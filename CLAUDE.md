@@ -92,6 +92,12 @@ If you read this, ask question about the project to fill this part. You need to 
 - Use Shadcn/UI components from `src/components/ui/`
 - Custom components in `src/components/nowts/`
 
+### Styling preferences
+
+- Use the shared typography components in `@src/components/ui/typography.tsx` for paragraphs and headings (instead of creating custom `p`, `h1`, `h2`, etc.).
+- For spacing, prefer utility layouts like `flex flex-col gap-4` for vertical spacing and `flex gap-4` for horizontal spacing (instead of `space-y-4`).
+- Prefer the card container `@src/components/ui/card.tsx` for styled wrappers rather than adding custom styles directly to `<div>` elements.
+
 ### State Management
 
 - Use `nuqs` for URL search parameter state
