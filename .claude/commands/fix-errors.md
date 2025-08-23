@@ -12,7 +12,7 @@ Your task is to fix all TypeScript and ESLint errors. To do so:
 
 2. Fix the errors using the "code" agent.
 
-Be sure to split the errors by folder, then run the code agent for each area. The code agent should be run with a specific list of files to fix and the actions to perform, so they can all work in parallel.
+Be sure to split the errors by folder, then run the "Snipper" agent for each area. The code agent should be run with a specific list of files to fix and the actions to perform, so they can all work in parallel.
 
 Ensure that each agent updates different files, with a maximum of 5 files per agent.
 
