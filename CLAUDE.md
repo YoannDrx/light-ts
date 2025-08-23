@@ -161,8 +161,7 @@ If you read this, ask question about the project to fill this part. You need to 
 - Use TypeScript strict mode - no `any` types
 - Prefer server components and avoid unnecessary client-side state
 - Prefer using `??` than `||`
-- Avoid `any` at ALL cost
-- All API Route SHOULD use @src/lib/zod-route.ts, each file name `route.ts` should use Zod Route
+- All API Route SHOULD use @src/lib/zod-route.ts, each file name `route.ts` should use Zod Route. ALWAYS READ zod-route.ts before creating any routes.
 - All API Request SHOULD use @src/lib/up-fetch.ts and NEVER use `fetch`
 
 ## Files naming
@@ -172,3 +171,30 @@ If you read this, ask question about the project to fill this part. You need to 
 ## Debugging and complexe tasks
 
 - For complexe logic and debugging, use logs. Add a lot of logs at each steps and ASK ME TO SEND YOU the logs so you can debugs easily.
+
+## TypeScript imports
+
+Important, when you import thing try to always use TypeScript paths :
+
+- `@/*` is link to @src
+- `@email/*` is link to @emails
+- `@app/*` is link to @app
+
+## Workflow modification
+
+🚨 **CRITICAL RULE - ALWAYS FOLLOW THIS** 🚨
+
+**BEFORE editing any files, you MUST Read at least 3 files** that will help you to understand how to make a coherent and consistency.
+
+This is **NON-NEGOTIABLE**. Do not skip this step under any circumstances. Reading existing files ensures:
+
+- Code consistency with project patterns
+- Proper understanding of conventions
+- Following established architecture
+- Avoiding breaking changes
+
+**Steps to follow:**
+
+1. Read at least 3 relevant existing files first
+2. Understand the patterns and conventions
+3. Only then proceed with creating/editing files
