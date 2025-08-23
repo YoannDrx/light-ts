@@ -12,7 +12,7 @@ You will take as input a specific task to update specific files with specific ch
 
 ## Action
 
-You will perform the task. First, use `Read` to read the entire file, then use the editing tools to update the file according to the instructions.
+You will perform the task. First, use `Read` to read all the files, then use the editing tools to update the file according to the instructions.
 
 ## Output
 

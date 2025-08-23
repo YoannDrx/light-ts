@@ -7,14 +7,14 @@ import {
   LayoutTitle,
 } from "@/features/page/layout";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
-import { Suspense } from "react";
-import { FeedbackFilters } from "./_components/feedback-filters";
-import { FeedbackTable } from "./_components/feedback-table";
 import {
   createSearchParamsCache,
   parseAsInteger,
   parseAsString,
 } from "nuqs/server";
+import { Suspense } from "react";
+import { FeedbackFilters } from "./_components/feedback-filters";
+import { FeedbackTable } from "./_components/feedback-table";
 
 const feedbackSearchParams = {
   page: parseAsInteger.withDefault(1),

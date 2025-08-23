@@ -2,8 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { useQueryStates } from "nuqs";
-import { parseAsInteger, parseAsString } from "nuqs";
+import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
 const feedbackSearchParams = {
   page: parseAsInteger.withDefault(1),

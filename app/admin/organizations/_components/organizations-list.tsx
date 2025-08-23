@@ -49,7 +49,7 @@ export const OrganizationsList = async ({
       <AutomaticPagination
         currentPage={currentPage}
         totalPages={totalPages}
-        searchParam={searchParams.q}
+        searchParam={searchParams.q || undefined}
       />
     </>
   );
