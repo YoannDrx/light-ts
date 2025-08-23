@@ -39,12 +39,12 @@ examples:
         type: 'text'
       })
     });
-    
+
     const testimonial = await response.json();
     console.log(testimonial);
   python: |
     import requests
-    
+
     response = requests.post(
         'https://api.nowts.com/v1/testimonials',
         headers={
@@ -62,7 +62,7 @@ examples:
             'type': 'text'
         }
     )
-    
+
     testimonial = response.json()
     print(testimonial)
 results:
@@ -113,38 +113,38 @@ Authorization: Bearer YOUR_API_TOKEN
 
 ## Request Body
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `content` | string | Yes | The testimonial content (min 10 characters) |
-| `author` | object | Yes | Author information |
-| `author.name` | string | Yes | Author's full name |
-| `author.email` | string | Yes | Author's email address |
-| `author.company` | string | No | Author's company name |
-| `rating` | number | No | Rating from 1-5 stars |
-| `type` | string | Yes | Testimonial type: `text`, `video`, or `audio` |
-| `tags` | array | No | Array of tags for categorization |
+| Field            | Type   | Required | Description                                   |
+| ---------------- | ------ | -------- | --------------------------------------------- |
+| `content`        | string | Yes      | The testimonial content (min 10 characters)   |
+| `author`         | object | Yes      | Author information                            |
+| `author.name`    | string | Yes      | Author's full name                            |
+| `author.email`   | string | Yes      | Author's email address                        |
+| `author.company` | string | No       | Author's company name                         |
+| `rating`         | number | No       | Rating from 1-5 stars                         |
+| `type`           | string | Yes      | Testimonial type: `text`, `video`, or `audio` |
+| `tags`           | array  | No       | Array of tags for categorization              |
 
 ## Response
 
 Returns a testimonial object with the following fields:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Unique testimonial identifier |
-| `content` | string | The testimonial content |
-| `author` | object | Author information |
-| `rating` | number | Rating from 1-5 stars |
-| `type` | string | Testimonial type |
-| `status` | string | Current status: `pending`, `approved`, `rejected` |
-| `createdAt` | string | ISO 8601 timestamp of creation |
-| `updatedAt` | string | ISO 8601 timestamp of last update |
+| Field       | Type   | Description                                       |
+| ----------- | ------ | ------------------------------------------------- |
+| `id`        | string | Unique testimonial identifier                     |
+| `content`   | string | The testimonial content                           |
+| `author`    | object | Author information                                |
+| `rating`    | number | Rating from 1-5 stars                             |
+| `type`      | string | Testimonial type                                  |
+| `status`    | string | Current status: `pending`, `approved`, `rejected` |
+| `createdAt` | string | ISO 8601 timestamp of creation                    |
+| `updatedAt` | string | ISO 8601 timestamp of last update                 |
 
 ## Error Codes
 
-| Code | Description |
-|------|-------------|
-| `400` | Bad Request - Invalid request data |
-| `401` | Unauthorized - Invalid or missing API token |
-| `403` | Forbidden - Insufficient permissions |
-| `422` | Validation Error - Request data failed validation |
+| Code  | Description                                             |
+| ----- | ------------------------------------------------------- |
+| `400` | Bad Request - Invalid request data                      |
+| `401` | Unauthorized - Invalid or missing API token             |
+| `403` | Forbidden - Insufficient permissions                    |
+| `422` | Validation Error - Request data failed validation       |
 | `500` | Internal Server Error - Something went wrong on our end |

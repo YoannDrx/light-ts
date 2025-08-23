@@ -66,6 +66,13 @@ export function Footer() {
                     >
                       <Link href="/about">About</Link>
                     </Button>
+                    <Button
+                      asChild
+                      variant="link"
+                      className="h-auto justify-start p-0"
+                    >
+                      <Link href="/contact">Contact</Link>
+                    </Button>
                   </nav>
                 </div>
 
@@ -97,7 +104,8 @@ export function Footer() {
                   {SiteConfig.company.address}
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  © {new Date().getFullYear()} {SiteConfig.company.name}. All rights reserved.
+                  © {new Date().getFullYear()} {SiteConfig.company.name}. All
+                  rights reserved.
                 </p>
               </div>
             </div>

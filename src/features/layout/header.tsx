@@ -18,6 +18,12 @@ export function Header() {
       >
         About
       </Link>
+      <Link
+        href="/contact"
+        className={buttonVariants({ variant: "ghost", size: "sm" })}
+      >
+        Contact
+      </Link>
       <AuthButton />
     </HeaderBase>
   );

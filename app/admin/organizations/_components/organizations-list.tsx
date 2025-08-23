@@ -16,7 +16,9 @@ type OrganizationsListProps = {
   };
 };
 
-export const OrganizationsList = async ({ searchParams }: OrganizationsListProps) => {
+export const OrganizationsList = async ({
+  searchParams,
+}: OrganizationsListProps) => {
   const pageSize = 10;
   const currentPage = searchParams.page;
 
@@ -25,7 +27,6 @@ export const OrganizationsList = async ({ searchParams }: OrganizationsListProps
     pageSize,
     search: searchParams.q || undefined,
   });
-
 
   return (
     <>

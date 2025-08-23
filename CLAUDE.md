@@ -162,6 +162,12 @@ If you read this, ask question about the project to fill this part. You need to 
 - Prefer server components and avoid unnecessary client-side state
 - Prefer using `??` than `||`
 - Avoid `any` at ALL cost
+- All API Route SHOULD use @src/lib/zod-route.ts, each file name `route.ts` should use Zod Route
+- All API Request SHOULD use @src/lib/up-fetch.ts and NEVER use `fetch`
+
+## Files naming
+
+- All server actions should be suffix by `.action.ts` eg. `user.action.ts`, `dashboard.action.ts`
 
 ## Debugging and complexe tasks
 

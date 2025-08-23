@@ -13,5 +13,18 @@
       "Edit(:*)",
       "mcp_context7"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/format-typescript.sh"
+          }
+        ]
+      }
+    ]
   }
 }
