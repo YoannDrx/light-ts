@@ -1,18 +1,12 @@
 import type { Statements } from "better-auth/plugins/access";
 import { createAccessControl } from "better-auth/plugins/access";
-import {
-  adminAc,
-  defaultStatements,
-  memberAc,
-  ownerAc,
-} from "better-auth/plugins/organization/access";
 import { z } from "zod";
 
+// Simple user-level permissions for B2C application
 const statement = {
-  ...defaultStatements,
   project: ["create", "share", "update", "delete"],
   subscription: ["manage"],
-  users: ["create", "delete"],
+  account: ["update", "delete"],
 } as const satisfies Statements;
 
 export const AuthPermissionSchema = z.object(
@@ -46,26 +40,15 @@ export type AuthPermission = z.infer<typeof AuthPermissionSchema>;
 
 export const ac = createAccessControl(statement);
 
-const member = ac.newRole({
-  project: ["create"],
-  users: ["create"],
-  ...memberAc.statements,
-});
-
-const admin = ac.newRole({
-  project: ["create", "update"],
+// Single user role with full permissions for their own account
+const user = ac.newRole({
+  project: ["create", "share", "update", "delete"],
   subscription: ["manage"],
-  users: ["create", "delete"],
-  ...adminAc.statements,
+  account: ["update", "delete"],
 });
 
-const owner = ac.newRole({
-  ...(statement as Statements),
-  ...ownerAc.statements,
-});
+export const roles = { user } as const;
 
-export const roles = { member, admin, owner } as const;
-
-export const RolesKeys = ["member", "admin", "owner"] as const;
+export const RolesKeys = ["user"] as const;
 
 export type AuthRole = keyof typeof roles;

@@ -1,10 +1,7 @@
 import { createZodRoute } from "next-zod-route";
 import { NextResponse } from "next/server";
-import { z } from "zod";
-import { AuthPermissionSchema, RolesKeys } from "./auth/auth-permissions";
 import { getUser } from "./auth/auth-user";
 import { logger } from "./logger";
-import { getCurrentOrg } from "./organizations/get-org";
 
 /**
  * Custom error class for route validation and authorization failures
@@ -70,39 +67,3 @@ export const authRoute = route.use(async ({ next }) => {
     ctx: { user },
   });
 });
-
-/**
- * Route handler with organization-based authorization
- * Validates user permissions within an organization context
- *
- * @example
- * ```ts
- * export const POST = orgRoute
- *   .metadata({ permissions: { users: ["create"] } })
- *   .handler(async (req, { ctx }) => {
- *     // ctx.organization is available
- *     return { success: true };
- *   });
- * ```
- */
-export const orgRoute = route
-  .defineMetadata(
-    z.object({
-      roles: z.array(z.enum(RolesKeys)).optional(),
-      permissions: AuthPermissionSchema.optional(),
-    }),
-  )
-  .use(async ({ next, metadata }) => {
-    const organization = await getCurrentOrg(metadata);
-
-    if (!organization) {
-      throw new ZodRouteError(
-        "You need to be part of an organization to access this resource.",
-        401,
-      );
-    }
-
-    return next({
-      ctx: { organization },
-    });
-  });

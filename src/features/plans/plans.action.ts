@@ -1,17 +1,12 @@
 "use server";
 
-import { ActionError, orgAction } from "@/lib/actions/safe-actions";
+import { ActionError, authAction } from "@/lib/actions/safe-actions";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { getServerUrl } from "@/lib/server-url";
 import { stripe } from "@/lib/stripe";
 import { z } from "zod";
 
-export const upgradeOrgAction = orgAction
-  .metadata({
-    permissions: {
-      subscription: ["manage"],
-    },
-  })
+export const upgradeUserAction = authAction
   .inputSchema(
     z.object({
       plan: z.string(),
@@ -23,7 +18,7 @@ export const upgradeOrgAction = orgAction
   .action(
     async ({
       parsedInput: { plan, annual, successUrl, cancelUrl },
-      ctx: { org },
+      ctx: { user },
     }) => {
       // Find the plan
       const authPlan = AUTH_PLANS.find((p) => p.name === plan);
@@ -40,7 +35,7 @@ export const upgradeOrgAction = orgAction
       }
 
       // Get or create Stripe customer
-      const customerId = org.stripeCustomerId;
+      const customerId = user.stripeCustomerId;
 
       if (!customerId) {
         throw new ActionError("No Stripe customer ID found");
@@ -60,12 +55,12 @@ export const upgradeOrgAction = orgAction
         success_url: `${getServerUrl()}${successUrl}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${getServerUrl()}${cancelUrl}`,
         metadata: {
-          organizationId: org.id,
+          userId: user.id,
           plan: plan,
         },
         subscription_data: {
           metadata: {
-            organizationId: org.id,
+            userId: user.id,
             plan: plan,
           },
           trial_period_days: authPlan.freeTrial?.days,

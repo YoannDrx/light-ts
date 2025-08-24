@@ -13,11 +13,13 @@ model User {
   resendContactId String?
 
   // Outgoing
-  sessions    Session[]
-  accounts    Account[]
-  feedbacks   Feedback[]
-  members     Member[]
-  invitations Invitation[]
+  sessions      Session[]
+  accounts      Account[]
+  feedbacks     Feedback[]
+  subscription  Subscription?
+  
+  // Stripe integration
+  stripeCustomerId String?
 
   role       String?
   banned     Boolean?
@@ -38,7 +40,6 @@ model Session {
   userAgent            String?
   userId               String
   user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  activeOrganizationId String?
 
   impersonatedBy String?
 
@@ -76,61 +77,17 @@ model Verification {
   @@map("verification")
 }
 
-model Organization {
-  id               String        @id
-  name             String
-  slug             String?
-  logo             String?
-  createdAt        DateTime
-  metadata         String?
-  stripeCustomerId String?
-  members          Member[]
-  invitations      Invitation[]
-  subscription     Subscription?
-  email            String?
-
-  @@unique([slug])
-  @@map("organization")
-}
-
-model Member {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role           String
-  createdAt      DateTime
-
-  @@map("member")
-}
-
-model Invitation {
-  id             String       @id
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  email          String
-  role           String?
-  status         String
-  expiresAt      DateTime
-  inviterId      String
-  user           User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
-
-  @@map("invitation")
-}
-
 model Subscription {
-  id                   String       @id
+  id                   String  @id
   plan                 String
-  referenceId          String       @unique
-  organization         Organization @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+  referenceId          String  @unique
+  user                 User    @relation(fields: [referenceId], references: [id], onDelete: Cascade)
   stripeCustomerId     String?
   stripeSubscriptionId String?
   status               String?
   periodStart          DateTime?
   periodEnd            DateTime?
   cancelAtPeriodEnd    Boolean?
-  seats                Int?
 
   @@map("subscription")
 }

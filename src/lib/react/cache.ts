@@ -1,7 +1,7 @@
 // To avoid calling many time same function, you can cache them with react `cache` method
 
 import { cache } from "react";
-import { getCurrentOrg, getRequiredCurrentOrg } from "../organizations/get-org";
+import { getCurrentUser, getRequiredCurrentUser } from "../user/get-user";
 
-export const getCurrentOrgCache = cache(getCurrentOrg);
-export const getRequiredCurrentOrgCache = cache(getRequiredCurrentOrg);
+export const getCurrentUserCache = cache(getCurrentUser);
+export const getRequiredCurrentUserCache = cache(getRequiredCurrentUser);

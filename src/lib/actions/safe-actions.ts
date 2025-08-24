@@ -1,9 +1,6 @@
 import { createSafeActionClient } from "next-safe-action";
-import { z } from "zod";
-import { AuthPermissionSchema, RolesKeys } from "../auth/auth-permissions";
 import { getRequiredUser } from "../auth/auth-user";
 import { logger } from "../logger";
-import { getRequiredCurrentOrg } from "../organizations/get-org";
 
 export class ActionError extends Error {}
 
@@ -38,27 +35,4 @@ export const authAction = createSafeActionClient({
       user: user,
     },
   });
-});
-
-export const orgAction = createSafeActionClient({
-  handleServerError,
-  defineMetadataSchema() {
-    return z
-      .object({
-        roles: z.array(z.enum(RolesKeys)).optional(),
-        permissions: AuthPermissionSchema.optional(),
-      })
-      .optional();
-  },
-}).use(async ({ next, metadata = {} }) => {
-  try {
-    const org = await getRequiredCurrentOrg(metadata);
-    return next({
-      ctx: { org },
-    });
-  } catch {
-    throw new ActionError(
-      "You need to be part of an organization to access this resource.",
-    );
-  }
 });

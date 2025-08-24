@@ -1,5 +1,5 @@
 import type { NavigationGroup } from "@/features/navigation/navigation.type";
-import { Building2, Home, MessageSquare, Users } from "lucide-react";
+import { Home, MessageSquare, Users } from "lucide-react";
 
 const ADMIN_PATH = `/admin`;
 
@@ -16,11 +16,6 @@ export const ADMIN_LINKS: NavigationGroup[] = [
         href: `${ADMIN_PATH}/users`,
         Icon: Users,
         label: "Users",
-      },
-      {
-        href: `${ADMIN_PATH}/organizations`,
-        Icon: Building2,
-        label: "Organizations",
       },
       {
         href: `${ADMIN_PATH}/feedback`,

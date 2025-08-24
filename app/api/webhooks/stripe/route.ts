@@ -86,20 +86,13 @@ const checkoutSessionCompleted = async (
       ? session.subscription
       : session.subscription.id;
 
-  // Find organization by Stripe customer ID
-  const organization = await prisma.organization.findFirst({
+  // Find user by Stripe customer ID
+  const user = await prisma.user.findFirst({
     where: { stripeCustomerId: customerId },
-    include: {
-      members: {
-        include: {
-          user: true,
-        },
-      },
-    },
   });
 
-  if (!organization) {
-    logger.error(`Organization not found for customer ID: ${customerId}`);
+  if (!user) {
+    logger.error(`User not found for customer ID: ${customerId}`);
     return;
   }
 
@@ -122,7 +115,7 @@ const checkoutSessionCompleted = async (
 
   // Create or update subscription
   const existingSubscription = await prisma.subscription.findFirst({
-    where: { referenceId: organization.id },
+    where: { referenceId: user.id },
   });
 
   let dbSubscription;
@@ -141,7 +134,6 @@ const checkoutSessionCompleted = async (
           stripeSubscription.items.data[0].current_period_end * 1000,
         ),
         cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-        seats: stripeSubscription.items.data[0]?.quantity ?? 1,
       },
     });
   } else {
@@ -149,7 +141,7 @@ const checkoutSessionCompleted = async (
       data: {
         id: `sub_${Date.now()}`,
         plan: plan.name,
-        referenceId: organization.id,
+        referenceId: user.id,
         stripeCustomerId: customerId,
         stripeSubscriptionId: subscriptionId,
         status: stripeSubscription.status,
@@ -160,7 +152,6 @@ const checkoutSessionCompleted = async (
           stripeSubscription.items.data[0].current_period_end * 1000,
         ),
         cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-        seats: stripeSubscription.items.data[0]?.quantity ?? 1,
       },
     });
   }
@@ -172,14 +163,14 @@ const checkoutSessionCompleted = async (
   ) {
     await plan.freeTrial.onTrialStart(dbSubscription, {
       req,
-      organizationId: organization.id,
+      userId: user.id,
       stripeCustomerId: customerId,
       subscriptionId: subscriptionId,
     });
   }
 
   logger.info(
-    `Subscription created/updated for organization: ${organization.id}, plan: ${plan.name}`,
+    `Subscription created/updated for user: ${user.id}, plan: ${plan.name}`,
   );
 };
 
@@ -232,7 +223,7 @@ const customerSubscriptionUpdated = async (
         { subscription: updatedSubscription },
         {
           req,
-          organizationId: updatedSubscription.referenceId,
+          userId: updatedSubscription.referenceId,
           stripeCustomerId: subscription.customer as string,
           subscriptionId: subscription.id,
         },
@@ -247,7 +238,7 @@ const customerSubscriptionUpdated = async (
     ) {
       await plan.freeTrial.onTrialExpired(updatedSubscription, {
         req,
-        organizationId: updatedSubscription.referenceId,
+        userId: updatedSubscription.referenceId,
         stripeCustomerId: subscription.customer as string,
         subscriptionId: subscription.id,
       });
@@ -295,7 +286,7 @@ const customerSubscriptionDeleted = async (
   if (plan?.onSubscriptionCanceled) {
     await plan.onSubscriptionCanceled(updatedSubscription, {
       req,
-      organizationId: updatedSubscription.referenceId,
+      userId: updatedSubscription.referenceId,
       stripeCustomerId: subscription.customer as string,
       subscriptionId: subscription.id,
     });

@@ -34,6 +34,13 @@ export default [
   // React
   ...fixupConfigRules(pluginReactConfig),
   {
+    settings: {
+      react: {
+        version: "detect"
+      }
+    }
+  },
+  {
     plugins: {
       "react-hooks": hooksPlugin,
     },
