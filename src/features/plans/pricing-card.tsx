@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { authClient } from "@/lib/auth-client";
+import { useSession } from "@/lib/auth-client";
 import type { AppAuthPlan } from "@/lib/auth/stripe/auth-plans";
 import {
   ADDITIONAL_FEATURES,
@@ -20,7 +20,7 @@ import { Clock } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
 import { LoadingButton } from "../form/submit-button";
-import { upgradeOrgAction } from "./plans.action";
+import { upgradeUserAction } from "./plans.action";
 
 export function PricingCard({
   plan,
@@ -29,10 +29,10 @@ export function PricingCard({
   plan: AppAuthPlan;
   isYearly?: boolean;
 }) {
-  // Get the active organization
-  const { data: activeOrg } = authClient.useActiveOrganization();
+  // Get the current user
+  const { data: session } = useSession();
 
-  const { execute: upgradeOrg, isPending } = useAction(upgradeOrgAction, {
+  const { execute: upgradeUser, isPending } = useAction(upgradeUserAction, {
     onSuccess: (result) => {
       if (result.data.url) {
         window.location.href = result.data.url;
@@ -182,15 +182,15 @@ export function PricingCard({
             plan.isPopular ? "bg-primary hover:bg-primary/90" : "",
           )}
           onClick={() => {
-            if (!activeOrg) {
-              toast.error("No active organization");
+            if (!session?.user) {
+              toast.error("Please sign in to upgrade");
               return;
             }
-            upgradeOrg({
+            upgradeUser({
               plan: plan.name,
               annual: isYearly,
-              successUrl: `/orgs/${activeOrg.slug}/settings/billing/success`,
-              cancelUrl: `/orgs/${activeOrg.slug}/settings/billing`,
+              successUrl: `/app/settings/billing/success`,
+              cancelUrl: `/app/settings/billing`,
             });
           }}
         >

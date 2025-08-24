@@ -14,8 +14,6 @@ export const UpgradeCard = () => {
 
   if (!user) return null;
 
-  if (user.subscription) return null;
-
   return (
     <Card className="">
       <CardHeader className="">

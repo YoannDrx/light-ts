@@ -2,6 +2,7 @@
 
 import { ActionError, authAction } from "@/lib/actions/safe-actions";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
+import { prisma } from "@/lib/prisma";
 import { getServerUrl } from "@/lib/server-url";
 import { stripe } from "@/lib/stripe";
 import { z } from "zod";
@@ -34,12 +35,17 @@ export const upgradeUserAction = authAction
         throw new ActionError(`Price ID not found for plan "${plan}"`);
       }
 
-      // Get or create Stripe customer
-      const customerId = user.stripeCustomerId;
+      // Get the full user from database to access stripeCustomerId
+      const dbUser = await prisma.user.findUnique({
+        where: { id: user.id },
+        select: { stripeCustomerId: true },
+      });
 
-      if (!customerId) {
+      if (!dbUser?.stripeCustomerId) {
         throw new ActionError("No Stripe customer ID found");
       }
+
+      const customerId = dbUser.stripeCustomerId;
 
       // Create checkout session
       const session = await stripe.checkout.sessions.create({

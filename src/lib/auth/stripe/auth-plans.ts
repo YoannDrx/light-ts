@@ -20,7 +20,7 @@ export type PlanLimit = typeof DEFAULT_LIMIT;
 
 type HookCtx = {
   req: Request;
-  organizationId: string;
+  userId: string;
   stripeCustomerId: string;
   subscriptionId: string;
 };

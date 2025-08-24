@@ -207,7 +207,6 @@ const customerSubscriptionUpdated = async (
       ),
       periodEnd: new Date(subscription.items.data[0].current_period_end * 1000),
       cancelAtPeriodEnd: subscription.cancel_at_period_end,
-      seats: subscription.items.data[0]?.quantity ?? dbSubscription.seats ?? 1,
     },
   });
 

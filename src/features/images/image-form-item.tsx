@@ -67,7 +67,7 @@ const UseImageUpload = ({ onChange }: { onChange: (url: string) => void }) => {
         return;
       }
 
-      onChange(result.data);
+      onChange(result.data as string);
     },
   });
 
