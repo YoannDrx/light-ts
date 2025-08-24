@@ -8,6 +8,11 @@ import { upfetch } from "@/lib/up-fetch";
  */
 
 export const NotifyNowts = async () => {
+  // Skip notification in CI environments to prevent build failures
+  if (process.env.CI) {
+    return null;
+  }
+
   try {
     await upfetch("https://codelynx.dev/api/nowts/deploy", {
       method: "POST",
