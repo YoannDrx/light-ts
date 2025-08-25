@@ -3,7 +3,7 @@ import { Building2, Home, MessageSquare, Users } from "lucide-react";
 
 const ADMIN_PATH = `/admin`;
 
-export const ADMIN_LINKS: NavigationGroup[] = [
+const ADMIN_LINKS: NavigationGroup[] = [
   {
     title: "Admin",
     links: [

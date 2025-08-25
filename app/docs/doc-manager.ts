@@ -70,22 +70,6 @@ export async function getDocs(tags?: string[]) {
   }
 }
 
-export async function getDocsTags() {
-  const docs = await getDocs();
-  const tags = new Set<string>();
-
-  for (const doc of docs) {
-    if (!doc.attributes.tags) {
-      continue;
-    }
-    for (const tag of doc.attributes.tags) {
-      tags.add(tag);
-    }
-  }
-
-  return Array.from(tags);
-}
-
 export async function getDocsSubcategories() {
   const docs = await getDocs();
   const subcategories = new Set<string>();
