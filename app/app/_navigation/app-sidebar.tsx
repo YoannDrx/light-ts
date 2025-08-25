@@ -22,8 +22,8 @@ import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
-import { APP_LINKS } from "./app-navigation.links";
 import { AppCommand } from "./app-command";
+import { APP_LINKS } from "./app-navigation.links";
 import { UpgradeCard } from "./upgrade-app-card";
 
 export function AppSidebar() {

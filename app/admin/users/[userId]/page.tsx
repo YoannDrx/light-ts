@@ -9,10 +9,10 @@ import {
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { UserDetailsCard } from "../../_components/user-details-card";
 import { UserActions } from "./_components/user-actions";
 import { UserProviders } from "./_components/user-providers";
 import { UserSessions } from "./_components/user-sessions";
-import { UserDetailsCard } from "../../_components/user-details-card";
 
 export default async function RoutePage(props: {
   params: Promise<{ userId: string }>;
@@ -51,7 +51,6 @@ export default async function RoutePage(props: {
 
       <LayoutContent className="flex flex-col gap-4">
         <UserDetailsCard user={userData} />
-
         <UserSessions userId={userData.id} />
         <UserProviders accounts={userData.accounts} />
       </LayoutContent>
