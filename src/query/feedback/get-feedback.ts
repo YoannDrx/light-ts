@@ -94,8 +94,6 @@ export const getFeedbackById = async (id: string) => {
   });
 };
 
-export type FeedbackList = Prisma.PromiseReturnType<typeof getFeedbackList>;
+type FeedbackList = Prisma.PromiseReturnType<typeof getFeedbackList>;
 
 export type FeedbackWithUser = FeedbackList["feedback"][number];
-
-export type FeedbackById = Prisma.PromiseReturnType<typeof getFeedbackById>;

@@ -70,63 +70,6 @@ export async function getDocs(tags?: string[]) {
   }
 }
 
-export async function getDocsTags() {
-  const docs = await getDocs();
-  const tags = new Set<string>();
-
-  for (const doc of docs) {
-    if (!doc.attributes.tags) {
-      continue;
-    }
-    for (const tag of doc.attributes.tags) {
-      tags.add(tag);
-    }
-  }
-
-  return Array.from(tags);
-}
-
-export async function getDocsSubcategories() {
-  const docs = await getDocs();
-  const subcategories = new Set<string>();
-
-  for (const doc of docs) {
-    if (doc.attributes.subcategory) {
-      subcategories.add(doc.attributes.subcategory);
-    }
-  }
-
-  return Array.from(subcategories);
-}
-
-export function groupDocsBySubcategory(docs: DocType[]) {
-  // Create "General" group for docs without subcategory
-  const grouped: Record<string, DocType[]> = {
-    General: [],
-  };
-
-  for (const doc of docs) {
-    const subcategory = doc.attributes.subcategory ?? "General";
-    grouped[subcategory] ??= [];
-    grouped[subcategory].push(doc);
-  }
-
-  // Sort each subcategory by order or title
-  Object.keys(grouped).forEach((key) => {
-    grouped[key].sort((a, b) => {
-      if (
-        a.attributes.order !== undefined &&
-        b.attributes.order !== undefined
-      ) {
-        return a.attributes.order - b.attributes.order;
-      }
-      return a.attributes.title.localeCompare(b.attributes.title);
-    });
-  });
-
-  return grouped;
-}
-
 export async function getCurrentDoc(slug: string): Promise<DocType | null> {
   try {
     const filePath = path.join(docsDirectory, `${slug}.mdx`);
