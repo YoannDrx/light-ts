@@ -8,7 +8,7 @@
     "src/site-config.ts",
     "e2e/**",
     ".claude/**",
-    "prisma"
+    "prisma/**"
   ],
   "paths": {
     "@/*": ["./src/*"],
