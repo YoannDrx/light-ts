@@ -36,9 +36,9 @@ export default [
   {
     settings: {
       react: {
-        version: "detect"
-      }
-    }
+        version: "detect",
+      },
+    },
   },
   {
     plugins: {
@@ -153,6 +153,7 @@ export default [
       "**/worker.js",
       "src/generated",
       ".claude",
+      ".conductor",
     ],
   },
 ];
