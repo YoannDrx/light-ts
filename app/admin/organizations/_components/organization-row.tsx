@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,11 +34,11 @@ export const OrganizationRow = ({ organization }: OrganizationRowProps) => {
         <div className="flex items-center gap-3">
           <Avatar className="size-10">
             <AvatarImage
-              src={organization.logo ?? undefined}
-              alt={organization.name ?? ""}
+              src={organization.logo || undefined}
+              alt={organization.name || ""}
             />
             <AvatarFallback className="text-sm">
-              {getInitials(organization.name ?? "O")}
+              {getInitials(organization.name || "O")}
             </AvatarFallback>
           </Avatar>
           <Link
