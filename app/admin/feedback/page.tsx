@@ -40,7 +40,6 @@ export default async function AdminFeedbackPage({ searchParams }: PageProps) {
           View and manage all user feedback submissions
         </LayoutDescription>
       </LayoutHeader>
-<<<<<<<< HEAD:app/admin/feedback/page.tsx
 
       <LayoutContent>
         <div className="space-y-4">
@@ -48,16 +47,6 @@ export default async function AdminFeedbackPage({ searchParams }: PageProps) {
 
           <Suspense fallback={<FeedbackTableSkeleton />}>
             <FeedbackTable searchParams={params} />
-========
-      <LayoutActions>{/* Add actions here if needed */}</LayoutActions>
-
-      <LayoutContent>
-        <div className="space-y-4">
-          <OrganizationFilters />
-
-          <Suspense fallback={<OrganizationTableSkeleton />}>
-            <OrganizationsList searchParams={params} />
->>>>>>>> origin/main:app/admin/organizations/page.tsx
           </Suspense>
         </div>
       </LayoutContent>
