@@ -34,10 +34,10 @@ export const OrganizationRow = ({ organization }: OrganizationRowProps) => {
           <Avatar className="size-10">
             <AvatarImage
               src={organization.logo ?? undefined}
-              alt={organization.name || ""}
+              alt={organization.name ?? ""}
             />
             <AvatarFallback className="text-sm">
-              {getInitials(organization.name || "O")}
+              {getInitials(organization.name ?? "O")}
             </AvatarFallback>
           </Avatar>
           <Link
