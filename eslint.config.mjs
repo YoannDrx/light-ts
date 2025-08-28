@@ -45,6 +45,11 @@ export default [
       "react-hooks": hooksPlugin,
     },
     rules: hooksPlugin.configs.recommended.rules,
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
   },
   // NextJS
   {
