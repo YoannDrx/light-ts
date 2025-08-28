@@ -1,13 +1,18 @@
 "use server";
 
-import { ActionError, authAction } from "@/lib/actions/safe-actions";
+import { orgAction } from "@/lib/actions/safe-actions";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
-import { prisma } from "@/lib/prisma";
+import { ActionError } from "@/lib/errors/action-error";
 import { getServerUrl } from "@/lib/server-url";
 import { stripe } from "@/lib/stripe";
 import { z } from "zod";
 
-export const upgradeUserAction = authAction
+export const upgradeOrgAction = orgAction
+  .metadata({
+    permissions: {
+      subscription: ["manage"],
+    },
+  })
   .inputSchema(
     z.object({
       plan: z.string(),
@@ -19,7 +24,7 @@ export const upgradeUserAction = authAction
   .action(
     async ({
       parsedInput: { plan, annual, successUrl, cancelUrl },
-      ctx: { user },
+      ctx: { org },
     }) => {
       // Find the plan
       const authPlan = AUTH_PLANS.find((p) => p.name === plan);
@@ -35,17 +40,12 @@ export const upgradeUserAction = authAction
         throw new ActionError(`Price ID not found for plan "${plan}"`);
       }
 
-      // Get the full user from database to access stripeCustomerId
-      const dbUser = await prisma.user.findUnique({
-        where: { id: user.id },
-        select: { stripeCustomerId: true },
-      });
+      // Get or create Stripe customer
+      const customerId = org.stripeCustomerId;
 
-      if (!dbUser?.stripeCustomerId) {
+      if (!customerId) {
         throw new ActionError("No Stripe customer ID found");
       }
-
-      const customerId = dbUser.stripeCustomerId;
 
       // Create checkout session
       const session = await stripe.checkout.sessions.create({
@@ -61,12 +61,12 @@ export const upgradeUserAction = authAction
         success_url: `${getServerUrl()}${successUrl}?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${getServerUrl()}${cancelUrl}`,
         metadata: {
-          userId: user.id,
+          organizationId: org.id,
           plan: plan,
         },
         subscription_data: {
           metadata: {
-            userId: user.id,
+            organizationId: org.id,
             plan: plan,
           },
           trial_period_days: authPlan.freeTrial?.days,

@@ -1,10 +1,12 @@
 "use server";
 
-import { ActionError, authAction } from "@/lib/actions/safe-actions";
+import { orgAction } from "@/lib/actions/safe-actions";
+import { ActionError } from "@/lib/errors/action-error";
 import { fileAdapter } from "@/lib/files/placeholder-adapter";
 import { z } from "zod";
 
-export const uploadImageAction = authAction
+export const uploadImageAction = orgAction
+  .metadata({})
   .inputSchema(
     z.object({
       formData: z.instanceof(FormData),
