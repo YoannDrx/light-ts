@@ -5,14 +5,14 @@ alwaysApply: false
 ---
 ## Context
 
-Toasts are small notifications that appear in the corner of the application.
+Toast is a small notification that appears in the corner of our application.
 
 ## Rules
 
-There are two types of toast triggers:
+There are 2 kinds of toast triggers:
 
 * [server-toast.tsx](mdc:src/lib/server-toast.tsx) for server-side toasts
-* `toast` from Sonner for client-side toasts 
+* `toast` for client-side toasts 
 
 ### Client Toast
 
@@ -22,13 +22,13 @@ There are two types of toast triggers:
 import { toast } from "sonner";
 
 function MyComponent() {
-  return <button onClick={() => toast("Hello")}>Hello</button>;
+  <button onClick={() => toast("Hello")}>Hello</button>
 }
 ```
 
 ### Server Toast
 
-Server toasts are only available in API routes and server actions.
+* Only available in API routes or server actions
 
 ```tsx
 import { serverToast } from "@/lib/server-toast";
