@@ -57,7 +57,7 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
         return unwrapSafePromise(
           authClient.signIn.magicLink({
             email: values.email,
-            callbackURL: getCallbackUrl(props.callbackUrl ?? "/orgs"),
+            callbackURL: getCallbackUrl(props.callbackUrl ?? "/app"),
           }),
         );
       }
@@ -66,7 +66,7 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
       toast.error(error.message);
     },
     onSuccess: () => {
-      const callbackUrl = getCallbackUrl(props.callbackUrl ?? "/orgs");
+      const callbackUrl = getCallbackUrl(props.callbackUrl ?? "/app");
       const newUrl =
         window.location.origin +
         (isUsingCredentials ? callbackUrl : "/auth/verify");

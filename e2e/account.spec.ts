@@ -53,7 +53,7 @@ test.describe("account", () => {
 
     await page.getByRole("button", { name: "Yes, Delete My Account" }).click();
     await page.waitForURL(/\/auth\/goodbye/, { timeout: 10000 });
-    await expect(page.getByText("Account Deleted")).toBeVisible();
+    await expect(page.getByText("Account Deleted").first()).toBeVisible();
 
     const user = await prisma.user.findUnique({
       where: {
@@ -74,7 +74,8 @@ test.describe("account", () => {
 
     await expect(page.getByText("Profile updated")).toBeVisible();
     await page.reload();
-    await expect(input).toHaveValue(newName);
+    const updatedInput = page.getByRole("textbox", { name: "Name" });
+    await expect(updatedInput).toHaveValue(newName);
   });
 
   test("change password flow", async ({ page }) => {
@@ -101,10 +102,10 @@ test.describe("account", () => {
         email: userData.email,
         password: newPassword,
       },
-      callbackURL: "/orgs",
+      callbackURL: "/app",
     });
 
-    await page.waitForURL(/\/orgs\/.*/, { timeout: 10000 });
+    await page.waitForURL(/\/app/, { timeout: 10000 });
 
     const user = await prisma.user.findUnique({
       where: { email: userData.email },

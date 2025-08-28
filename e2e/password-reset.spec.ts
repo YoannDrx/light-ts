@@ -66,8 +66,8 @@ test("password reset flow", async ({ page }) => {
     .first()
     .click();
 
-  // 11. Should be redirected to the organization page
-  await page.waitForURL(/\/orgs\/.*/, { timeout: 10000 });
+  // 11. Should be redirected to the app page
+  await page.waitForURL(/\/app/, { timeout: 10000 });
 
   // Clean up - delete the test user
   const user = await prisma.user.findUnique({

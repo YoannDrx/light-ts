@@ -47,7 +47,7 @@ export const SignUpCredentialsForm = () => {
     },
     onSuccess: () => {
       // Process full-refresh
-      const newUrl = window.location.origin + getCallbackUrl("/orgs");
+      const newUrl = window.location.origin + getCallbackUrl("/app");
       window.location.href = newUrl;
     },
   });

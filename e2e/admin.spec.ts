@@ -5,7 +5,7 @@ test.describe("admin", () => {
   test("verify admin dashboard work", async ({ page }) => {
     await createTestAccount({
       page,
-      callbackURL: "/orgs",
+      callbackURL: "/app",
       admin: true,
     });
 
@@ -14,14 +14,14 @@ test.describe("admin", () => {
     await expect(page.getByRole("link", { name: "Users" })).toBeVisible();
 
     await expect(
-      page.getByRole("link", { name: "Organizations" }),
+      page.getByRole("link", { name: "Feedback" }).first(),
     ).toBeVisible();
 
     await page.getByRole("link", { name: "Users" }).click();
 
     await expect(page).toHaveURL("/admin/users");
 
-    await page.getByRole("link", { name: "Organizations" }).click();
-    await expect(page).toHaveURL("/admin/organizations");
+    await page.getByRole("link", { name: "Feedback" }).first().click();
+    await expect(page).toHaveURL("/admin/feedback");
   });
 });
