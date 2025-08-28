@@ -1,5 +1,7 @@
 import { getUser } from "@/lib/auth/auth-user";
-import { authRoute, route, ZodRouteError } from "@/lib/zod-route";
+import { ZodRouteError } from "@/lib/errors/zod-route-error";
+import { getCurrentOrg } from "@/lib/organizations/get-org";
+import { authRoute, orgRoute, route } from "@/lib/zod-route";
 import { describe, expect, it, vi } from "vitest";
 
 describe("zod-route", () => {
@@ -86,6 +88,63 @@ describe("zod-route", () => {
     expect(data).toEqual({
       message: "test",
       user: JSON.parse(JSON.stringify(user)),
+    });
+  });
+
+  it("orgRoute should add the organization inside the context if the user is authenticated", async () => {
+    const organization = {
+      id: "123",
+      name: "test",
+      slug: "test",
+      createdAt: new Date(1, 1, 1, 1),
+      updatedAt: new Date(1, 1, 1, 1),
+      members: [],
+      logo: "test",
+      email: "test@test.com",
+      memberRoles: [],
+      subscription: null,
+      user,
+      invitations: [],
+      metadata: null,
+      stripeCustomerId: null,
+    };
+    vi.mocked(getCurrentOrg).mockResolvedValue(organization);
+
+    const GET = orgRoute.handler((_request, { ctx }) => {
+      return {
+        message: "test",
+        org: ctx.organization,
+      };
+    });
+
+    const request = new Request("http://localhost/");
+    const response = await GET(request, { params: Promise.resolve({}) });
+
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data).toEqual({
+      message: "test",
+      org: JSON.parse(JSON.stringify(organization)),
+    });
+  });
+
+  it("orgRoute should return 401 if the user is not part of the organization", async () => {
+    vi.mocked(getCurrentOrg).mockResolvedValue(null);
+
+    const GET = orgRoute.handler(() => {
+      return {
+        message: "test",
+      };
+    });
+
+    const request = new Request("http://localhost/");
+    const response = await GET(request, { params: Promise.resolve({}) });
+
+    expect(response.status).toBe(401);
+    const data = await response.json();
+    expect(data).toEqual({
+      message:
+        "You need to be part of an organization to access this resource.",
     });
   });
 });
