@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -5,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 import type { PropsWithChildren } from "react";
 import { Typography } from "../../components/nowts/typography";
 import { ContactSupportDialog } from "../contact/support/contact-support-dialog";
@@ -26,6 +28,9 @@ export function Error401(props: Error401Props) {
       </CardHeader>
       <CardFooter className="flex flex-row gap-2">
         <ContactSupportDialog />
+        <Button asChild>
+          <Link href="/auth/signin">Sign in</Link>
+        </Button>
       </CardFooter>
     </Card>
   );
