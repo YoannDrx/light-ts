@@ -10,6 +10,7 @@ import { getRequiredUser } from "@/lib/auth/auth-user";
 import { combineWithParentMetadata } from "@/lib/metadata";
 import { CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { AccountLayout } from "../../account-layout";
 
 export const generateMetadata = combineWithParentMetadata({
   title: "Subscription Successful",
@@ -20,7 +21,7 @@ export default async function SubscriptionSuccessPage() {
   await getRequiredUser();
 
   return (
-    <div className="flex flex-col items-center justify-center py-12">
+    <AccountLayout>
       <Card className="w-full">
         <CardHeader className="text-center">
           <div className="mb-4 flex justify-center">
@@ -44,6 +45,6 @@ export default async function SubscriptionSuccessPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </AccountLayout>
   );
 }

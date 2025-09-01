@@ -11,10 +11,6 @@ export const getUserActiveSubscription = async () => {
 
   const subscription = user.subscription;
 
-  if (subscription.status !== "active") {
-    return null;
-  }
-
   return {
     ...subscription,
     stripeCustomerId: user.stripeCustomerId,
