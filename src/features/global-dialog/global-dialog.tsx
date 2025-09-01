@@ -4,16 +4,16 @@ import dynamic from "next/dynamic";
 import type { DialogType } from "./global-dialog.store";
 import { useGlobalDialogStore } from "./global-dialog.store";
 
-const OrgDialogPlan = dynamic(
+const UserDialogPlan = dynamic(
   async () =>
-    import("./org-plan-dialog").then((mod) => ({
-      default: mod.OrgPlanDialog,
+    import("./user-plan-dialog").then((mod) => ({
+      default: mod.UserPlanDialog,
     })),
   { ssr: false },
 );
 
 const DialogTypeMap: Record<DialogType, React.ComponentType> = {
-  "org-plan": OrgDialogPlan,
+  "user-plan": UserDialogPlan,
 };
 
 /**

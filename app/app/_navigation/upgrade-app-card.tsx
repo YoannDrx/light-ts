@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { BILLING_URL } from "@/lib/LINKS";
 import Link from "next/link";
 import { useCurrentUser } from "./use-current-user";
 
@@ -24,7 +25,7 @@ export const UpgradeCard = () => {
       </CardHeader>
       <CardContent className="">
         <Link
-          href="/app/settings/billing"
+          href={BILLING_URL}
           className={buttonVariants({ className: "w-full" })}
         >
           Upgrade

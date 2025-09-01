@@ -7,11 +7,15 @@ import {
   LayoutTitle,
 } from "@/features/page/layout";
 import { auth } from "@/lib/auth";
-import type { LayoutParams } from "@/types/next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
 
-export default async function RouteLayout(props: LayoutParams) {
+type AccountLayoutProps = {
+  children: ReactNode;
+};
+
+export async function AccountLayout({ children }: AccountLayoutProps) {
   return (
     <Layout>
       <LayoutHeader>
@@ -32,7 +36,7 @@ export default async function RouteLayout(props: LayoutParams) {
           </SubmitButton>
         </form>
       </LayoutActions>
-      <LayoutContent>{props.children}</LayoutContent>
+      <LayoutContent>{children}</LayoutContent>
     </Layout>
   );
 }

@@ -15,6 +15,7 @@ import {
   ADDITIONAL_FEATURES,
   LIMITS_CONFIG,
 } from "@/lib/auth/stripe/auth-plans";
+import { BILLING_URL } from "@/lib/LINKS";
 import { cn } from "@/lib/utils";
 import { Clock } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
@@ -189,8 +190,8 @@ export function PricingCard({
             upgradeUser({
               plan: plan.name,
               annual: isYearly,
-              successUrl: `/app/settings/billing/success`,
-              cancelUrl: `/app/settings/billing`,
+              successUrl: `${BILLING_URL}/success`,
+              cancelUrl: `${BILLING_URL}/cancel`,
             });
           }}
         >

@@ -12,6 +12,7 @@ import { env } from "@/lib/env";
 import { resend } from "@/lib/mail/resend";
 import { combineWithParentMetadata } from "@/lib/metadata";
 import { prisma } from "@/lib/prisma";
+import { AccountLayout } from "../account-layout";
 import { ToggleEmailCheckbox } from "./toggle-email-checkbox";
 
 export const generateMetadata = combineWithParentMetadata({
@@ -31,11 +32,23 @@ export default async function MailProfilePage() {
   });
 
   if (!userWithResendContactId?.resendContactId) {
-    return <ErrorComponent />;
+    return (
+      <AccountLayout>
+        <div className="flex flex-col gap-4 lg:gap-8">
+          <ErrorComponent />
+        </div>
+      </AccountLayout>
+    );
   }
 
   if (!env.RESEND_AUDIENCE_ID) {
-    return <ErrorComponent />;
+    return (
+      <AccountLayout>
+        <div className="flex flex-col gap-4 lg:gap-8">
+          <ErrorComponent />
+        </div>
+      </AccountLayout>
+    );
   }
 
   const { data: resendUser } = await resend.contacts.get({
@@ -44,21 +57,32 @@ export default async function MailProfilePage() {
   });
 
   if (!resendUser) {
-    return <ErrorComponent />;
+    return (
+      <AccountLayout>
+        <div className="flex flex-col gap-4 lg:gap-8">
+          <ErrorComponent />
+        </div>
+      </AccountLayout>
+    );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Mail settings</CardTitle>
-        <CardDescription>
-          Update your email notifications settings to match your preferences.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ToggleEmailCheckbox unsubscribed={resendUser.unsubscribed} />
-      </CardContent>
-    </Card>
+    <AccountLayout>
+      <div className="flex flex-col gap-4 lg:gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Mail settings</CardTitle>
+            <CardDescription>
+              Update your email notifications settings to match your
+              preferences.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ToggleEmailCheckbox unsubscribed={resendUser.unsubscribed} />
+          </CardContent>
+        </Card>
+      </div>
+    </AccountLayout>
   );
 }
 

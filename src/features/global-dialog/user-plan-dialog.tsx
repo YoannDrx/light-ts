@@ -9,7 +9,7 @@ import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { PricingCard } from "../plans/pricing-card";
 import { closeGlobalDialog } from "./global-dialog.store";
 
-export const OrgPlanDialog = () => {
+export const UserPlanDialog = () => {
   return (
     <Dialog open={true} onOpenChange={() => closeGlobalDialog()}>
       <DialogContent className="max-h-[90vh] max-w-3xl overflow-auto px-8 py-6 lg:px-16 lg:py-14">

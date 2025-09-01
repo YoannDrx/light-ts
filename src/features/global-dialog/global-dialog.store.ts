@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type DialogType = "org-plan";
+export type DialogType = "user-plan";
 
 export const useGlobalDialogStore = create<{
   openDialog: DialogType | null;

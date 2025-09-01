@@ -51,6 +51,8 @@ export const route = createZodRoute({
 /**
  * Route handler with authentication middleware
  * Ensures user is logged in before accessing the route
+ *
+ * Use THIS route whenever you want to get the user session.
  */
 export const authRoute = route.use(async ({ next }) => {
   const user = await getUser();

@@ -1,3 +1,4 @@
+import type { Prisma } from "@/generated/prisma";
 import type { CurrentUserPayload } from "./get-user";
 import { getCurrentUser } from "./get-user";
 
@@ -14,8 +15,16 @@ export const getUserActiveSubscription = async () => {
     return null;
   }
 
-  return subscription;
+  return {
+    ...subscription,
+    stripeCustomerId: user.stripeCustomerId,
+    userId: user.id,
+  };
 };
+
+export type UserActiveSubscription = NonNullable<
+  Prisma.PromiseReturnType<typeof getUserActiveSubscription>
+>;
 
 export const checkUserSubscription = async (
   user: CurrentUserPayload | null,
