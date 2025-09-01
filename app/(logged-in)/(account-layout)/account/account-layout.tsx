@@ -17,7 +17,7 @@ type AccountLayoutProps = {
 
 export async function AccountLayout({ children }: AccountLayoutProps) {
   return (
-    <Layout>
+    <Layout size="lg">
       <LayoutHeader>
         <LayoutTitle>Settings</LayoutTitle>
       </LayoutHeader>

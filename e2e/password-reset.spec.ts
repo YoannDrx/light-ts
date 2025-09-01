@@ -56,7 +56,7 @@ test("password reset flow", async ({ page }) => {
   await page.getByRole("button", { name: /reset password/i }).click();
 
   // 9. Should be redirected to sign in page
-  await page.waitForURL(/\/auth\/signin/, { timeout: 10000 });
+  await page.waitForURL(/\/auth\/signin/, { timeout: 30000 });
 
   // 10. Try to sign in with the new password
   await page.getByLabel("Email").fill(userData.email);

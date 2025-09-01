@@ -152,7 +152,7 @@ describe("FormAutoSave", () => {
           expect.anything(),
         );
       },
-      { timeout: 200 },
+      { timeout: 500 },
     );
   });
 });

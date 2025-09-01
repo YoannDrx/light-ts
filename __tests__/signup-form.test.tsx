@@ -84,14 +84,19 @@ describe("SignUpCredentialsForm", () => {
     });
 
     // Check if redirect happened
-    expect(window.location.href).toBe("http://localhost:3000/orgs");
+    expect(window.location.href).toBe("http://localhost:3000/app");
   });
 
   it("should use custom callback URL from searchParams", async () => {
-    // Mock searchParams with custom callback
-    vi.mocked(useSearchParams).mockReturnValue(
-      createTestSearchParams({ callbackUrl: "/dashboard" }),
-    );
+    // Mock window.location.search with custom callback
+    Object.defineProperty(window, "location", {
+      value: {
+        origin: "http://localhost:3000",
+        href: "http://localhost:3000/auth/signup?callbackUrl=/dashboard",
+        search: "?callbackUrl=/dashboard",
+      },
+      writable: true,
+    });
 
     const { user } = setup(<SignUpCredentialsForm />);
 
@@ -110,6 +115,6 @@ describe("SignUpCredentialsForm", () => {
     });
 
     // Check if redirected to custom URL
-    expect(window.location.href).toBe("http://localhost:3000/orgs");
+    expect(window.location.href).toBe("http://localhost:3000/dashboard");
   });
 });

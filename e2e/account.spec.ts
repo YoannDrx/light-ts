@@ -67,6 +67,10 @@ test.describe("account", () => {
   test("update name flow", async ({ page }) => {
     await createTestAccount({ page, callbackURL: "/account" });
 
+    await page.getByRole("heading", { name: "Settings", level: 2 }).waitFor({
+      timeout: 10000,
+    });
+
     const newName = faker.person.fullName();
     const input = page.getByRole("textbox", { name: "Name" });
     await input.fill(newName);
