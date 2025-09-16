@@ -1,18 +1,36 @@
-import { SiteConfig } from "@/site-config";
-import { getSessionCookie } from "better-auth/cookies";
+import {
+  handleRootRedirect,
+  isAdminRoute,
+  isAppRoute,
+  redirectToSignIn,
+  redirectToUnauthorized,
+  validateSession,
+} from "@/lib/middleware-utils";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/") {
-    const session = getSessionCookie(request, {
-      cookiePrefix: SiteConfig.appId,
-    });
+  const { pathname } = request.nextUrl;
 
-    if (session) {
-      const url = new URL(request.url);
-      url.pathname = "/app";
-      return NextResponse.redirect(url.toString());
+  if (pathname === "/") {
+    return handleRootRedirect(request) ?? NextResponse.next();
+  }
+
+  if (isAppRoute(pathname)) {
+    const session = await validateSession(request);
+    if (!session) {
+      return redirectToSignIn(request);
+    }
+  }
+
+  if (isAdminRoute(pathname)) {
+    const session = await validateSession(request);
+    if (!session) {
+      return redirectToSignIn(request);
+    }
+
+    if (session.user.role !== "admin") {
+      return redirectToUnauthorized(request);
     }
   }
 
@@ -20,6 +38,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  runtime: "nodejs",
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
