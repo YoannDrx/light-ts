@@ -1,13 +1,16 @@
-import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vitest/config";
+import { fileURLToPath } from "url";
+import react from "@vitejs/plugin-react";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
-    environment: "jsdom",
+    environment: "happy-dom",
     setupFiles: [path.resolve(__dirname, "test/vitest.setup.ts")],
     env: {
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_123",

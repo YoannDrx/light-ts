@@ -8,9 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { dialogManager } from "@/features/dialog-manager/dialog-manager";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Ban, Crown, Eye, MoreHorizontal, UserCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -29,6 +30,7 @@ type UserActionsProps = {
 
 export function UserActions({ user }: UserActionsProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const impersonateMutation = useMutation({
     mutationFn: async (userId: string) => {
@@ -40,7 +42,8 @@ export function UserActions({ user }: UserActionsProps) {
     },
     onSuccess: () => {
       toast.success("Impersonation started");
-      router.push("/app");
+      void queryClient.invalidateQueries();
+      window.location.href = "/orgs";
     },
     onError: (error: Error) => {
       toast.error(`Failed to impersonate user: ${error.message}`);
@@ -158,7 +161,18 @@ export function UserActions({ user }: UserActionsProps) {
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem
-            onClick={() => banUserMutation.mutate({ userId: user.id })}
+            onClick={() => {
+              dialogManager.confirm({
+                title: "Ban User",
+                description: `Are you sure you want to ban ${user.name || user.email}? They will no longer be able to access the platform.`,
+                action: {
+                  label: "Ban User",
+                  onClick: async () => {
+                    await banUserMutation.mutateAsync({ userId: user.id });
+                  },
+                },
+              });
+            }}
             disabled={banUserMutation.isPending}
             className="text-destructive focus:text-destructive"
           >

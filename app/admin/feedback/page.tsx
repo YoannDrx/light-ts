@@ -23,11 +23,17 @@ const feedbackSearchParams = {
 
 const searchParamsCache = createSearchParamsCache(feedbackSearchParams);
 
-type PageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
+export default function Page(props: PageProps<"/admin/feedback">) {
+  return (
+    <Suspense fallback={null}>
+      <AdminFeedbackPage {...props} />
+    </Suspense>
+  );
+}
 
-export default async function AdminFeedbackPage({ searchParams }: PageProps) {
+async function AdminFeedbackPage({
+  searchParams,
+}: PageProps<"/admin/feedback">) {
   await getRequiredAdmin();
 
   const params = await searchParamsCache.parse(searchParams);

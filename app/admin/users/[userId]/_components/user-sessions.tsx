@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { dialogManager } from "@/features/dialog-manager/dialog-manager";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -148,7 +149,19 @@ export function UserSessions({ userId }: UserSessionsProps) {
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => revokeAllSessionsMutation.mutate()}
+              onClick={() => {
+                dialogManager.confirm({
+                  title: "Revoke All Sessions",
+                  description:
+                    "Are you sure you want to revoke all sessions? The user will be logged out from all devices.",
+                  action: {
+                    label: "Revoke All",
+                    onClick: async () => {
+                      await revokeAllSessionsMutation.mutateAsync();
+                    },
+                  },
+                });
+              }}
               disabled={revokeAllSessionsMutation.isPending}
             >
               <TrashIcon className="mr-2 size-4" />
@@ -209,13 +222,15 @@ export function UserSessions({ userId }: UserSessionsProps) {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Badge
-                          variant={
-                            new Date(session.expiresAt) > new Date()
-                              ? "default"
-                              : "destructive"
-                          }
-                        >
+                        <Badge variant="outline" className="gap-1.5">
+                          <span
+                            className={`size-1.5 rounded-full ${
+                              new Date(session.expiresAt) > new Date()
+                                ? "bg-emerald-500"
+                                : "bg-red-500"
+                            }`}
+                            aria-hidden="true"
+                          />
                           {new Date(session.expiresAt) > new Date()
                             ? "Active"
                             : "Expired"}
