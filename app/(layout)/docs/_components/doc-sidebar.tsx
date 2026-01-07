@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import type { DocType } from "../doc-manager";
+import { useI18n } from "@/i18n/provider";
 
 type DocSidebarProps = {
   docs: DocType[];
@@ -14,14 +15,16 @@ type DocSidebarProps = {
 
 export function DocSidebar({ docs }: DocSidebarProps) {
   const pathname = usePathname();
+  const { t } = useI18n();
+  const generalLabel = t("docs.general");
 
   const groupedDocs = useMemo(() => {
     const grouped: Record<string, typeof docs> = {
-      General: [],
+      [generalLabel]: [],
     };
 
     for (const doc of docs) {
-      const subcategory = doc.attributes.subcategory ?? "General";
+      const subcategory = doc.attributes.subcategory ?? generalLabel;
       grouped[subcategory] ??= [];
       grouped[subcategory].push(doc);
     }
@@ -39,15 +42,15 @@ export function DocSidebar({ docs }: DocSidebarProps) {
     });
 
     return grouped;
-  }, [docs]);
+  }, [docs, generalLabel]);
 
   const sortedSubcategories = useMemo(() => {
     return Object.keys(groupedDocs).sort((a, b) => {
-      if (a === "General") return -1;
-      if (b === "General") return 1;
+      if (a === generalLabel) return -1;
+      if (b === generalLabel) return 1;
       return a.localeCompare(b);
     });
-  }, [groupedDocs]);
+  }, [generalLabel, groupedDocs]);
 
   return (
     <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 overflow-y-auto border-r lg:block">

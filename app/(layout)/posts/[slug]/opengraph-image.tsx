@@ -1,4 +1,5 @@
 import { getCurrentPost } from "@/features/posts/post-manager";
+import { getI18n } from "@/i18n/server";
 import { getOgImageFont } from "@/lib/og-image-font";
 import type { PageParams } from "@/types/next";
 import { ImageResponse } from "next/og";
@@ -15,7 +16,8 @@ export default async function OpenGraphImage(
   props: PageParams<{ slug: string }>,
 ) {
   const params = await props.params;
-  const post = await getCurrentPost(params.slug);
+  const { locale } = await getI18n();
+  const post = await getCurrentPost(params.slug, locale);
 
   if (!post) {
     return null;

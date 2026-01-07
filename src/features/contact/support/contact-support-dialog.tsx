@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useI18n } from "@/i18n/provider";
 import { resolveActionResult } from "@/lib/actions/actions-utils";
 import { useSession } from "@/lib/auth-client";
 import { env } from "@/lib/env";
@@ -37,6 +38,7 @@ type ContactSupportDialogProps = PropsWithChildren;
 export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
   const [open, setOpen] = useState(false);
   const session = useSession();
+  const { t } = useI18n();
   const email = session.data?.user ? session.data.user.email : "";
   const form = useZodForm({
     schema: ContactSupportSchema,
@@ -50,12 +52,12 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
       return resolveActionResult(contactSupportAction(values));
     },
     onSuccess: () => {
-      toast.success("Your message has been sent.");
+      toast.success(t("support.sent"));
       form.reset();
       setOpen(false);
     },
     onError: () => {
-      toast.error("An error occurred");
+      toast.error(t("common.error"));
     },
   });
 
@@ -66,20 +68,22 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={(v) => setOpen(v)}>
       <DialogTrigger asChild>
-        {props.children ?? <Button variant="outline">Contact support</Button>}
+        {props.children ?? (
+          <Button variant="outline">{t("support.contact")}</Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Contact Support</DialogTitle>
+          <DialogTitle>{t("support.title")}</DialogTitle>
           <DialogDescription>
-            Fill the form bellow or send an email to{" "}
+            {t("support.descriptionPrefix")}{" "}
             <Link
               className="text-primary"
               href={`mailto:${env.NEXT_PUBLIC_EMAIL_CONTACT}`}
             >
               {env.NEXT_PUBLIC_EMAIL_CONTACT}
             </Link>
-            .
+            {t("support.descriptionSuffix")}
           </DialogDescription>
         </DialogHeader>
         <Form
@@ -93,7 +97,7 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("auth.form.email")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -107,7 +111,7 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Subject</FormLabel>
+                <FormLabel>{t("support.subject")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -120,7 +124,7 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel>{t("support.message")}</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
@@ -128,7 +132,7 @@ export const ContactSupportDialog = (props: ContactSupportDialogProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Send</Button>
+          <Button type="submit">{t("support.send")}</Button>
         </Form>
       </DialogContent>
     </Dialog>

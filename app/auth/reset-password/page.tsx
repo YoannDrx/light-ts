@@ -1,13 +1,17 @@
 import { SiteConfig } from "@/site-config";
 import type { PageParams } from "@/types/next";
 import type { Metadata } from "next";
+import { getI18n } from "@/i18n/server";
 import { ResetPasswordPage } from "./reset-password-page";
 
-export const metadata: Metadata = {
-  title: `Reset Password | ${SiteConfig.title}`,
-  description:
-    "Enter your new password to complete the password reset process.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("auth.resetPassword.metaTitle", { app: SiteConfig.title }),
+    description: t("auth.resetPassword.metaDescription"),
+  };
+}
 
 export default async function RoutePage(props: PageParams) {
   const searchParams = await props.searchParams;

@@ -5,6 +5,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useI18n } from "@/i18n/provider";
 import { Search } from "lucide-react";
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 
@@ -14,6 +15,7 @@ const feedbackSearchParams = {
 };
 
 export const FeedbackFilters = () => {
+  const { t } = useI18n();
   const [filters, setFilters] = useQueryStates(feedbackSearchParams, {
     shallow: false,
     throttleMs: 1000,
@@ -26,7 +28,7 @@ export const FeedbackFilters = () => {
           <Search className="size-4" />
         </InputGroupAddon>
         <InputGroupInput
-          placeholder="Search feedback by message, email, or user..."
+          placeholder={t("admin.feedback.searchPlaceholder")}
           value={filters.search}
           onChange={(e) => {
             void setFilters({

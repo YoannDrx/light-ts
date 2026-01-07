@@ -8,15 +8,20 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useI18n } from "@/i18n/provider";
 import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Fragment } from "react";
 
 export function AppBreadcrumb() {
   const pathname = usePathname();
+  const { t } = useI18n();
 
   const paths = pathname.split("/").filter(Boolean);
   const basePath = "/app";
+  const labelMap: Record<string, string> = {
+    users: t("nav.analytics"),
+  };
 
   return (
     <Breadcrumb>
@@ -24,7 +29,7 @@ export function AppBreadcrumb() {
         <BreadcrumbItem>
           <BreadcrumbLink href={basePath}>
             <Home size={16} strokeWidth={2} aria-hidden="true" />
-            <span className="sr-only">Home</span>
+            <span className="sr-only">{t("nav.home")}</span>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -32,7 +37,7 @@ export function AppBreadcrumb() {
           const isLast = index === paths.slice(1).length - 1;
           const currentPath = `/${paths.slice(0, index + 2).join("/")}`;
 
-          const displayName = path;
+          const displayName = labelMap[path] ?? path;
 
           return (
             <Fragment key={path + index}>

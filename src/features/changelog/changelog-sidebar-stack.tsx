@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/format/date";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/provider";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,7 @@ export function ChangelogSidebarStack({
   changelogs: initialChangelogs,
   className,
 }: ChangelogSidebarStackProps) {
+  const { t, locale } = useI18n();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [changelogs, dismissChangelog] = useOptimistic(
@@ -69,7 +71,7 @@ export function ChangelogSidebarStack({
                 <div className="relative aspect-[2.5/1] w-full">
                   <Image
                     src={attributes.image}
-                    alt={attributes.title ?? "Changelog"}
+                    alt={attributes.title ?? t("changelog.title")}
                     fill
                     className="object-cover"
                   />
@@ -78,10 +80,10 @@ export function ChangelogSidebarStack({
               <div className="flex items-start justify-between gap-2 p-2.5">
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">
-                    {attributes.title ?? "New Update"}
+                    {attributes.title ?? t("changelog.newUpdate")}
                   </p>
                   <p className="text-muted-foreground text-xs">
-                    {formatDate(attributes.date)}
+                    {formatDate(attributes.date, locale)}
                   </p>
                 </div>
                 {index === 0 && (

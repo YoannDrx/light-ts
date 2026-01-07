@@ -13,6 +13,8 @@ import {
 import { calculateReadingTime } from "@/features/posts/calculate-reading-time";
 import type { PostParams } from "@/features/posts/post-manager";
 import { getCurrentPost, getPosts } from "@/features/posts/post-manager";
+import { defaultLocale } from "@/i18n/config";
+import { getI18n } from "@/i18n/server";
 import { formatDate } from "@/lib/format/date";
 import { logger } from "@/lib/logger";
 import { SiteConfig } from "@/site-config";
@@ -25,7 +27,8 @@ export const dynamic = "force-static";
 
 export async function generateMetadata(props: PostParams): Promise<Metadata> {
   const params = await props.params;
-  const post = await getCurrentPost(params.slug);
+  const { locale } = await getI18n();
+  const post = await getCurrentPost(params.slug, locale);
 
   if (!post) {
     notFound();
@@ -49,7 +52,7 @@ export async function generateMetadata(props: PostParams): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
+  const posts = await getPosts(undefined, defaultLocale);
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -57,8 +60,9 @@ export async function generateStaticParams() {
 }
 
 export default async function RoutePage(props: PostParams) {
+  const { t, locale } = await getI18n();
   const params = await props.params;
-  const post = await getCurrentPost(params.slug);
+  const post = await getCurrentPost(params.slug, locale);
 
   if (!post) {
     notFound();
@@ -76,7 +80,7 @@ export default async function RoutePage(props: PostParams) {
     <Layout>
       <LayoutContent>
         <Link className={buttonVariants({ variant: "link" })} href="/posts">
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={16} /> {t("posts.back")}
         </Link>
       </LayoutContent>
       <LayoutHeader
@@ -90,15 +94,23 @@ export default async function RoutePage(props: PostParams) {
         <div className="flex w-full flex-col gap-2 bg-black/50 p-10 text-white backdrop-blur">
           {post.attributes.status === "draft" ? (
             <Badge className="w-fit" variant="secondary">
-              Draft
+              {t("posts.draft")}
             </Badge>
           ) : null}
           <LayoutTitle className="drop-shadow-sm">
             {post.attributes.title}
           </LayoutTitle>
           <LayoutDescription className="drop-shadow-sm">
-            Published by {formatDate(new Date(post.attributes.date))} · Reading
-            time {calculateReadingTime(post.content)} minutes · Created by{" "}
+            {t("posts.publishedBy", {
+              date: formatDate(new Date(post.attributes.date), locale),
+            })}{" "}
+            ·{" "}
+            {t("posts.readingTime", {
+              minutes: calculateReadingTime(post.content).toLocaleString(
+                locale,
+              ),
+            })}{" "}
+            · {t("posts.createdBy")}{" "}
             <Typography variant="link" as={Link} href={SiteConfig.team.website}>
               {SiteConfig.team.name}
             </Typography>

@@ -2,6 +2,7 @@
 
 import { Divider } from "@/components/nowts/divider";
 import { Typography } from "@/components/nowts/typography";
+import { useI18n } from "@/i18n/provider";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ProviderButton } from "./provider-button";
@@ -16,13 +17,14 @@ export const SignInProviders = ({
 }) => {
   const searchParams = useSearchParams();
   const callbackUrlParams = searchParams.get("callbackUrl");
+  const { t } = useI18n();
 
   callbackUrl ??= callbackUrlParams as string;
 
   return (
     <div className="flex flex-col gap-4 lg:gap-6">
       <SignInCredentialsAndMagicLinkForm callbackUrl={callbackUrl} />
-      {providers.length > 0 && <Divider>or</Divider>}
+      {providers.length > 0 && <Divider>{t("auth.signIn.or")}</Divider>}
 
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-4">
         {/* ℹ️ Add provider you want to support here */}
@@ -35,13 +37,13 @@ export const SignInProviders = ({
       </div>
 
       <Typography variant="muted" className="text-xs">
-        You don't have an account?{" "}
+        {t("auth.signIn.noAccount")}{" "}
         <Typography
           variant="link"
           as={Link}
           href={`/auth/signup?callbackUrl=${callbackUrl}`}
         >
-          Sign up
+          {t("auth.signIn.signUp")}
         </Typography>
       </Typography>
     </div>

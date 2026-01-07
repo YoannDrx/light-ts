@@ -9,6 +9,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -25,13 +26,14 @@ export function ConfirmDeletePage({
   callbackUrl?: string;
 }) {
   const router = useRouter();
+  const { t } = useI18n();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const confirmDeleteMutation = useMutation({
     mutationFn: async () => {
       if (!token) {
-        throw new Error("Invalid token");
+        throw new Error(t("auth.confirmDelete.invalidToken"));
       }
       return unwrapSafePromise(
         authClient.deleteUser({
@@ -73,12 +75,11 @@ export function ConfirmDeletePage({
           </Avatar>
         </div>
         <CardHeader className="text-center">
-          Confirm Account Deletion
+          {t("auth.confirmDelete.title")}
         </CardHeader>
 
         <CardDescription className="text-center">
-          Are you sure you want to delete your account? This action is permanent
-          and cannot be undone.
+          {t("auth.confirmDelete.description")}
         </CardDescription>
       </CardHeader>
       <CardFooter className="border-t pt-6">
@@ -90,10 +91,10 @@ export function ConfirmDeletePage({
             onClick={handleConfirmDelete}
             className="flex-1"
           >
-            Yes, Delete My Account
+            {t("auth.confirmDelete.confirm")}
           </LoadingButton>
           <Button variant="outline" onClick={handleCancel} className="flex-1">
-            Cancel
+            {t("actions.cancel")}
           </Button>
         </div>
       </CardFooter>

@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useI18n } from "@/i18n/provider";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { useMemo } from "react";
 import { Area, AreaChart, XAxis } from "recharts";
@@ -16,35 +17,34 @@ type MrrChartProps = {
   data: MrrDataPoint[];
 };
 
-const chartConfig = {
-  mrr: {
-    label: "MRR",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig;
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
 export function MrrChart({ data }: MrrChartProps) {
+  const { locale, t } = useI18n();
+  const chartConfig = {
+    mrr: {
+      label: t("admin.stats.mrr"),
+      color: "var(--chart-1)",
+    },
+  } satisfies ChartConfig;
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+
   const chartData = useMemo(() => {
     return data.map((item) => {
       const [year, month] = item.date.split("-");
       const date = new Date(Number(year), Number(month) - 1);
       return {
         ...item,
-        formattedDate: date.toLocaleDateString("en-US", {
+        formattedDate: date.toLocaleDateString(locale, {
           month: "short",
         }),
       };
     });
-  }, [data]);
+  }, [data, locale]);
 
   const currentMrr =
     chartData.length > 0 ? chartData[chartData.length - 1].mrr : 0;
@@ -60,7 +60,7 @@ export function MrrChart({ data }: MrrChartProps) {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-muted-foreground text-sm font-medium">
-              Monthly Recurring Revenue
+              {t("admin.stats.mrr")}
             </p>
             <p className="mt-1 text-3xl font-semibold tracking-tight">
               {formatCurrency(currentMrr)}

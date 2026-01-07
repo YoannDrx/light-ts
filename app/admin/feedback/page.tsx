@@ -6,6 +6,7 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
 import {
   createSearchParamsCache,
@@ -23,7 +24,7 @@ const feedbackSearchParams = {
 
 const searchParamsCache = createSearchParamsCache(feedbackSearchParams);
 
-export default function Page(props: PageProps<"/admin/feedback">) {
+export default async function Page(props: PageProps<"/admin/feedback">) {
   return (
     <Suspense fallback={null}>
       <AdminFeedbackPage {...props} />
@@ -34,6 +35,7 @@ export default function Page(props: PageProps<"/admin/feedback">) {
 async function AdminFeedbackPage({
   searchParams,
 }: PageProps<"/admin/feedback">) {
+  const { t } = await getI18n();
   await getRequiredAdmin();
 
   const params = await searchParamsCache.parse(searchParams);
@@ -41,10 +43,8 @@ async function AdminFeedbackPage({
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>Feedback Management</LayoutTitle>
-        <LayoutDescription>
-          View and manage all user feedback submissions
-        </LayoutDescription>
+        <LayoutTitle>{t("admin.feedback.title")}</LayoutTitle>
+        <LayoutDescription>{t("admin.feedback.description")}</LayoutDescription>
       </LayoutHeader>
 
       <LayoutContent>

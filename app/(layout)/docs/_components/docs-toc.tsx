@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/provider";
 
 function useActiveItem(itemIds: string[]) {
   const [activeId, setActiveId] = React.useState<string | null>(null);
@@ -51,6 +52,7 @@ export function DocsTableOfContents({
   toc: TocItem[];
   className?: string;
 }) {
+  const { t } = useI18n();
   const itemIds = React.useMemo(
     () => toc.map((item) => item.url.replace("#", "")),
     [toc],
@@ -64,7 +66,7 @@ export function DocsTableOfContents({
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <h4 className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-        On This Page
+        {t("docs.onThisPage")}
       </h4>
       <nav className="flex flex-col gap-2">
         {toc.map((item) => (

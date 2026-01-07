@@ -16,6 +16,7 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
 import { getInitials } from "@/lib/utils/initials";
 import { getFeedbackById } from "@/query/feedback/get-feedback";
@@ -25,30 +26,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { FeedbackReplyButton } from "../_components/feedback-reply-button";
 
-const ReviewIcons = [
-  {
-    value: 1,
-    icon: Angry,
-    tooltip: "Extremely Dissatisfied",
-  },
-  {
-    value: 2,
-    icon: Frown,
-    tooltip: "Somewhat Dissatisfied",
-  },
-  {
-    value: 3,
-    icon: Meh,
-    tooltip: "Neutral",
-  },
-  {
-    value: 4,
-    icon: SmilePlus,
-    tooltip: "Satisfied",
-  },
-];
-
-export default function Page(props: {
+export default async function Page(props: {
   params: Promise<{ feedbackId: string }>;
 }) {
   return (
@@ -62,6 +40,7 @@ async function FeedbackDetailPage(props: {
   params: Promise<{ feedbackId: string }>;
 }) {
   const params = await props.params;
+  const { locale, t } = await getI18n();
   await getRequiredAdmin();
 
   const feedback = await getFeedbackById(params.feedbackId);
@@ -70,16 +49,41 @@ async function FeedbackDetailPage(props: {
     notFound();
   }
 
-  const reviewIcon = ReviewIcons.find((icon) => icon.value === feedback.review);
-  const displayName = feedback.user?.name ?? "Anonymous";
-  const displayEmail = feedback.user?.email ?? feedback.email ?? "No email";
+  const reviewIcons = [
+    {
+      value: 1,
+      icon: Angry,
+      tooltipKey: "admin.feedback.ratings.extremelyDissatisfied",
+    },
+    {
+      value: 2,
+      icon: Frown,
+      tooltipKey: "admin.feedback.ratings.somewhatDissatisfied",
+    },
+    {
+      value: 3,
+      icon: Meh,
+      tooltipKey: "admin.feedback.ratings.neutral",
+    },
+    {
+      value: 4,
+      icon: SmilePlus,
+      tooltipKey: "admin.feedback.ratings.satisfied",
+    },
+  ];
+
+  const reviewIcon = reviewIcons.find((icon) => icon.value === feedback.review);
+  const displayName = feedback.user?.name ?? t("admin.users.anonymous");
+  const displayEmail =
+    feedback.user?.email ?? feedback.email ?? t("admin.users.noEmail");
 
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>Feedback</LayoutTitle>
+        <LayoutTitle>{t("admin.feedback.detailTitle")}</LayoutTitle>
         <LayoutDescription>
-          Submitted {new Date(feedback.createdAt).toLocaleDateString()}
+          {t("admin.feedback.submitted")}{" "}
+          {new Date(feedback.createdAt).toLocaleDateString(locale)}
         </LayoutDescription>
       </LayoutHeader>
 
@@ -103,7 +107,7 @@ async function FeedbackDetailPage(props: {
                 <ItemTitle>
                   {displayName}
                   <Badge variant="outline" className="text-xs">
-                    {feedback.user.role ?? "user"}
+                    {t(`admin.users.roles.${feedback.user.role ?? "user"}`)}
                   </Badge>
                 </ItemTitle>
                 <ItemDescription>{displayEmail}</ItemDescription>
@@ -121,7 +125,7 @@ async function FeedbackDetailPage(props: {
               </Avatar>
             </ItemMedia>
             <ItemContent>
-              <ItemTitle>Anonymous</ItemTitle>
+              <ItemTitle>{t("admin.users.anonymous")}</ItemTitle>
               <ItemDescription>{displayEmail}</ItemDescription>
             </ItemContent>
           </Item>
@@ -130,13 +134,17 @@ async function FeedbackDetailPage(props: {
         <Item variant="outline">
           <ItemMedia>
             {reviewIcon && (
-              <InlineTooltip title={reviewIcon.tooltip}>
+              <InlineTooltip title={t(reviewIcon.tooltipKey)}>
                 <reviewIcon.icon size={24} className="text-primary" />
               </InlineTooltip>
             )}
           </ItemMedia>
           <ItemContent>
-            <ItemTitle>{reviewIcon?.tooltip ?? "No rating"}</ItemTitle>
+            <ItemTitle>
+              {reviewIcon
+                ? t(reviewIcon.tooltipKey)
+                : t("admin.feedback.noRating")}
+            </ItemTitle>
             <ItemDescription className="whitespace-pre-wrap">
               {feedback.message}
             </ItemDescription>

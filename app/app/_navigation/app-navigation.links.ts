@@ -3,20 +3,27 @@ import { Home, User } from "lucide-react";
 
 const APP_PATH = "/app";
 
-export const APP_LINKS: NavigationGroup[] = [
-  {
-    title: "Menu",
-    links: [
-      {
-        href: APP_PATH,
-        Icon: Home,
-        label: "Dashboard",
-      },
-      {
-        href: `${APP_PATH}/users`,
-        Icon: User,
-        label: "Analytics",
-      },
-    ],
-  },
-] satisfies NavigationGroup[];
+type Translator = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
+
+export const getAppNavigation = (t: Translator): NavigationGroup[] => {
+  return [
+    {
+      title: t("nav.menu"),
+      links: [
+        {
+          href: APP_PATH,
+          Icon: Home,
+          label: t("nav.dashboard"),
+        },
+        {
+          href: `${APP_PATH}/users`,
+          Icon: User,
+          label: t("nav.analytics"),
+        },
+      ],
+    },
+  ];
+};

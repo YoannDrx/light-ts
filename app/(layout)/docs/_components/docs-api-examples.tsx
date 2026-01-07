@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Typography } from "@/components/nowts/typography";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Check, Copy } from "lucide-react";
+import { useI18n } from "@/i18n/provider";
 
 type ApiMethod = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 
@@ -34,6 +35,7 @@ export function DocsApiExamples({
   className,
 }: ApiExamplesProps) {
   const { isCopied, copyToClipboard } = useCopyToClipboard(2000);
+  const { t } = useI18n();
 
   if (!examples && !results && !method && !endpoint) {
     return null;
@@ -77,7 +79,7 @@ export function DocsApiExamples({
       {examples && exampleKeys.length > 0 && (
         <div className="flex flex-col gap-2">
           <Typography variant="muted" className="text-xs">
-            Request Examples
+            {t("docs.requestExamples")}
           </Typography>
           <Tabs defaultValue={exampleKeys[0]} className="w-full">
             <TabsList
@@ -110,7 +112,7 @@ export function DocsApiExamples({
       {results && resultKeys.length > 0 && (
         <div className="flex flex-col gap-2">
           <Typography variant="muted" className="text-xs">
-            Response Examples
+            {t("docs.responseExamples")}
           </Typography>
           <Tabs defaultValue={resultKeys[0]} className="w-full">
             <TabsList

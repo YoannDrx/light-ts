@@ -7,22 +7,27 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { SiteConfig } from "@/site-config";
 import type { PageParams } from "@/types/next";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: `Welcome | ${SiteConfig.title}`,
-  description:
-    "Welcome to your new account! You're all set up and ready to start collecting testimonials.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("auth.newUser.metaTitle", { app: SiteConfig.title }),
+    description: t("auth.newUser.metaDescription"),
+  };
+}
 
 /**
  * This page is show when a user login. You can add an onboarding process here.
  */
 export default async function NewUserPage(props: PageParams) {
+  const { t } = await getI18n();
   const searchParams = await props.searchParams;
   const callbackUrl =
     typeof searchParams.callbackUrl === "string"
@@ -36,12 +41,12 @@ export default async function NewUserPage(props: PageParams) {
       <Header />
       <Layout>
         <LayoutHeader>
-          <LayoutTitle>Successfully login</LayoutTitle>
-          <LayoutDescription>You can now use the app</LayoutDescription>
+          <LayoutTitle>{t("auth.newUser.title")}</LayoutTitle>
+          <LayoutDescription>{t("auth.newUser.description")}</LayoutDescription>
         </LayoutHeader>
         <LayoutContent>
           <Link href="/" className={buttonVariants({ size: "lg" })}>
-            Get Started
+            {t("auth.newUser.cta")}
           </Link>
         </LayoutContent>
       </Layout>

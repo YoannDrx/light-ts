@@ -12,13 +12,18 @@ import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getDocs } from "./doc-manager";
+import { getI18n } from "@/i18n/server";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: `Documentation | ${SiteConfig.title}`,
-  description: `Everything you need to know about using ${SiteConfig.title}`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+  return {
+    title: t("docs.metaTitle", { app: SiteConfig.title }),
+    description: t("docs.metaDescription", { app: SiteConfig.title }),
+  };
+}
 
-export default function Page(props: PageProps<"/docs">) {
+export default async function Page(props: PageProps<"/docs">) {
   return (
     <Suspense fallback={null}>
       <DocsPage {...props} />
@@ -27,7 +32,8 @@ export default function Page(props: PageProps<"/docs">) {
 }
 
 async function DocsPage(_props: PageProps<"/docs">) {
-  const docs = await getDocs();
+  const { t, locale } = await getI18n();
+  const docs = await getDocs(undefined, locale);
 
   const sortedDocs = [...docs].sort((a, b) => {
     if (a.attributes.order !== undefined && b.attributes.order !== undefined) {
@@ -44,10 +50,10 @@ async function DocsPage(_props: PageProps<"/docs">) {
             variant="h1"
             className="text-4xl font-bold tracking-tight"
           >
-            Documentation
+            {t("docs.title")}
           </Typography>
           <Typography variant="p" className="text-muted-foreground text-lg">
-            Everything you need to know about using {SiteConfig.title}
+            {t("docs.description", { app: SiteConfig.title })}
           </Typography>
         </div>
 
@@ -69,7 +75,8 @@ async function DocsPage(_props: PageProps<"/docs">) {
                   href={`/docs/${doc.slug}`}
                   className={buttonVariants({ variant: "outline" })}
                 >
-                  Read More <ArrowRightIcon className="ml-2 size-4" />
+                  {t("docs.readMore")}{" "}
+                  <ArrowRightIcon className="ml-2 size-4" />
                 </Link>
               </CardFooter>
             </Card>

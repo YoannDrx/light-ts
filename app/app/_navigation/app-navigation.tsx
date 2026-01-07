@@ -3,6 +3,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { LanguageToggle } from "@/features/i18n/language-toggle";
 import { Layout } from "@/features/page/layout";
 import type { PropsWithChildren } from "react";
 import { AppBreadcrumb } from "./app-breadcrumb";
@@ -21,6 +22,9 @@ export async function AppNavigation({ children }: PropsWithChildren) {
               className="size-9 cursor-pointer"
             />
             <AppBreadcrumb />
+            <div className="ml-auto">
+              <LanguageToggle />
+            </div>
           </Layout>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

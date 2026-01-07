@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getI18n } from "@/i18n/server";
 import { getUsersWithStats } from "../_actions/admin-users";
 import { UserRow } from "./user-row";
 
@@ -17,6 +18,7 @@ type UserTableProps = {
 };
 
 export const UserTable = async ({ searchParams }: UserTableProps) => {
+  const { t } = await getI18n();
   const pageSize = 10;
   const currentPage = searchParams.page;
 
@@ -31,10 +33,10 @@ export const UserTable = async ({ searchParams }: UserTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>User</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t("admin.users.table.user")}</TableHead>
+            <TableHead>{t("admin.users.table.role")}</TableHead>
+            <TableHead>{t("admin.users.table.created")}</TableHead>
+            <TableHead>{t("admin.users.table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

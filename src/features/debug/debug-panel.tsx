@@ -3,6 +3,7 @@
 import { Typography } from "@/components/nowts/typography";
 import { Button } from "@/components/ui/button";
 import { useIsClient } from "@/hooks/use-is-client";
+import { useI18n } from "@/i18n/provider";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { GripHorizontalIcon, GripIcon, Loader2Icon, XIcon } from "lucide-react";
@@ -86,6 +87,7 @@ function DebugPanelContent({
   const dragControls = useDragControls();
   const { actions, infos } = useDebugPanelStore();
   const session = useSession();
+  const { t } = useI18n();
   const [loadingActions, setLoadingActions] = useState<Set<string>>(new Set());
   const [size, setSize] = useState(initialSize);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -139,14 +141,24 @@ function DebugPanelContent({
   const allInfos = [
     ...(session.data?.user
       ? [
-          { id: "_user", label: "User", value: session.data.user.email },
+          {
+            id: "_user",
+            label: t("debug.user"),
+            value: session.data.user.email,
+          },
           {
             id: "_session",
-            label: "Session",
+            label: t("debug.session"),
             value: `${session.data.session.id.slice(0, 8)}...`,
           },
         ]
-      : [{ id: "_user", label: "User", value: "Not logged in" }]),
+      : [
+          {
+            id: "_user",
+            label: t("debug.user"),
+            value: t("debug.notLoggedIn"),
+          },
+        ]),
     ...infos,
   ];
 
@@ -188,7 +200,7 @@ function DebugPanelContent({
       >
         <div className="flex items-center gap-2">
           <GripHorizontalIcon className="text-muted-foreground size-4" />
-          <Typography variant="small">Debug Panel</Typography>
+          <Typography variant="small">{t("debug.title")}</Typography>
         </div>
         <div className="flex items-center gap-2">
           <BreakpointBadge className="bg-muted rounded px-1.5 py-0.5" />
@@ -208,7 +220,7 @@ function DebugPanelContent({
               variant="muted"
               className="text-xs font-medium uppercase"
             >
-              Info
+              {t("debug.info")}
             </Typography>
             <div className="bg-muted/50 rounded-md p-2">
               {allInfos.map((info) => (
@@ -220,7 +232,7 @@ function DebugPanelContent({
                     {info.label}
                   </Typography>
                   <Typography variant="code" className="text-xs">
-                    {info.value === null ? "null" : String(info.value)}
+                    {info.value === null ? t("debug.null") : String(info.value)}
                   </Typography>
                 </div>
               ))}
@@ -234,7 +246,7 @@ function DebugPanelContent({
               variant="muted"
               className="text-xs font-medium uppercase"
             >
-              Actions
+              {t("debug.actions")}
             </Typography>
             <div className="flex flex-wrap gap-1">
               {actions.map((action) => (
@@ -259,7 +271,7 @@ function DebugPanelContent({
 
         {actions.length === 0 && (
           <Typography variant="muted" className="text-center text-xs">
-            No actions registered
+            {t("debug.noActions")}
           </Typography>
         )}
       </div>

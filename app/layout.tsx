@@ -2,9 +2,9 @@ import { TailwindIndicator } from "@/components/utils/tailwind-indicator";
 import { FloatingLegalFooter } from "@/features/legal/floating-legal-footer";
 import { NextTopLoader } from "@/features/page/next-top-loader";
 import { ServerToaster } from "@/features/server-sonner/server-toaster";
+import { getI18n } from "@/i18n/server";
 import { getServerUrl } from "@/lib/server-url";
 import { cn } from "@/lib/utils";
-import { SiteConfig } from "@/site-config";
 import type { LayoutParams } from "@/types/next";
 import type { Metadata } from "next";
 import { Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
@@ -13,11 +13,15 @@ import { type ReactNode, Suspense } from "react";
 import "./globals.css";
 import { Providers } from "./providers";
 
-export const metadata: Metadata = {
-  title: SiteConfig.title,
-  description: SiteConfig.description,
-  metadataBase: new URL(getServerUrl()),
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("meta.title"),
+    description: t("meta.description"),
+    metadataBase: new URL(getServerUrl()),
+  };
+}
 
 const CaptionFont = Space_Grotesk({
   subsets: ["latin"],
@@ -34,12 +38,14 @@ const GeistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   modal,
 }: LayoutParams & { modal?: ReactNode }) {
+  const { locale, messages } = await getI18n();
+
   return (
-    <html lang="en" className="h-full" suppressHydrationWarning>
+    <html lang={locale} className="h-full" suppressHydrationWarning>
       <body
         suppressHydrationWarning
         className={cn(
@@ -50,7 +56,7 @@ export default function RootLayout({
         )}
       >
         <NuqsAdapter>
-          <Providers>
+          <Providers locale={locale} messages={messages}>
             <NextTopLoader
               delay={100}
               showSpinner={false}

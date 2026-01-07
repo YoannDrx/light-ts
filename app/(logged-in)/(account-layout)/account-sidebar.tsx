@@ -14,16 +14,18 @@ import {
 import { SidebarNavigationMenu } from "@/components/ui/sidebar-utils";
 import type { NavigationGroup } from "@/features/navigation/navigation.type";
 import { SidebarUserButton } from "@/features/sidebar/sidebar-user-button";
+import { useI18n } from "@/i18n/provider";
 import { ChevronDown } from "lucide-react";
 import { getAccountNavigation } from "./account.links";
 
 export function AccountSidebar() {
-  const links: NavigationGroup[] = getAccountNavigation();
+  const { t } = useI18n();
+  const links: NavigationGroup[] = getAccountNavigation(t);
 
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
-        <Typography variant="large">Account</Typography>
+        <Typography variant="large">{t("account.title")}</Typography>
       </SidebarHeader>
       <SidebarContent>
         {links.map((link) => (

@@ -19,6 +19,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { InlineTooltip } from "@/components/ui/tooltip";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { resolveActionResult } from "@/lib/actions/actions-utils";
 import { useSession } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
@@ -36,6 +37,7 @@ type ContactFeedbackPopoverProps = PropsWithChildren;
 export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
   const [open, setOpen] = useState(false);
   const session = useSession();
+  const { t } = useI18n();
   const email = session.data?.user ? session.data.user.email : "";
   const form = useZodForm({
     schema: ContactFeedbackSchema,
@@ -49,12 +51,12 @@ export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
       return resolveActionResult(feedbackAction(values));
     },
     onSuccess: () => {
-      toast.success("Your feedback has been sent! Thanks you.");
+      toast.success(t("feedback.sent"));
       form.reset();
       setOpen(false);
     },
     onError: () => {
-      toast.error("An error occurred");
+      toast.error(t("common.error"));
     },
   });
 
@@ -65,7 +67,9 @@ export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
   return (
     <Popover open={open} onOpenChange={(v) => setOpen(v)}>
       <PopoverTrigger asChild>
-        {props.children ?? <Button variant="outline">Feedback</Button>}
+        {props.children ?? (
+          <Button variant="outline">{t("feedback.button")}</Button>
+        )}
       </PopoverTrigger>
       <PopoverContent className="p-0">
         <Form
@@ -80,7 +84,7 @@ export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("auth.form.email")}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -95,7 +99,7 @@ export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{t("feedback.message")}</FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
@@ -124,7 +128,7 @@ export const ContactFeedbackPopover = (props: ContactFeedbackPopoverProps) => {
               type="submit"
               variant="outline"
             >
-              Send
+              {t("feedback.send")}
             </LoadingButton>
           </div>
         </Form>
@@ -137,22 +141,22 @@ const ReviewInputItems = [
   {
     value: "1",
     icon: Angry,
-    tooltip: "Extremely Dissatisfied",
+    tooltipKey: "admin.feedback.ratings.extremelyDissatisfied",
   },
   {
     value: "2",
     icon: Frown,
-    tooltip: "Somewhat Dissatisfied",
+    tooltipKey: "admin.feedback.ratings.somewhatDissatisfied",
   },
   {
     value: "3",
     icon: Meh,
-    tooltip: "Neutral",
+    tooltipKey: "admin.feedback.ratings.neutral",
   },
   {
     value: "4",
     icon: SmilePlus,
-    tooltip: "Satisfied",
+    tooltipKey: "admin.feedback.ratings.satisfied",
   },
 ];
 
@@ -163,10 +167,12 @@ const ReviewInput = ({
   onChange: (value: string) => void;
   value?: string;
 }) => {
+  const { t } = useI18n();
+
   return (
     <>
       {ReviewInputItems.map((item) => (
-        <InlineTooltip key={item.value} title={item.tooltip}>
+        <InlineTooltip key={item.value} title={t(item.tooltipKey)}>
           <button
             type="button"
             onClick={() => {

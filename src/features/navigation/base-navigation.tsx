@@ -13,20 +13,25 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { SidebarMenuButtonLink } from "@/components/ui/sidebar-utils";
+import { LanguageToggle } from "@/features/i18n/language-toggle";
 import { Layout } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { SiteConfig } from "@/site-config";
 import { Building2, Home, User } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { SidebarUserButton } from "../sidebar/sidebar-user-button";
 
-export function BaseNavigation({ children }: PropsWithChildren) {
+export async function BaseNavigation({ children }: PropsWithChildren) {
   return (
     <SidebarProvider id="app-sidebar">
       <BaseSidebar />
       <SidebarInset className="border-accent border">
         <header className="flex h-16 shrink-0 items-center gap-2">
-          <Layout size="lg">
+          <Layout size="lg" className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
+            <div className="ml-auto">
+              <LanguageToggle />
+            </div>
           </Layout>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
@@ -35,7 +40,9 @@ export function BaseNavigation({ children }: PropsWithChildren) {
   );
 }
 
-const BaseSidebar = () => {
+const BaseSidebar = async () => {
+  const { t } = await getI18n();
+
   return (
     <Sidebar variant="inset">
       <SidebarHeader>
@@ -49,19 +56,19 @@ const BaseSidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButtonLink href="/orgs">
               <Building2 />
-              <span>Organization</span>
+              <span>{t("nav.organization")}</span>
             </SidebarMenuButtonLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButtonLink href="/home">
               <Home />
-              <span>Home</span>
+              <span>{t("nav.home")}</span>
             </SidebarMenuButtonLink>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButtonLink href="/account">
               <User />
-              <span>Account</span>
+              <span>{t("nav.account")}</span>
             </SidebarMenuButtonLink>
           </SidebarMenuItem>
         </SidebarMenu>

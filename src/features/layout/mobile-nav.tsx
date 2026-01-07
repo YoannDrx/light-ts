@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useI18n } from "@/i18n/provider";
 
 type NavItem = {
   href: string;
@@ -30,13 +31,14 @@ const iconMap: Record<string, typeof BookOpen> = {
 export function MobileNav({ navItems }: { navItems: NavItem[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { t } = useI18n();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild className="md:hidden">
         <Button variant="ghost" size="icon">
           <Menu className="size-5" />
-          <span className="sr-only">Menu</span>
+          <span className="sr-only">{t("nav.menu")}</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="w-80">
@@ -44,7 +46,7 @@ export function MobileNav({ navItems }: { navItems: NavItem[] }) {
           <SheetTitle className="flex items-center gap-2">
             <Image
               src={SiteConfig.appIcon}
-              alt={SiteConfig.title}
+              alt={t("nav.logoAlt")}
               width={24}
               height={24}
               className="size-6"

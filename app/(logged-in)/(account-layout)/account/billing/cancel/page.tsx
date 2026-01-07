@@ -5,19 +5,20 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { getRequiredUser } from "@/lib/auth/auth-user";
 import { CancelSubscriptionForm } from "./cancel-form";
 
 export default async function CancelSubscriptionPage() {
+  const { t } = await getI18n();
   await getRequiredUser();
 
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>Cancel Subscription</LayoutTitle>
+        <LayoutTitle>{t("account.billing.cancelTitle")}</LayoutTitle>
         <LayoutDescription>
-          We're sorry to see you go. Please let us know why you're cancelling so
-          we can improve our service.
+          {t("account.billing.cancelDescription")}
         </LayoutDescription>
       </LayoutHeader>
       <LayoutContent>

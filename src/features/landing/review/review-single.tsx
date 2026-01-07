@@ -2,6 +2,7 @@ import { Typography } from "@/components/nowts/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ClientMarkdown } from "@/features/markdown/client-markdown";
 import { Layout } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 
 type ReviewSingleProps = {
   /**
@@ -26,7 +27,9 @@ type ReviewSingleProps = {
   compagnyImage?: string;
 };
 
-export const ReviewSingle = (props: ReviewSingleProps) => {
+export const ReviewSingle = async (props: ReviewSingleProps) => {
+  const { t } = await getI18n();
+
   return (
     <Layout className="flex flex-col items-center gap-8">
       <div className="flex flex-1 flex-col gap-4">
@@ -46,7 +49,7 @@ export const ReviewSingle = (props: ReviewSingleProps) => {
               </Typography>
               {props.compagnyImage ? (
                 <>
-                  <span>at</span>
+                  <span>{t("landing.reviews.at")}</span>
 
                   <Avatar className="size-8">
                     <AvatarFallback>{props.name[0]}</AvatarFallback>

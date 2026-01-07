@@ -3,6 +3,7 @@
 import { Form, type FormProps } from "@/components/ui/form";
 import { useDebounceFn } from "@/hooks/use-debounce-fn";
 import { useWarnIfUnsavedChanges } from "@/hooks/use-warn-if-unsaved-changes";
+import { useI18n } from "@/i18n/provider";
 import { createContext, Fragment, use, useEffect, useRef } from "react";
 import type { FieldValues } from "react-hook-form";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -30,6 +31,7 @@ export const FormAutoSave = <T extends FieldValues>({
   action,
   ...props
 }: FormProps<T> & { autoSaveMs?: number; action?: string }) => {
+  const { t } = useI18n();
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const submit = () => {
@@ -46,10 +48,7 @@ export const FormAutoSave = <T extends FieldValues>({
     enableOnFormTags: true,
   });
 
-  useWarnIfUnsavedChanges(
-    isDirty,
-    "You have unsaved changes. Are you sure you want to leave?",
-  );
+  useWarnIfUnsavedChanges(isDirty, t("form.unsavedWarning"));
 
   return (
     <FormAutoSaveContext.Provider

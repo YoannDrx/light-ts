@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -26,6 +27,7 @@ type UserRowProps = {
 export const UserRow = ({ user }: UserRowProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { locale, t } = useI18n();
 
   const onUserUpdate = () => {
     router.refresh();
@@ -43,16 +45,16 @@ export const UserRow = ({ user }: UserRowProps) => {
       return unwrapSafePromise(
         authClient.admin.banUser({
           userId,
-          banReason: reason ?? "Banned by admin",
+          banReason: reason ?? t("admin.users.banReason"),
         }),
       );
     },
     onSuccess: () => {
-      toast.success("User banned successfully");
+      toast.success(t("admin.users.banned"));
       onUserUpdate();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to ban user: ${error.message}`);
+      toast.error(t("admin.users.banFailed", { error: error.message }));
     },
   });
 
@@ -66,11 +68,11 @@ export const UserRow = ({ user }: UserRowProps) => {
       );
     },
     onSuccess: () => {
-      toast.success("User unbanned successfully");
+      toast.success(t("admin.users.unbanned"));
       onUserUpdate();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to unban user: ${error.message}`);
+      toast.error(t("admin.users.unbanFailed", { error: error.message }));
     },
   });
 
@@ -84,13 +86,13 @@ export const UserRow = ({ user }: UserRowProps) => {
       );
     },
     onSuccess: () => {
-      toast.success("Impersonation started");
+      toast.success(t("admin.users.impersonating"));
       // Refresh the page to update the session
       void queryClient.invalidateQueries();
       window.location.href = "/orgs";
     },
     onError: (error: Error) => {
-      toast.error(`Failed to impersonate user: ${error.message}`);
+      toast.error(t("admin.users.impersonateFailed", { error: error.message }));
     },
   });
 
@@ -111,11 +113,11 @@ export const UserRow = ({ user }: UserRowProps) => {
       );
     },
     onSuccess: () => {
-      toast.success("User role updated successfully");
+      toast.success(t("admin.users.roleUpdated"));
       onUserUpdate();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to update user role: ${error.message}`);
+      toast.error(t("admin.users.roleUpdateFailed", { error: error.message }));
     },
   });
 
@@ -126,12 +128,12 @@ export const UserRow = ({ user }: UserRowProps) => {
       </TableCell>
       <TableCell>
         <Badge variant={user.role === "admin" ? "default" : "secondary"}>
-          {user.role ?? "user"}
+          {t(`admin.users.roles.${user.role ?? "user"}`)}
         </Badge>
       </TableCell>
       <TableCell>
         <div className="text-sm">
-          {new Date(user.createdAt).toLocaleDateString()}
+          {new Date(user.createdAt).toLocaleDateString(locale)}
         </div>
       </TableCell>
       <TableCell>
@@ -153,7 +155,7 @@ export const UserRow = ({ user }: UserRowProps) => {
                   disabled={impersonateMutation.isPending}
                 >
                   <Eye className="mr-2 size-4" />
-                  Impersonate
+                  {t("admin.users.actions.impersonate")}
                 </DropdownMenuItem>
               )}
 
@@ -168,7 +170,7 @@ export const UserRow = ({ user }: UserRowProps) => {
                   disabled={setRoleMutation.isPending}
                 >
                   <Crown className="mr-2 size-4" />
-                  Make Admin
+                  {t("admin.users.actions.makeAdmin")}
                 </DropdownMenuItem>
               )}
 
@@ -180,7 +182,7 @@ export const UserRow = ({ user }: UserRowProps) => {
                   disabled={unbanUserMutation.isPending}
                 >
                   <UserCheck className="mr-2 size-4" />
-                  Unban User
+                  {t("admin.users.actions.unban")}
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem
@@ -189,7 +191,7 @@ export const UserRow = ({ user }: UserRowProps) => {
                   variant="destructive"
                 >
                   <Ban className="mr-2 size-4" />
-                  Ban User
+                  {t("admin.users.actions.ban")}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>

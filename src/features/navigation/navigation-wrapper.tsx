@@ -4,6 +4,7 @@ import { Typography } from "@/components/nowts/typography";
 import { LogoSvg } from "@/components/svg/logo-svg";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { getI18n } from "@/i18n/server";
 import type { ReactNode } from "react";
 import { ThemeToggle } from "../theme/theme-toggle";
 
@@ -22,6 +23,8 @@ export async function NavigationWrapper({
   topBarChildren?: ReactNode;
   topBarCornerLeftChildren?: ReactNode;
 }) {
+  const { t } = await getI18n();
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="bg-muted/40 hidden border-r md:block">
@@ -47,7 +50,7 @@ export async function NavigationWrapper({
                 className="shrink-0 md:hidden"
               >
                 <Menu className="size-5" />
-                <span className="sr-only">Toggle navigation menu</span>
+                <span className="sr-only">{t("nav.toggleMenu")}</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">

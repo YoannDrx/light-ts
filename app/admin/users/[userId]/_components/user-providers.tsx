@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useI18n } from "@/i18n/provider";
 import { Github, Mail, Shield } from "lucide-react";
 
 type Account = {
@@ -39,6 +40,7 @@ type UserProvidersProps = {
 };
 
 export function UserProviders({ accounts }: UserProvidersProps) {
+  const { locale, t } = useI18n();
   const getProviderIcon = (providerId: string) => {
     switch (providerId.toLowerCase()) {
       case "github":
@@ -61,7 +63,7 @@ export function UserProviders({ accounts }: UserProvidersProps) {
         return "Google";
       case "credential":
       case "credentials":
-        return "Email/Password";
+        return t("admin.userDetails.providers.emailPassword");
       default:
         return providerId;
     }
@@ -70,25 +72,33 @@ export function UserProviders({ accounts }: UserProvidersProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Authentication Providers</CardTitle>
+        <CardTitle>{t("admin.userDetails.providers.title")}</CardTitle>
         <CardDescription>
-          Connected authentication methods for this user
+          {t("admin.userDetails.providers.description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         {accounts.length === 0 ? (
           <div className="text-muted-foreground py-4 text-center">
-            No authentication providers found
+            {t("admin.userDetails.providers.empty")}
           </div>
         ) : (
           <div className="rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Provider</TableHead>
-                  <TableHead>Account ID</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Connected</TableHead>
+                  <TableHead>
+                    {t("admin.userDetails.providers.table.provider")}
+                  </TableHead>
+                  <TableHead>
+                    {t("admin.userDetails.providers.table.accountId")}
+                  </TableHead>
+                  <TableHead>
+                    {t("admin.userDetails.providers.table.status")}
+                  </TableHead>
+                  <TableHead>
+                    {t("admin.userDetails.providers.table.connected")}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -120,18 +130,18 @@ export function UserProviders({ accounts }: UserProvidersProps) {
                         />
                         {account.accessTokenExpiresAt &&
                         new Date(account.accessTokenExpiresAt) > new Date()
-                          ? "Active"
+                          ? t("admin.userDetails.providers.status.active")
                           : account.accessToken
-                            ? "Connected"
-                            : "Inactive"}
+                            ? t("admin.userDetails.providers.status.connected")
+                            : t("admin.userDetails.providers.status.inactive")}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        {new Date(account.createdAt).toLocaleDateString()}
+                        {new Date(account.createdAt).toLocaleDateString(locale)}
                       </div>
                       <div className="text-muted-foreground text-xs">
-                        {new Date(account.createdAt).toLocaleTimeString()}
+                        {new Date(account.createdAt).toLocaleTimeString(locale)}
                       </div>
                     </TableCell>
                   </TableRow>

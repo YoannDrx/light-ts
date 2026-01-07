@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { dialogManager } from "@/features/dialog-manager/dialog-manager";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -17,6 +18,7 @@ import { AlertTriangle, Building2, UserX2 } from "lucide-react";
 import { toast } from "sonner";
 
 export function DeleteAccountForm() {
+  const { t } = useI18n();
   const deleteAccountMutation = useMutation({
     mutationFn: async () => {
       return unwrapSafePromise(
@@ -33,12 +35,11 @@ export function DeleteAccountForm() {
         <div className="flex items-center gap-2">
           <AlertTriangle className="text-destructive size-5" />
           <CardTitle className="text-xl font-semibold">
-            Delete Account
+            {t("account.danger.title")}
           </CardTitle>
         </div>
         <CardDescription className="text-muted-foreground text-base">
-          This action will permanently delete your account and all associated
-          data
+          {t("account.danger.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -46,10 +47,11 @@ export function DeleteAccountForm() {
           <div className="flex items-start gap-4">
             <UserX2 className="text-muted-foreground mt-0.5 size-5" />
             <div className="space-y-1">
-              <p className="leading-none font-medium">Personal Data</p>
+              <p className="leading-none font-medium">
+                {t("account.danger.personalTitle")}
+              </p>
               <p className="text-muted-foreground text-sm">
-                All your personal information and settings will be permanently
-                erased
+                {t("account.danger.personalDescription")}
               </p>
             </div>
           </div>
@@ -58,10 +60,11 @@ export function DeleteAccountForm() {
           <div className="flex items-start gap-4">
             <Building2 className="text-muted-foreground mt-0.5 size-5" />
             <div className="space-y-1">
-              <p className="leading-none font-medium">Organization Data</p>
+              <p className="leading-none font-medium">
+                {t("account.danger.orgTitle")}
+              </p>
               <p className="text-muted-foreground text-sm">
-                If you&apos;re an organization owner, all organization data will
-                be deleted and subscriptions cancelled
+                {t("account.danger.orgDescription")}
               </p>
             </div>
           </div>
@@ -74,23 +77,22 @@ export function DeleteAccountForm() {
           loading={deleteAccountMutation.isPending}
           onClick={() => {
             dialogManager.confirm({
-              title: "Delete your account ?",
-              description: "Are you sure you want to delete your profile?",
-              confirmText: "Delete",
+              title: t("account.danger.confirmTitle"),
+              description: t("account.danger.confirmDescription"),
+              confirmText: t("account.danger.confirmText"),
               action: {
-                label: "Delete",
+                label: t("account.danger.confirmText"),
                 onClick: async () => {
                   await deleteAccountMutation.mutateAsync();
-                  toast.success("Your deletion has been asked.", {
-                    description:
-                      "Please check your email for further instructions.",
+                  toast.success(t("account.danger.requestedTitle"), {
+                    description: t("account.danger.requestedDescription"),
                   });
                 },
               },
             });
           }}
         >
-          Delete
+          {t("account.danger.delete")}
         </LoadingButton>
       </CardFooter>
     </Card>

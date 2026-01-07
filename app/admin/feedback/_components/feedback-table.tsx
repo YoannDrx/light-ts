@@ -1,6 +1,7 @@
 import { AutomaticPagination } from "@/components/nowts/automatic-pagination";
 import { Typography } from "@/components/nowts/typography";
 import { ItemGroup } from "@/components/ui/item";
+import { getI18n } from "@/i18n/server";
 import { getFeedbackList } from "@/query/feedback/get-feedback";
 import { FeedbackItem } from "./feedback-row";
 
@@ -12,6 +13,7 @@ type FeedbackTableProps = {
 };
 
 export const FeedbackTable = async ({ searchParams }: FeedbackTableProps) => {
+  const { t } = await getI18n();
   const pageSize = 10;
   const currentPage = searchParams.page;
 
@@ -26,7 +28,7 @@ export const FeedbackTable = async ({ searchParams }: FeedbackTableProps) => {
   if (feedback.length === 0) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">
-        <Typography variant="muted">No feedback found</Typography>
+        <Typography variant="muted">{t("admin.feedback.empty")}</Typography>
       </div>
     );
   }

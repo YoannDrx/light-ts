@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { Clock } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { useI18n } from "@/i18n/provider";
 import { LoadingButton } from "../form/submit-button";
 import { upgradeUserAction } from "./plans.action";
 
@@ -30,6 +31,7 @@ export function PricingCard({
   plan: AppAuthPlan;
   isYearly?: boolean;
 }) {
+  const { locale, t, tm } = useI18n();
   // Get the current user
   const { data: session } = useSession();
 
@@ -40,7 +42,7 @@ export function PricingCard({
       }
     },
     onError: (error) => {
-      toast.error(error.error.serverError ?? "Failed to upgrade plan");
+      toast.error(error.error.serverError ?? t("pricingCard.upgradeError"));
     },
   });
 
@@ -59,6 +61,17 @@ export function PricingCard({
   };
 
   const discount = calculateDiscount(plan.price, plan.yearlyPrice ?? 0);
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: plan.currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  const additionalFeatures =
+    tm<{ label: string; description: string }[]>(
+      `plans.additionalFeatures.${plan.name}`,
+    ) ?? [];
 
   return (
     <Card
@@ -70,59 +83,64 @@ export function PricingCard({
       {plan.isPopular && (
         <div className="absolute top-5 right-0">
           <div className="bg-primary text-primary-foreground rounded-l-full px-4 py-1 text-xs font-semibold">
-            Most Popular
+            {t("pricingCard.mostPopular")}
           </div>
         </div>
       )}
 
       <CardHeader className={cn("pb-0")}>
-        <CardTitle className="text-2xl capitalize">{plan.name}</CardTitle>
-        <CardDescription className="mt-1.5">{plan.description}</CardDescription>
+        <CardTitle className="text-2xl capitalize">
+          {t(`plans.names.${plan.name}`)}
+        </CardTitle>
+        <CardDescription className="mt-1.5">
+          {t(`plans.descriptions.${plan.name}`)}
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 pt-6">
         <div className="mb-8">
           <div className="flex items-baseline">
-            <span className="text-3xl font-bold">
-              {plan.currency === "USD" ? "$" : plan.currency}
-            </span>
             <span className="text-5xl font-bold tracking-tight">
-              {displayPrice}
+              {formatCurrency(displayPrice)}
             </span>
-            <span className="text-muted-foreground ml-1.5">/mo</span>
+            <span className="text-muted-foreground ml-1.5">
+              {t("pricingCard.perMonth")}
+            </span>
           </div>
 
           {isYearly && originalPrice !== null && originalPrice > 0 && (
             <div className="mt-2 flex items-center">
               <span className="text-muted-foreground mr-2 line-through">
-                ${originalPrice}/mo
+                {formatCurrency(originalPrice)} {t("pricingCard.perMonth")}
               </span>
               <Badge
                 variant="outline"
                 className="border-primary/20 bg-primary/10 text-primary"
               >
-                Save {discount}%
+                {t("pricingCard.save", { percent: `${discount}%` })}
               </Badge>
             </div>
           )}
 
           {isYearly && yearlyPrice > 0 && (
             <p className="text-muted-foreground mt-2 text-sm">
-              Billed as ${yearlyPrice} per year
+              {t("pricingCard.billedYearly", {
+                amount: formatCurrency(yearlyPrice),
+              })}
             </p>
           )}
 
           {plan.freeTrial && (
             <div className="bg-primary/10 text-primary mt-3 inline-flex items-center rounded-full px-3 py-1 text-sm font-medium">
               <Clock className="mr-1.5 size-3.5" />
-              {plan.freeTrial.days}-day free trial
+              {t("pricingCard.freeTrial", { days: plan.freeTrial.days })}
             </div>
           )}
         </div>
 
         <div className="space-y-6">
           <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
-            Plan Includes
+            {t("pricingCard.includes")}
           </h4>
 
           <ul className="space-y-5">
@@ -140,10 +158,12 @@ export function PricingCard({
                   </div>
                   <div>
                     <p className="font-medium">
-                      {limitConfig.getLabel(value as number)}
+                      {t(`plans.limits.${key}.label`, {
+                        value: value as number,
+                      })}
                     </p>
                     <p className="text-muted-foreground text-sm">
-                      {limitConfig.description}
+                      {t(`plans.limits.${key}.description`)}
                     </p>
                   </div>
                 </li>
@@ -155,6 +175,7 @@ export function PricingCard({
               plan.name as keyof typeof ADDITIONAL_FEATURES
             ].map((feature, index) => {
               const Icon = feature.icon;
+              const translated = additionalFeatures.at(index);
 
               return (
                 <li key={index} className="flex items-start">
@@ -162,9 +183,13 @@ export function PricingCard({
                     <Icon className="size-5" />
                   </div>
                   <div>
-                    <p className="font-medium">{feature.label}</p>
+                    <p className="font-medium">
+                      {translated ? translated.label : feature.label}
+                    </p>
                     <p className="text-muted-foreground text-sm">
-                      {feature.description}
+                      {translated
+                        ? translated.description
+                        : feature.description}
                     </p>
                   </div>
                 </li>
@@ -184,7 +209,7 @@ export function PricingCard({
           )}
           onClick={() => {
             if (!session?.user) {
-              toast.error("Please sign in to upgrade");
+              toast.error(t("pricingCard.signInRequired"));
               return;
             }
             upgradeUser({
@@ -196,10 +221,10 @@ export function PricingCard({
           }}
         >
           {plan.price === 0
-            ? "Get Started"
+            ? t("pricingCard.ctaFree")
             : isYearly
-              ? "Subscribe Yearly"
-              : "Subscribe Monthly"}
+              ? t("pricingCard.ctaYearly")
+              : t("pricingCard.ctaMonthly")}
         </LoadingButton>
       </CardFooter>
     </Card>

@@ -1,9 +1,12 @@
 import { Typography } from "@/components/nowts/typography";
 import { buttonVariants } from "@/components/ui/button";
+import { getI18n } from "@/i18n/server";
 import Link from "next/link";
 import { SectionLayout } from "../section-layout";
 
-export const CTAImageSection = () => {
+export const CTAImageSection = async () => {
+  const { t } = await getI18n();
+
   return (
     <div
       style={{
@@ -20,13 +23,13 @@ export const CTAImageSection = () => {
           variant="h2"
           className="text-center text-5xl font-extrabold"
         >
-          Start getting a lot of followers
+          {t("landing.ctaImage.title")}
         </Typography>
         <Typography className="text-center font-bold">
-          By posting every day with Threader !
+          {t("landing.ctaImage.description")}
         </Typography>
         <Link href="#pricing" className={buttonVariants({ size: "lg" })}>
-          Get started
+          {t("landing.ctaImage.cta")}
         </Link>
       </SectionLayout>
     </div>

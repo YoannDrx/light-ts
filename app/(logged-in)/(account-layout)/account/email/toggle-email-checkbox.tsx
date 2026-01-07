@@ -3,6 +3,7 @@
 import { Typography } from "@/components/nowts/typography";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useI18n } from "@/i18n/provider";
 import { resolveActionResult } from "@/lib/actions/actions-utils";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -16,6 +17,7 @@ type ToggleEmailCheckboxProps = {
 export const ToggleEmailCheckbox = ({
   unsubscribed,
 }: ToggleEmailCheckboxProps) => {
+  const { t } = useI18n();
   const mutation = useMutation({
     mutationFn: async (unsubscribed: boolean) => {
       return resolveActionResult(
@@ -25,10 +27,10 @@ export const ToggleEmailCheckbox = ({
       );
     },
     onSuccess: () => {
-      toast.success("You've updated your email settings.");
+      toast.success(t("account.email.updated"));
     },
     onError: () => {
-      toast.error("An error occurred");
+      toast.error(t("common.error"));
     },
   });
 
@@ -52,10 +54,11 @@ export const ToggleEmailCheckbox = ({
         }}
       />
       <div className="space-y-1 leading-none">
-        <Label htmlFor="unsubscribed-checkbox">Unsubscribed</Label>
+        <Label htmlFor="unsubscribed-checkbox">
+          {t("account.email.unsubscribeLabel")}
+        </Label>
         <Typography variant="muted">
-          If enabled, you will not receive any marketing or promotional emails
-          from us.
+          {t("account.email.unsubscribeDescription")}
         </Typography>
       </div>
     </div>

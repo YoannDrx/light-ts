@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getI18n } from "@/i18n/server";
 
 type UserDetailsCardProps = {
   user: {
@@ -21,7 +22,9 @@ type UserDetailsCardProps = {
   };
 };
 
-export function UserDetailsCard({ user }: UserDetailsCardProps) {
+export async function UserDetailsCard({ user }: UserDetailsCardProps) {
+  const { locale, t } = await getI18n();
+
   return (
     <Card>
       <CardHeader className="flex items-center gap-2 space-y-0">
@@ -30,18 +33,20 @@ export function UserDetailsCard({ user }: UserDetailsCardProps) {
           <AvatarFallback>{user.name?.charAt(0) ?? "?"}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-1">
-          <CardTitle>{user.name ?? "No name"}</CardTitle>
+          <CardTitle>{user.name ?? t("admin.userDetails.noName")}</CardTitle>
           <CardDescription>{user.email}</CardDescription>
         </div>
       </CardHeader>
       <CardContent className="flex items-center gap-4">
-        <Badge variant="outline">{user.role ?? "user"}</Badge>
+        <Badge variant="outline">
+          {t(`admin.users.roles.${user.role ?? "user"}`)}
+        </Badge>
         {!user.emailVerified && (
           <>
             <Typography variant="muted" className="text-sm">
               {" • "}
             </Typography>
-            <Badge variant="outline">Unverified</Badge>
+            <Badge variant="outline">{t("admin.users.unverified")}</Badge>
           </>
         )}
         {user.banned && (
@@ -49,14 +54,17 @@ export function UserDetailsCard({ user }: UserDetailsCardProps) {
             <Typography variant="muted" className="text-sm">
               {" • "}
             </Typography>
-            <Badge variant="destructive">Banned</Badge>
+            <Badge variant="destructive">
+              {t("admin.users.status.banned")}
+            </Badge>
           </>
         )}
         <Typography variant="muted" className="text-sm">
           {" • "}
         </Typography>
         <Typography variant="muted" className="text-sm">
-          Created: {new Date(user.createdAt).toLocaleDateString()}
+          {t("admin.userDetails.created")}{" "}
+          {new Date(user.createdAt).toLocaleDateString(locale)}
         </Typography>
       </CardContent>
     </Card>

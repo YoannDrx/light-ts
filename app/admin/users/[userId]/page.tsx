@@ -9,6 +9,7 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -28,6 +29,7 @@ export default async function Page(props: PageProps<"/admin/users/[userId]">) {
 
 async function RoutePage(props: PageProps<"/admin/users/[userId]">) {
   const params = await props.params;
+  const { t } = await getI18n();
   await getRequiredAdmin();
 
   const userData = await prisma.user.findUnique({
@@ -51,8 +53,10 @@ async function RoutePage(props: PageProps<"/admin/users/[userId]">) {
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>User Details</LayoutTitle>
-        <LayoutDescription>View and manage user information</LayoutDescription>
+        <LayoutTitle>{t("admin.userDetails.title")}</LayoutTitle>
+        <LayoutDescription>
+          {t("admin.userDetails.description")}
+        </LayoutDescription>
       </LayoutHeader>
       <LayoutActions>
         <UserActions user={userData} />
@@ -63,12 +67,12 @@ async function RoutePage(props: PageProps<"/admin/users/[userId]">) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Subscription</CardTitle>
+            <CardTitle>{t("admin.userDetails.subscriptionTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             {!userData.subscription ? (
               <div className="text-muted-foreground py-4 text-center">
-                No subscription found
+                {t("admin.userDetails.noSubscription")}
               </div>
             ) : (
               <div className="flex items-center gap-4">
@@ -81,7 +85,7 @@ async function RoutePage(props: PageProps<"/admin/users/[userId]">) {
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
                     <span className="font-medium">
-                      {userData.subscription.plan}
+                      {t(`plans.names.${userData.subscription.plan}`)}
                     </span>
                     <Badge
                       variant={
@@ -92,7 +96,9 @@ async function RoutePage(props: PageProps<"/admin/users/[userId]">) {
                             : "secondary"
                       }
                     >
-                      {userData.subscription.status}
+                      {t(
+                        `admin.userDetails.subscriptionStatus.${userData.subscription.status}`,
+                      )}
                     </Badge>
                   </div>
                 </div>

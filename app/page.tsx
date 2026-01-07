@@ -16,8 +16,86 @@ import { StatsSection } from "@/features/landing/stats-section";
 import { Footer } from "@/features/layout/footer";
 import { Pricing } from "@/features/plans/pricing-section";
 import Image from "next/image";
+import { getI18n } from "@/i18n/server";
+import type { ReactNode } from "react";
 
-export default function HomePage() {
+type LandingReview = {
+  image: string;
+  name: string;
+  review: string;
+  role: string;
+  compagnyImage?: string;
+};
+
+type LandingFeature = {
+  badge: string;
+  title: string;
+  description: string;
+};
+
+type LandingFeatureWithComponent = LandingFeature & {
+  component: ReactNode;
+};
+
+type LandingFaq = {
+  question: string;
+  answer: string;
+};
+
+export default async function HomePage() {
+  const { tm } = await getI18n();
+  const tripleReviews = tm<LandingReview[]>("landing.reviews.triple") ?? [];
+  const singleReview = tm<LandingReview>("landing.reviews.single");
+  const gridReviews = tm<LandingReview[]>("landing.reviews.grid") ?? [];
+  const featureItems = tm<LandingFeature[]>("landing.features.items") ?? [];
+  const faqItems = tm<LandingFaq[]>("landing.faq.items") ?? [];
+  const featureComponents = [
+    (item: LandingFeature) => (
+      <Image
+        src="/images/placeholder1.gif"
+        alt={item.title}
+        width={200}
+        height={100}
+        className="h-auto w-full object-cover"
+        unoptimized
+      />
+    ),
+    (item: LandingFeature) => (
+      <Image
+        src="/images/placeholder1.gif"
+        alt={item.title}
+        width={200}
+        height={100}
+        className="h-auto w-full object-cover"
+      />
+    ),
+    (item: LandingFeature) => (
+      <Image
+        src="/images/placeholder1.gif"
+        alt={item.title}
+        width={200}
+        height={100}
+        className="h-auto w-full object-cover"
+        unoptimized
+      />
+    ),
+    (item: LandingFeature) => (
+      <Image
+        src="/images/placeholder1.gif"
+        alt={item.title}
+        width={200}
+        height={100}
+        className="h-auto w-full object-cover"
+        unoptimized
+      />
+    ),
+  ];
+  const featuresWithComponents: LandingFeatureWithComponent[] =
+    featureItems.map((item, index) => ({
+      ...item,
+      component: featureComponents[index](item),
+    }));
+
   return (
     <div className="bg-background text-foreground relative flex h-fit flex-col">
       <div className="mt-16"></div>
@@ -34,106 +112,21 @@ export default function HomePage() {
 
       <SectionDivider />
 
-      <ReviewTriple
-        reviews={[
-          {
-            image: "https://i.pravatar.cc/300?u=a1",
-            name: "Sophie",
-            review: `Threader **has completely transformed the way I manage my social media** content. The ability to schedule posts and use AI for content suggestions has saved me hours each week.`,
-            role: "Digital Marketer",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=a2",
-            name: "Alex",
-            review: `Using Threader has significantly boosted my online engagement. **The analytics tool helps me understand what works**, allowing me to refine my strategy and grow my follower base.`,
-            role: "Social Media Influencer",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=a3",
-            name: "Jordan",
-            review: `The ease of scheduling and the AI-generated content features are game-changers. **Threader's user-friendly interface** makes it perfect for anyone looking to enhance their online presence.`,
-            role: "Entrepreneur",
-          },
-        ]}
-      />
+      <ReviewTriple reviews={tripleReviews.slice(0, 3)} />
 
       <SectionDivider />
 
-      <ReviewSingle
-        image="https://i.pravatar.cc/300?u=5"
-        name="Michel"
-        review={`Threader **has completely transformed** the way I manage my social media content. The ability to schedule posts and use AI for content suggestions **has saved me hours each week.**`}
-        role="Digital Marketer"
-        compagnyImage="https://1000logos.net/wp-content/uploads/2017/03/McDonalds-Logo-2003.png"
-        key={1}
-      />
+      {singleReview && (
+        <ReviewSingle
+          image={singleReview.image}
+          name={singleReview.name}
+          review={singleReview.review}
+          role={singleReview.role}
+          compagnyImage={singleReview.compagnyImage}
+        />
+      )}
 
-      <FeaturesSection
-        features={[
-          {
-            badge: "⏰ Schedule",
-            title: "Schedule your post",
-            description: "Schedule your post on the Threader in a few clicks.",
-            component: (
-              <Image
-                src="/images/placeholder1.gif"
-                alt=""
-                width={200}
-                height={100}
-                className="h-auto w-full object-cover"
-                unoptimized
-              />
-            ),
-          },
-          {
-            badge: "📅 Calendar",
-            title: "See what you scheduled",
-            description:
-              "With the calendar view, you can see what you scheduled and when.",
-            component: (
-              <Image
-                src="/images/placeholder1.gif"
-                alt=""
-                width={200}
-                height={100}
-                className="h-auto w-full object-cover"
-              />
-            ),
-          },
-          {
-            badge: "👁️ Preview",
-            title: "Preview your post",
-            description:
-              "Preview your post before scheduling it to see how it will look like.",
-            component: (
-              <Image
-                src="/images/placeholder1.gif"
-                alt=""
-                width={200}
-                height={100}
-                className="h-auto w-full object-cover"
-                unoptimized
-              />
-            ),
-          },
-          {
-            badge: "🔄 Repost",
-            title: "Schedule repost",
-            description:
-              "Automatically repost your post after a certain amount of time.",
-            component: (
-              <Image
-                src="/images/placeholder1.gif"
-                alt=""
-                width={200}
-                height={100}
-                className="h-auto w-full object-cover"
-                unoptimized
-              />
-            ),
-          },
-        ]}
-      />
+      <FeaturesSection features={featuresWithComponents} />
 
       <CTAImageSection />
 
@@ -143,122 +136,11 @@ export default function HomePage() {
 
       <Pricing />
 
-      <FAQSection
-        faq={[
-          {
-            question: "What is Threader?",
-            answer:
-              "Threader is an innovative platform designed to help you write, schedule, and publish content to your account with the assistance of AI, enhancing your business's online presence.",
-          },
-          {
-            question: "How does AI Content Generation work?",
-            answer:
-              "Our AI Content Generation feature leverages the power of artificial intelligence to create unique and engaging content for your Threads, making content creation easier and more efficient.",
-          },
-          {
-            question: "Can I schedule my threads in advance?",
-            answer:
-              "Yes, with Threader, you can schedule your threads for a specific time, allowing you to maintain a consistent online presence without the need to manually post every day.",
-          },
-          {
-            question: "What is the Now.TS project?",
-            answer:
-              "Now.TS is a new project announced on our platform that enables users to create professional Next.js applications in days, streamlining the development process.",
-          },
-          {
-            question: "How can I get more followers?",
-            answer:
-              "To gain more followers, focus on creating content related to Next.js, as our analysis shows it's highly engaging. Utilize our research tools to understand trends and improve your content strategy.",
-          },
-          {
-            question: "What are the benefits of posting with Threader?",
-            answer:
-              "Posting with Threader allows you to schedule posts, avoid daily manual postings, track your scheduled content easily, and maintain consistency in your online activity.",
-          },
-          {
-            question: "What pricing plans does Threader offer?",
-            answer:
-              "Threader offers two pricing plans: THREADER FREE, perfect for tiny creators, allowing you to schedule 1 post in advance; and THREADER PREMIUM, ideal for content creators, offering unlimited scheduling, post previews, and auto-reposting features.",
-          },
-        ]}
-      />
+      <FAQSection faq={faqItems} />
 
       <SectionDivider />
 
-      <ReviewGrid
-        reviews={[
-          {
-            image: "https://i.pravatar.cc/300?u=b1",
-            name: "Eva",
-            review:
-              "Since I started using Threader, my content creation process has been streamlined. The AI suggestions are spot on, helping me to connect better with my audience. Highly recommend for anyone looking to elevate their content game.",
-            role: "Content Creator",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b2",
-            name: "Lucas",
-            review:
-              "Threader's scheduling feature is a lifesaver. It allows me to plan my content calendar efficiently, ensuring I never miss posting on the optimal days and times. Fantastic tool for social media managers.",
-            role: "Social Media Manager",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b3",
-            name: "Mia",
-            review:
-              "The analytics provided by Threader are invaluable. They've given me insights into what my audience loves, helping me double my engagement rate in just a few months.",
-            role: "Digital Marketer",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b4",
-            name: "Noah",
-            review:
-              "I was skeptical about AI-generated content, but Threader changed my mind. The content feels personal and has significantly increased my interaction rates.",
-            role: "Blogger",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b5",
-            name: "Isabella",
-            review:
-              "Threader's user interface is incredibly user-friendly. I was able to onboard my team in no time, and we've seen a marked improvement in our social media performance.",
-            role: "Team Leader",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b6",
-            name: "Oliver",
-            review:
-              "Auto-reposting with Threader is a feature I didn't know I needed. It's great for getting more mileage out of your best content without any extra effort.",
-            role: "Freelancer",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b7",
-            name: "Sophia",
-            review:
-              "Joining the Threader community has opened up networking opportunities with fellow content creators. It's more than just a tool; it's a platform for growth.",
-            role: "Influencer",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b8",
-            name: "Elijah",
-            review:
-              "The calendar view in Threader helps me visualize my content strategy for the entire month. It's been a game changer for my planning process.",
-            role: "Strategist",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b9",
-            name: "Charlotte",
-            review:
-              "I appreciate the flexibility in Threader's pricing plans. It's accessible for creators at any stage of their journey, from beginners to established influencers.",
-            role: "Entrepreneur",
-          },
-          {
-            image: "https://i.pravatar.cc/300?u=b10",
-            name: "James",
-            review:
-              "The customer support team at Threader is fantastic. They've been quick to respond and helpful with any questions I've had. Great service overall.",
-            role: "Customer",
-          },
-        ]}
-      />
+      <ReviewGrid reviews={gridReviews} />
 
       <EmailFormSection />
 

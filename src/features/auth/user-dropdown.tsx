@@ -28,12 +28,14 @@ import {
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
+import { useI18n } from "@/i18n/provider";
 import { UserDropdownLogout } from "./user-dropdown-logout";
 import { UserDropdownStopImpersonating } from "./user-dropdown-stop-impersonating";
 
 export const UserDropdown = ({ children }: PropsWithChildren) => {
   const session = useSession();
   const theme = useTheme();
+  const { t } = useI18n();
 
   if (!session.data?.user) {
     return null;
@@ -59,20 +61,20 @@ export const UserDropdown = ({ children }: PropsWithChildren) => {
         <DropdownMenuItem asChild>
           <Link href="/orgs">
             <LayoutDashboard className="mr-2 size-4" />
-            Dashboard
+            {t("nav.dashboard")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/account">
             <Settings className="mr-2 size-4" />
-            Account Settings
+            {t("account.settings.title")}
           </Link>
         </DropdownMenuItem>
         {session.data.user.role === "admin" && (
           <DropdownMenuItem asChild>
             <Link href="/admin">
               <Shield className="mr-2 size-4" />
-              Admin
+              {t("admin.nav.section")}
             </Link>
           </DropdownMenuItem>
         )}
@@ -80,22 +82,22 @@ export const UserDropdown = ({ children }: PropsWithChildren) => {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <SunMoon className="text-muted-foreground mr-4 size-4" />
-            <span>Theme</span>
+            <span>{t("theme.title")}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => theme.setTheme("dark")}>
                 <SunMedium className="mr-2 size-4" />
-                <span>Dark</span>
+                <span>{t("theme.dark")}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => theme.setTheme("light")}>
                 <Moon className="mr-2 size-4" />
-                <span>Light</span>
+                <span>{t("theme.light")}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => theme.setTheme("system")}>
                 <Monitor className="mr-2 size-4" />
-                <span>System</span>
+                <span>{t("theme.system")}</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>

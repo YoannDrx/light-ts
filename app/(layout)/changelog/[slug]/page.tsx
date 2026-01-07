@@ -6,6 +6,8 @@ import {
   getCurrentChangelog,
 } from "@/features/changelog/changelog-manager";
 import { ServerMdx } from "@/features/markdown/server-mdx";
+import { getI18n } from "@/i18n/server";
+import { defaultLocale } from "@/i18n/config";
 import { formatDate } from "@/lib/format/date";
 import { SiteConfig } from "@/site-config";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
@@ -17,22 +19,26 @@ import { notFound } from "next/navigation";
 export async function generateMetadata(
   props: ChangelogParams,
 ): Promise<Metadata> {
+  const { t, locale } = await getI18n();
   const params = await props.params;
-  const changelog = await getCurrentChangelog(params.slug);
+  const changelog = await getCurrentChangelog(params.slug, locale);
 
   if (!changelog) {
     notFound();
   }
 
   const title =
-    changelog.attributes.title ?? formatDate(changelog.attributes.date);
+    changelog.attributes.title ?? formatDate(changelog.attributes.date, locale);
 
   return {
-    title: `${title} - Changelog - ${SiteConfig.title}`,
-    description: `Release notes for ${title}`,
+    title: t("changelog.detail.metaTitle", {
+      title,
+      app: SiteConfig.title,
+    }),
+    description: t("changelog.detail.metaDescription", { title }),
     openGraph: {
-      title: `${title} - Changelog`,
-      description: `Release notes for ${title}`,
+      title: t("changelog.detail.metaTitleShort", { title }),
+      description: t("changelog.detail.metaDescription", { title }),
       url: `${SiteConfig.prodUrl}/changelog/${params.slug}`,
       type: "article",
       images: changelog.attributes.image
@@ -43,7 +49,7 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  const changelogs = await getChangelogs();
+  const changelogs = await getChangelogs(defaultLocale);
 
   if (changelogs.length === 0) {
     return [{ slug: "_placeholder" }];
@@ -55,15 +61,16 @@ export async function generateStaticParams() {
 }
 
 export default async function ChangelogDetailPage(props: ChangelogParams) {
+  const { t, locale } = await getI18n();
   const params = await props.params;
-  const changelog = await getCurrentChangelog(params.slug);
+  const changelog = await getCurrentChangelog(params.slug, locale);
 
   if (!changelog) {
     notFound();
   }
 
   const { attributes, content } = changelog;
-  const title = attributes.title ?? formatDate(attributes.date);
+  const title = attributes.title ?? formatDate(attributes.date, locale);
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-8">
@@ -75,7 +82,7 @@ export default async function ChangelogDetailPage(props: ChangelogParams) {
         })}
         href="/changelog"
       >
-        <ArrowLeft size={16} /> Back to Changelog
+        <ArrowLeft size={16} /> {t("changelog.backToChangelog")}
       </Link>
 
       {attributes.image && (
@@ -99,7 +106,7 @@ export default async function ChangelogDetailPage(props: ChangelogParams) {
           )}
           <Badge variant="outline" className="gap-1">
             <Calendar size={12} />
-            {formatDate(attributes.date)}
+            {formatDate(attributes.date, locale)}
           </Badge>
         </div>
 

@@ -1,6 +1,14 @@
 import { format } from "date-fns";
-import { enUS } from "date-fns/locale";
+import { enUS, fr, type Locale as DateLocale } from "date-fns/locale";
+import { defaultLocale, type Locale as AppLocale } from "@/i18n/config";
 
-export const formatDate = (date: Date) => {
-  return format(date, "MMMM d, yyyy", { locale: enUS });
+const dateLocales: Record<AppLocale, DateLocale> = {
+  en: enUS,
+  fr,
+};
+
+export const formatDate = (date: Date, locale: AppLocale = defaultLocale) => {
+  return format(date, "MMMM d, yyyy", {
+    locale: dateLocales[locale],
+  });
 };

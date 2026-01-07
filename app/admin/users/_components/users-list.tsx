@@ -25,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { dayjs } from "@/lib/dayjs";
 import { unwrapSafePromise } from "@/lib/promises";
@@ -55,6 +56,7 @@ export function UsersList({
   limit,
   currentPage,
 }: UsersListProps) {
+  const { locale, t } = useI18n();
   const [query, setQuery] = useQueryState(
     "q",
     parseAsString
@@ -69,7 +71,7 @@ export function UsersList({
       return unwrapSafePromise(
         authClient.admin.banUser({
           userId,
-          banReason: "Admin initiated ban",
+          banReason: t("admin.users.banReason"),
         }),
       );
     },
@@ -77,7 +79,7 @@ export function UsersList({
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("User has been banned");
+      toast.success(t("admin.users.banned"));
     },
   });
 
@@ -93,7 +95,7 @@ export function UsersList({
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("User has been unbanned");
+      toast.success(t("admin.users.unbanned"));
     },
   });
 
@@ -116,7 +118,7 @@ export function UsersList({
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("User role has been updated");
+      toast.success(t("admin.users.roleUpdated"));
     },
   });
 
@@ -132,7 +134,7 @@ export function UsersList({
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("Now impersonating user");
+      toast.success(t("admin.users.impersonating"));
       window.location.href = "/orgs";
     },
   });
@@ -143,7 +145,7 @@ export function UsersList({
         <CardHeader>
           <InputGroup className="w-full">
             <InputGroupInput
-              placeholder="Search users by email..."
+              placeholder={t("admin.users.searchPlaceholder")}
               value={query}
               onChange={(e) => void setQuery(e.target.value)}
             />
@@ -159,11 +161,13 @@ export function UsersList({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>User</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
+                <TableHead>{t("admin.users.table.user")}</TableHead>
+                <TableHead>{t("admin.users.table.role")}</TableHead>
+                <TableHead>{t("admin.users.table.status")}</TableHead>
+                <TableHead>{t("admin.users.table.joined")}</TableHead>
+                <TableHead className="w-[100px]">
+                  {t("admin.users.table.actions")}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -189,7 +193,9 @@ export function UsersList({
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{user.role ?? "user"}</Badge>
+                    <Badge variant="outline">
+                      {t(`admin.users.roles.${user.role ?? "user"}`)}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     {user.banned ? (
@@ -198,7 +204,7 @@ export function UsersList({
                           className="size-1.5 rounded-full bg-red-500"
                           aria-hidden="true"
                         />
-                        Banned
+                        {t("admin.users.status.banned")}
                       </Badge>
                     ) : (
                       <Badge variant="outline" className="gap-1.5">
@@ -206,18 +212,20 @@ export function UsersList({
                           className="size-1.5 rounded-full bg-emerald-500"
                           aria-hidden="true"
                         />
-                        Active
+                        {t("admin.users.status.active")}
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>{dayjs(user.createdAt).fromNow()}</TableCell>
+                  <TableCell>
+                    {dayjs(user.createdAt).locale(locale).fromNow()}
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="ghost"
                           className="h-8 w-8 p-0"
-                          aria-label="Open actions menu"
+                          aria-label={t("admin.users.actionsMenu")}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -232,7 +240,7 @@ export function UsersList({
                             }}
                           >
                             <UserCog className="mr-2 h-4 w-4" />
-                            Impersonate
+                            {t("admin.users.actions.impersonate")}
                           </DropdownMenuItem>
                         )}
                         {user.role !== "admin" && (
@@ -245,7 +253,7 @@ export function UsersList({
                             }}
                           >
                             <Crown className="mr-2 h-4 w-4" />
-                            Make Admin
+                            {t("admin.users.actions.makeAdmin")}
                           </DropdownMenuItem>
                         )}
                         {user.role === "admin" && (
@@ -258,7 +266,7 @@ export function UsersList({
                             }}
                           >
                             <UserCog className="mr-2 h-4 w-4" />
-                            Make Regular User
+                            {t("admin.users.actions.makeUser")}
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
@@ -272,7 +280,7 @@ export function UsersList({
                             className="text-green-600"
                           >
                             <CheckCircle2 className="mr-2 h-4 w-4" />
-                            Unban User
+                            {t("admin.users.actions.unban")}
                           </DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem
@@ -284,7 +292,7 @@ export function UsersList({
                             className="text-destructive"
                           >
                             <Ban className="mr-2 h-4 w-4" />
-                            Ban User
+                            {t("admin.users.actions.ban")}
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
@@ -295,7 +303,7 @@ export function UsersList({
               {users.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5} className="h-24 text-center">
-                    No users found.
+                    {t("admin.users.empty")}
                   </TableCell>
                 </TableRow>
               )}

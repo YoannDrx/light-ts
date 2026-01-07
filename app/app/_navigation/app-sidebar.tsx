@@ -18,22 +18,26 @@ import {
 import { SidebarNavigationMenu } from "@/components/ui/sidebar-utils";
 import { ContactFeedbackPopover } from "@/features/contact/feedback/contact-feedback-popover";
 import { SidebarUserButton } from "@/features/sidebar/sidebar-user-button";
+import { useI18n } from "@/i18n/provider";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
 import { AppCommand } from "./app-command";
-import { APP_LINKS } from "./app-navigation.links";
+import { getAppNavigation } from "./app-navigation.links";
 import { UpgradeCard } from "./upgrade-app-card";
 
 export function AppSidebar() {
+  const { t } = useI18n();
+  const links = getAppNavigation(t);
+
   return (
     <Sidebar variant="inset">
       <SidebarHeader className="flex flex-col gap-2">
         <AppCommand />
       </SidebarHeader>
       <SidebarContent>
-        {APP_LINKS.map((link) => (
+        {links.map((link) => (
           <ItemCollapsing
             defaultOpenStartPath={link.defaultOpenStartPath}
             key={link.title}

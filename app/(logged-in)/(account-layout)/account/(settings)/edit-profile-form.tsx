@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { InlineTooltip } from "@/components/ui/tooltip";
 import { LoadingButton } from "@/features/form/submit-button";
 import { ImageFormItem } from "@/features/images/image-form-item";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { displayName } from "@/lib/format/display-name";
 import { unwrapSafePromise } from "@/lib/promises";
@@ -42,6 +43,7 @@ type EditProfileFormProps = {
 export const EditProfileCardForm = ({
   defaultValues,
 }: EditProfileFormProps) => {
+  const { t } = useI18n();
   const form = useZodForm({
     schema: ProfileFormSchema,
     defaultValues: defaultValues,
@@ -58,7 +60,7 @@ export const EditProfileCardForm = ({
       );
     },
     onSuccess: () => {
-      toast.success("Profile updated");
+      toast.success(t("account.profile.updated"));
       router.refresh();
     },
     onError: (error) => {
@@ -75,7 +77,7 @@ export const EditProfileCardForm = ({
       );
     },
     onSuccess: () => {
-      toast.success("Verification email sent");
+      toast.success(t("account.profile.verifySent"));
     },
     onError: (error) => {
       toast.error(error.message);
@@ -112,7 +114,7 @@ export const EditProfileCardForm = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("auth.form.name")}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder=""
@@ -127,9 +129,9 @@ export const EditProfileCardForm = ({
             />
             <div className="flex flex-col gap-2">
               <Label className="flex items-center gap-4">
-                <span>Email</span>
+                <span>{t("auth.form.email")}</span>
                 {defaultValues.emailVerified ? (
-                  <InlineTooltip title="Email verified. If you change your email, you will need to verify it again.">
+                  <InlineTooltip title={t("account.profile.verifiedTooltip")}>
                     <BadgeCheck size={16} />
                   </InlineTooltip>
                 ) : (
@@ -141,7 +143,7 @@ export const EditProfileCardForm = ({
                     onClick={() => verifyEmailMutation.mutate()}
                     loading={verifyEmailMutation.isPending}
                   >
-                    Verify email
+                    {t("account.profile.verifyEmail")}
                   </LoadingButton>
                 )}
               </Label>
@@ -153,17 +155,17 @@ export const EditProfileCardForm = ({
               className={buttonVariants({ size: "sm", variant: "link" })}
               href="/account/change-email"
             >
-              Change email
+              {t("account.profile.changeEmail")}
             </Link>
             <Link
               className={buttonVariants({ size: "sm", variant: "link" })}
               href="/account/change-password"
             >
-              Change password
+              {t("account.profile.changePassword")}
             </Link>
             <div className="flex-1"></div>
             <LoadingButton loading={updateProfileMutation.isPending}>
-              Save
+              {t("actions.save")}
             </LoadingButton>
           </CardFooter>
         </Card>

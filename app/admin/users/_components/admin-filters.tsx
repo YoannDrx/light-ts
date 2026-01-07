@@ -5,11 +5,13 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useI18n } from "@/i18n/provider";
 import { Search } from "lucide-react";
 import { useQueryStates } from "nuqs";
 import { adminSearchParams } from "../_actions/search-params";
 
 export const AdminFilters = () => {
+  const { t } = useI18n();
   const [filters, setFilters] = useQueryStates(adminSearchParams, {
     shallow: false,
     throttleMs: 1000,
@@ -22,7 +24,7 @@ export const AdminFilters = () => {
           <Search className="size-4" />
         </InputGroupAddon>
         <InputGroupInput
-          placeholder="Search users by email..."
+          placeholder={t("admin.users.searchPlaceholder")}
           value={filters.search}
           onChange={(e) => {
             void setFilters({

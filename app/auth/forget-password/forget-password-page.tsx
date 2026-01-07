@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -32,6 +33,7 @@ const EmailFormSchema = z.object({
 
 export function ForgetPasswordPage() {
   const router = useRouter();
+  const { t } = useI18n();
 
   const emailForm = useZodForm({
     schema: EmailFormSchema,
@@ -68,10 +70,12 @@ export function ForgetPasswordPage() {
             </AvatarFallback>
           </Avatar>
         </div>
-        <CardHeader className="text-center">Forget Password</CardHeader>
+        <CardHeader className="text-center">
+          {t("auth.forgetPassword.title")}
+        </CardHeader>
 
         <CardDescription className="text-center">
-          Enter your email to reset your password
+          {t("auth.forgetPassword.description")}
         </CardDescription>
       </CardHeader>
 
@@ -86,9 +90,12 @@ export function ForgetPasswordPage() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("auth.form.email")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="your@email.com" {...field} />
+                  <Input
+                    placeholder={t("auth.form.emailPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,7 +106,7 @@ export function ForgetPasswordPage() {
             type="submit"
             className="w-full"
           >
-            Send Reset Link
+            {t("auth.forgetPassword.submit")}
           </LoadingButton>
         </Form>
       </CardFooter>

@@ -1,4 +1,7 @@
+"use client";
+
 import { Typography } from "@/components/nowts/typography";
+import { useI18n } from "@/i18n/provider";
 import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
 import React, { useRef, useState } from "react";
@@ -35,6 +38,7 @@ export const NativeTargetBox = ({
   ref,
   ...props
 }: DragAndDropProps) => {
+  const { t } = useI18n();
   const [isDrop, setIsDrop] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -61,7 +65,11 @@ export const NativeTargetBox = ({
       const files = Array.from(input.files ?? []);
 
       if (files.length === 0) {
-        toast.error(`We only accept ${accept?.join(", ")}`);
+        toast.error(
+          t("images.onlyAccept", {
+            types: accept?.join(", ") ?? "",
+          }),
+        );
         return;
       }
 
@@ -97,11 +105,11 @@ export const NativeTargetBox = ({
       {children}
       {isDrop ? (
         <div className="absolute inset-0 flex items-center justify-center">
-          <Typography variant="muted">Drop here</Typography>
+          <Typography variant="muted">{t("images.dropHere")}</Typography>
         </div>
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
-          <Typography variant="muted">Upload</Typography>
+          <Typography variant="muted">{t("images.upload")}</Typography>
         </div>
       )}
       <input

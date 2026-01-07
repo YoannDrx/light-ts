@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { InterceptDialog } from "@/components/utils/intercept-dialog";
 import { ServerMdx } from "@/features/markdown/server-mdx";
+import { getI18n } from "@/i18n/server";
 import { formatDate } from "@/lib/format/date";
 import { Calendar, Tag } from "lucide-react";
 import Image from "next/image";
@@ -15,9 +16,10 @@ type ChangelogDialogProps = {
   changelog: Changelog;
 };
 
-export function ChangelogDialog({ changelog }: ChangelogDialogProps) {
+export async function ChangelogDialog({ changelog }: ChangelogDialogProps) {
+  const { locale } = await getI18n();
   const { attributes, content } = changelog;
-  const title = attributes.title ?? formatDate(attributes.date);
+  const title = attributes.title ?? formatDate(attributes.date, locale);
 
   return (
     <InterceptDialog>
@@ -42,7 +44,7 @@ export function ChangelogDialog({ changelog }: ChangelogDialogProps) {
             )}
             <Badge variant="outline" className="gap-1">
               <Calendar size={12} />
-              {formatDate(attributes.date)}
+              {formatDate(attributes.date, locale)}
             </Badge>
           </div>
           <DialogTitle className="text-xl font-bold sm:text-2xl">

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { getCallbackUrl } from "@/lib/auth/auth-utils";
 import { unwrapSafePromise } from "@/lib/promises";
@@ -31,6 +32,7 @@ type LoginCredentialsFormType = z.infer<typeof LoginCredentialsFormScheme>;
 export const SignInCredentialsAndMagicLinkForm = (props: {
   callbackUrl?: string;
 }) => {
+  const { t } = useI18n();
   const form = useZodForm({
     schema: LoginCredentialsFormScheme,
     defaultValues: {
@@ -85,9 +87,12 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>{t("auth.form.email")}</FormLabel>
             <FormControl>
-              <Input placeholder="john@doe.com" {...field} />
+              <Input
+                placeholder={t("auth.signIn.emailPlaceholder")}
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -100,12 +105,12 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
           render={({ field }) => (
             <FormItem className="flex-1">
               <div className="flex items-center justify-between">
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("auth.form.password")}</FormLabel>
                 <Link
                   href="/auth/forget-password"
                   className="text-sm underline"
                 >
-                  Forgot password ?
+                  {t("auth.signIn.forgotPassword")}
                 </Link>
               </div>
               <FormControl>
@@ -122,12 +127,14 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
         type="submit"
         className="ring-offset-card w-full ring-offset-2"
       >
-        {isUsingCredentials ? "Sign in" : "Sign in with magic link"}
+        {isUsingCredentials
+          ? t("auth.signIn.submit")
+          : t("auth.signIn.magicLinkSubmit")}
       </LoadingButton>
 
       {isUsingCredentials ? (
         <Typography variant="muted" className="text-xs">
-          Want faster sign in?{" "}
+          {t("auth.signIn.magicLinkPrompt")}{" "}
           <Typography
             variant="link"
             as="button"
@@ -136,12 +143,12 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
               setIsUsingCredentials(false);
             }}
           >
-            Login with magic link
+            {t("auth.signIn.magicLinkAction")}
           </Typography>
         </Typography>
       ) : (
         <Typography variant="muted" className="text-xs">
-          Prefer password sign in?{" "}
+          {t("auth.signIn.passwordPrompt")}{" "}
           <Typography
             variant="link"
             as="button"
@@ -150,7 +157,7 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
               setIsUsingCredentials(true);
             }}
           >
-            Use password
+            {t("auth.signIn.passwordAction")}
           </Typography>
         </Typography>
       )}
