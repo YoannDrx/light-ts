@@ -1,8 +1,5 @@
-"use cache";
-
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import { cacheLife } from "next/dist/server/use-cache/cache-life";
 
 export type MrrDataPoint = {
   date: string;
@@ -16,8 +13,6 @@ export type UserGrowthDataPoint = {
 };
 
 export async function getMrrHistory(): Promise<MrrDataPoint[]> {
-  cacheLife("hours");
-
   const now = new Date();
   const sixMonthsAgo = new Date(now);
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
@@ -60,8 +55,6 @@ export async function getMrrHistory(): Promise<MrrDataPoint[]> {
 }
 
 export async function getUserGrowth(): Promise<UserGrowthDataPoint[]> {
-  cacheLife("hours");
-
   const now = new Date();
   const sixMonthsAgo = new Date(now);
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);

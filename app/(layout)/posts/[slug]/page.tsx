@@ -23,8 +23,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-static";
-
 export async function generateMetadata(props: PostParams): Promise<Metadata> {
   const params = await props.params;
   const { locale } = await getI18n();

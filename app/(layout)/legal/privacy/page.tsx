@@ -13,8 +13,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const dynamic = "force-static";
-
 export default async function page() {
   const { t } = await getI18n();
   const markdown = t("legal.privacy.content");
