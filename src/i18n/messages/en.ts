@@ -1,7 +1,7 @@
 const en = {
   meta: {
-    title: "NOW.TS",
-    description: "Collect and showcase powerful video and text testimonials",
+    title: "Light-TS",
+    description: "Modern Next.js boilerplate with auth, payments, and more",
   },
   language: {
     toggleLabel: "Toggle language",
@@ -28,7 +28,7 @@ const en = {
     app: "App",
   },
   footer: {
-    description: "Collect and showcase powerful video and text testimonials.",
+    description: "Modern Next.js boilerplate for building SaaS applications.",
     product: "Product",
     blog: "Blog",
     documentation: "Documentation",
@@ -615,131 +615,135 @@ const en = {
   },
   landing: {
     hero: {
-      titlePrefix: "Collect testimonials",
-      titleHighlight: "that convert",
+      titlePrefix: "Ship your SaaS",
+      titleHighlight: "in days, not months",
       description:
-        "Turn customer stories into social proof and grow trust with beautifully crafted testimonials.",
+        "A modern Next.js boilerplate with authentication, payments, emails, and database - everything you need to launch fast.",
       ctaPrimary: "Get started",
-      ctaSecondary: "See pricing",
-      imageAlt: "Product screenshot",
+      ctaSecondary: "View features",
+      imageAlt: "Dashboard screenshot",
     },
     stats: {
-      one: "Testimonials collected",
-      two: "Active creators",
-      three: "Monthly impressions",
-      four: "Avg. response time",
+      one: "Hours saved",
+      two: "Active developers",
+      three: "Projects launched",
+      four: "Setup time",
     },
     bento: {
       avatarAlt: "Avatar",
       items: {
         ai: {
-          title: "AI writing assistant",
-          description: "Generate testimonial prompts and posts in seconds.",
+          title: "Authentication",
+          description:
+            "Multi-provider auth with GitHub, Google, and magic links.",
         },
         schedule: {
-          title: "Smart scheduling",
-          description: "Queue your posts once and forget it.",
+          title: "Payments",
+          description:
+            "Stripe integration with subscriptions and billing portal.",
         },
         calendar: {
-          title: "Calendar overview",
-          description: "See what is scheduled at a glance.",
+          title: "Database",
+          description: "PostgreSQL with Prisma ORM and multi-tenant support.",
         },
         analytics: {
-          title: "Performance analytics",
-          description: "Track likes, replies, and reach over time.",
+          title: "Email",
+          description:
+            "Beautiful transactional emails with React Email and Resend.",
         },
         research: {
-          title: "Audience research",
-          description: "Discover what your audience wants next.",
+          title: "Organizations",
+          description: "Multi-tenant support with roles and permissions.",
         },
       },
       skeleton: {
-        threadPrompt: "Create a Thread to announce Now.TS",
+        threadPrompt: "Create your first project",
         threadResponse:
-          "Today I announced my new project, Now.TS, the perfect way to create professional Next.js apps in days.",
-        schedulePending: "Scheduling your threads...",
-        scheduleSuccess: "Your threads are now scheduled for 7:00 AM",
-        researchQuestion: "What should I do to get more followers?",
-        searching: "Searching...",
+          "Your Light-TS project is ready! Start building your SaaS in minutes.",
+        schedulePending: "Setting up your environment...",
+        scheduleSuccess: "Your development server is running on localhost:3000",
+        researchQuestion: "What stack does Light-TS use?",
+        searching: "Loading...",
         researchAnswer:
-          "Based on Threads activity over the past 30 days, you should focus on Next.js content.",
+          "Next.js 16, TypeScript, TailwindCSS, Prisma, Better Auth, and Stripe.",
       },
       stats: {
-        followers: "+{count} followers",
-        views: "+{count} views",
-        likes: "{count} likes",
-        replies: "{count} replies",
-        last30Days: "In the last 30 days",
+        followers: "+{count} features",
+        views: "+{count} components",
+        likes: "{count} downloads",
+        replies: "{count} stars",
+        last30Days: "Included out of the box",
       },
     },
     features: {
-      badge: "The features you need.",
-      title: "More than a post scheduler, we help you",
-      titleEmphasis: "grow",
+      badge: "Everything included.",
+      title: "Build faster with a complete",
+      titleEmphasis: "stack",
       description:
-        "Everything you need to create, schedule, and publish with confidence.",
+        "Everything you need to launch a production-ready SaaS application.",
       items: [
         {
-          badge: "⏰ Schedule",
-          title: "Schedule your post",
-          description: "Schedule your post on Threader in a few clicks.",
+          badge: "Auth",
+          title: "Authentication ready",
+          description:
+            "Sign in with GitHub, Google, or magic links out of the box.",
         },
         {
-          badge: "📅 Calendar",
-          title: "See what you scheduled",
+          badge: "Payments",
+          title: "Stripe integration",
           description:
-            "With the calendar view, you can see what you scheduled and when.",
+            "Subscriptions, webhooks, and customer portal already configured.",
         },
         {
-          badge: "👁️ Preview",
-          title: "Preview your post",
+          badge: "Database",
+          title: "PostgreSQL + Prisma",
           description:
-            "Preview your post before scheduling it to see how it will look.",
+            "Type-safe database access with migrations and seeding scripts.",
         },
         {
-          badge: "🔄 Repost",
-          title: "Schedule repost",
+          badge: "Email",
+          title: "Transactional emails",
           description:
-            "Automatically repost your post after a certain amount of time.",
+            "Beautiful email templates with React Email and Resend integration.",
         },
       ],
     },
     pain: {
-      title: "I love posting on Threads...",
-      subtitle: "But I lose time publishing every day",
+      title: "I love building SaaS products...",
+      subtitle: "But setting up the basics takes forever",
       without: {
-        title: "😞 Posting without Threader",
+        title: "Building from scratch",
         items: [
-          "Opening Threads every day to post",
-          "Getting distracted when I open the app",
-          "Losing track of my posts",
-          "Inconsistent",
+          "Weeks spent on authentication setup",
+          "Complex payment integration",
+          "Database schema design",
+          "Inconsistent code patterns",
         ],
       },
       with: {
-        title: "😎 Posting with Threader",
+        title: "Building with Light-TS",
         items: [
-          "Schedule your posts in Threader",
-          "Avoid opening the app every day",
-          "See exactly what you have scheduled",
-          "Be consistent",
+          "Auth ready in minutes",
+          "Stripe pre-configured",
+          "Proven database patterns",
+          "Consistent, scalable architecture",
         ],
       },
     },
     cta: {
-      title: "Ready to start posting?",
-      subtitle: "It's time to start.",
+      title: "Ready to ship faster?",
+      subtitle: "Start building today.",
       button: "Get started",
     },
     ctaCard: {
-      title: "Boost your productivity today",
-      description: "Create an account and start posting today.",
+      title: "Launch your SaaS today",
+      description: "Clone the repo and start building in minutes.",
       primaryCta: "Get started",
-      secondaryCta: "Learn more",
+      secondaryCta: "View docs",
     },
     ctaImage: {
-      title: "Start getting a lot of followers",
-      description: "By posting every day with Threader!",
+      title: "Ship your product faster",
+      description: "Focus on your features, not the boilerplate.",
       cta: "Get started",
     },
     faq: {
@@ -747,39 +751,39 @@ const en = {
       title: "Frequently Asked Questions",
       items: [
         {
-          question: "What is Threader?",
+          question: "What is Light-TS?",
           answer:
-            "Threader is an innovative platform designed to help you write, schedule, and publish content with AI assistance, enhancing your online presence.",
+            "Light-TS is a modern Next.js boilerplate that includes authentication, payments, database, and email - everything you need to launch a SaaS quickly.",
         },
         {
-          question: "How does AI Content Generation work?",
+          question: "What tech stack does Light-TS use?",
           answer:
-            "Our AI feature leverages artificial intelligence to create unique and engaging content for your Threads, making creation faster and easier.",
+            "Next.js 16, TypeScript, TailwindCSS v4, Prisma ORM, Better Auth, Stripe, React Email, and Resend.",
         },
         {
-          question: "Can I schedule my threads in advance?",
+          question: "Is the code production-ready?",
           answer:
-            "Yes, Threader lets you schedule threads for a specific time so you can stay consistent without posting every day.",
+            "Yes, Light-TS follows best practices with TypeScript strict mode, proper error handling, and scalable architecture patterns.",
         },
         {
-          question: "What is the Now.TS project?",
+          question: "Can I use it for commercial projects?",
           answer:
-            "Now.TS is a project announced on our platform that enables users to build professional Next.js apps in days.",
+            "Absolutely! Light-TS is designed for building commercial SaaS applications.",
         },
         {
-          question: "How can I get more followers?",
+          question: "How do I get started?",
           answer:
-            "Focus on creating content around Next.js. Our research tools help you understand trends and improve your strategy.",
+            "Clone the repository, run pnpm setup to configure your environment, and you're ready to build.",
         },
         {
-          question: "What are the benefits of posting with Threader?",
+          question: "What database does it support?",
           answer:
-            "Threader helps you schedule posts, avoid daily manual posting, track your content, and stay consistent.",
+            "Light-TS uses PostgreSQL with Prisma ORM. NeonDB is recommended for serverless deployments.",
         },
         {
-          question: "What pricing plans does Threader offer?",
+          question: "Is authentication included?",
           answer:
-            "Threader offers Free and Premium plans. Free lets you schedule 1 post in advance, while Premium adds unlimited scheduling, post previews, and auto-reposting.",
+            "Yes, multi-provider authentication with GitHub, Google, email/password, and magic links is pre-configured with Better Auth.",
         },
       ],
     },
@@ -895,11 +899,11 @@ const en = {
   },
   email: {
     section: {
-      title: "Get notified when we're launching",
+      title: "Stay updated",
       description:
-        "Be the first to use Threader. Get early access, exclusive content, and more.",
-      submit: "Notify me",
-      success: "Thank you for joining the waiting list",
+        "Get notified about new features, updates, and best practices for building SaaS products.",
+      submit: "Subscribe",
+      success: "Thank you for subscribing",
     },
     submit: "Subscribe",
     success: "You have subscribed to our newsletter.",
@@ -993,19 +997,19 @@ const en = {
   about: {
     metaTitle: "About {app}",
     metaDescription:
-      "Learn about NOW.TS, our mission to empower content creators with powerful testimonial collection, and meet the founder behind the platform.",
+      "Learn about Light-TS, the modern Next.js boilerplate designed to help developers ship SaaS products faster.",
     hero: {
       kicker: "About us",
-      title: "Building trust through authentic testimonials",
+      title: "Ship faster with a proven foundation",
       description:
-        "A platform you can trust, built by a dedicated founder committed to continuous innovation, regular updates, and transparent communication with our community.",
+        "A boilerplate you can trust, built by developers for developers, with continuous updates and a focus on modern best practices.",
     },
     commitment: {
       title: "Our commitment to you",
       paragraphOne:
-        "NOW.TS is built with a long-term vision and unwavering commitment to our users. We understand that choosing a platform means trusting us with your most valuable asset - your reputation and relationships with clients.",
+        "Light-TS is built with a long-term vision and commitment to the developer community. We understand that choosing a boilerplate means trusting it as the foundation of your product.",
       paragraphTwo:
-        "That's why we guarantee regular updates, continuous feature improvements, and transparent communication about every change. You'll never be left wondering about the future of your testimonials or our platform. We're here to grow with you, not abandon you.",
+        "That's why we guarantee regular updates, continuous improvements, and clear documentation. You'll always have access to the latest patterns and best practices. We're here to help you ship faster.",
     },
     gallery: {
       altOne: "Content creator recording testimonial",
@@ -1042,10 +1046,10 @@ const en = {
   contact: {
     metaTitle: "Contact {app}",
     metaDescription:
-      "Get in touch with the NOW.TS team. We're here to help with any questions about testimonials, platform features, or technical support.",
+      "Get in touch with the Light-TS team. We're here to help with any questions about the boilerplate, features, or technical support.",
     title: "Get in touch",
     description:
-      "Have questions about NOW.TS? Need help with testimonial collection or want to share feedback? We're here to help and always excited to hear from our community.",
+      "Have questions about Light-TS? Need help with setup or want to share feedback? We're here to help and always excited to hear from the community.",
     details: {
       location: "Location",
       email: "Email",

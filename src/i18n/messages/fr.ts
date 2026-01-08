@@ -2,8 +2,8 @@ import type en from "./en";
 
 const fr: typeof en = {
   meta: {
-    title: "NOW.TS",
-    description: "Collectez et mettez en avant des témoignages vidéo et texte",
+    title: "Light-TS",
+    description: "Boilerplate Next.js moderne avec auth, paiements et plus",
   },
   language: {
     toggleLabel: "Changer de langue",
@@ -30,7 +30,8 @@ const fr: typeof en = {
     app: "App",
   },
   footer: {
-    description: "Collectez et mettez en avant des témoignages vidéo et texte.",
+    description:
+      "Boilerplate Next.js moderne pour construire des applications SaaS.",
     product: "Produit",
     blog: "Blog",
     documentation: "Documentation",
@@ -628,131 +629,135 @@ const fr: typeof en = {
   },
   landing: {
     hero: {
-      titlePrefix: "Collectez des témoignages",
-      titleHighlight: "qui convertissent",
+      titlePrefix: "Lancez votre SaaS",
+      titleHighlight: "en jours, pas en mois",
       description:
-        "Transformez les retours clients en preuve sociale et inspirez confiance avec des témoignages soignés.",
+        "Un boilerplate Next.js moderne avec authentification, paiements, emails et base de données - tout ce qu'il faut pour lancer rapidement.",
       ctaPrimary: "Commencer",
-      ctaSecondary: "Voir les tarifs",
-      imageAlt: "Capture d'écran du produit",
+      ctaSecondary: "Voir les fonctionnalités",
+      imageAlt: "Capture d'écran du tableau de bord",
     },
     stats: {
-      one: "Témoignages collectés",
-      two: "Créateurs actifs",
-      three: "Impressions mensuelles",
-      four: "Temps de réponse moyen",
+      one: "Heures économisées",
+      two: "Développeurs actifs",
+      three: "Projets lancés",
+      four: "Temps de setup",
     },
     bento: {
       avatarAlt: "Avatar",
       items: {
         ai: {
-          title: "Assistant d'écriture IA",
-          description: "Générez des prompts et des posts en quelques secondes.",
+          title: "Authentification",
+          description:
+            "Auth multi-provider avec GitHub, Google et magic links.",
         },
         schedule: {
-          title: "Planification intelligente",
-          description: "Planifiez vos posts une fois et oubliez.",
+          title: "Paiements",
+          description:
+            "Intégration Stripe avec abonnements et portail de facturation.",
         },
         calendar: {
-          title: "Vue calendrier",
-          description: "Voyez d'un coup d'œil ce qui est planifié.",
+          title: "Base de données",
+          description: "PostgreSQL avec Prisma ORM et support multi-tenant.",
         },
         analytics: {
-          title: "Analyses de performance",
-          description: "Suivez likes, réponses et portée dans le temps.",
+          title: "Email",
+          description: "Emails transactionnels avec React Email et Resend.",
         },
         research: {
-          title: "Recherche d'audience",
-          description: "Découvrez ce que votre audience veut lire ensuite.",
+          title: "Organisations",
+          description: "Support multi-tenant avec rôles et permissions.",
         },
       },
       skeleton: {
-        threadPrompt: "Créer un Thread pour annoncer Now.TS",
+        threadPrompt: "Créer votre premier projet",
         threadResponse:
-          "Aujourd'hui, j'ai annoncé mon nouveau projet, Now.TS, la meilleure façon de créer des apps Next.js professionnelles en quelques jours.",
-        schedulePending: "Planification de vos threads...",
-        scheduleSuccess: "Vos threads sont planifiés pour 7h00",
-        researchQuestion: "Que dois-je faire pour gagner plus d'abonnés ?",
-        searching: "Recherche...",
+          "Votre projet Light-TS est prêt ! Commencez à construire votre SaaS en minutes.",
+        schedulePending: "Configuration de votre environnement...",
+        scheduleSuccess:
+          "Votre serveur de développement tourne sur localhost:3000",
+        researchQuestion: "Quelle stack utilise Light-TS ?",
+        searching: "Chargement...",
         researchAnswer:
-          "D'après l'activité Threads des 30 derniers jours, vous devriez vous concentrer sur du contenu Next.js.",
+          "Next.js 16, TypeScript, TailwindCSS, Prisma, Better Auth et Stripe.",
       },
       stats: {
-        followers: "+{count} abonnés",
-        views: "+{count} vues",
-        likes: "{count} likes",
-        replies: "{count} réponses",
-        last30Days: "Sur les 30 derniers jours",
+        followers: "+{count} fonctionnalités",
+        views: "+{count} composants",
+        likes: "{count} téléchargements",
+        replies: "{count} étoiles",
+        last30Days: "Inclus par défaut",
       },
     },
     features: {
-      badge: "Les fonctionnalités qu'il vous faut.",
-      title: "Plus qu'un planificateur de posts, nous vous aidons à",
-      titleEmphasis: "grandir",
+      badge: "Tout est inclus.",
+      title: "Construisez plus vite avec une stack",
+      titleEmphasis: "complète",
       description:
-        "Tout ce qu'il faut pour créer, planifier et publier en confiance.",
+        "Tout ce qu'il faut pour lancer une application SaaS prête pour la production.",
       items: [
         {
-          badge: "⏰ Planifier",
-          title: "Planifiez vos posts",
-          description: "Planifiez vos posts sur Threader en quelques clics.",
+          badge: "Auth",
+          title: "Authentification prête",
+          description: "Connexion via GitHub, Google ou magic links incluse.",
         },
         {
-          badge: "📅 Calendrier",
-          title: "Visualisez votre planning",
+          badge: "Paiements",
+          title: "Intégration Stripe",
           description:
-            "Avec la vue calendrier, visualisez ce qui est planifié et quand.",
+            "Abonnements, webhooks et portail client déjà configurés.",
         },
         {
-          badge: "👁️ Aperçu",
-          title: "Prévisualisez vos posts",
+          badge: "Database",
+          title: "PostgreSQL + Prisma",
           description:
-            "Prévisualisez votre post avant de le planifier pour voir le rendu.",
+            "Accès base de données type-safe avec migrations et scripts de seed.",
         },
         {
-          badge: "🔄 Repost",
-          title: "Planifiez un repost",
+          badge: "Email",
+          title: "Emails transactionnels",
           description:
-            "Repostez automatiquement vos posts après un certain délai.",
+            "Templates d'emails avec React Email et intégration Resend.",
         },
       ],
     },
     pain: {
-      title: "J'adore publier sur Threads...",
-      subtitle: "Mais je perds du temps à publier chaque jour",
+      title: "J'adore construire des produits SaaS...",
+      subtitle: "Mais la mise en place prend une éternité",
       without: {
-        title: "😞 Publier sans Threader",
+        title: "Construire from scratch",
         items: [
-          "Ouvrir Threads chaque jour pour publier",
-          "Se laisser distraire en ouvrant l'app",
-          "Perdre le fil de mes publications",
-          "Incohérent",
+          "Des semaines sur la configuration de l'auth",
+          "Intégration des paiements complexe",
+          "Conception du schéma de base de données",
+          "Patterns de code incohérents",
         ],
       },
       with: {
-        title: "😎 Publier avec Threader",
+        title: "Construire avec Light-TS",
         items: [
-          "Planifier ses posts dans Threader",
-          "Éviter d'ouvrir l'app chaque jour",
-          "Voir exactement ce qui est planifié",
-          "Être régulier",
+          "Auth prête en minutes",
+          "Stripe pré-configuré",
+          "Patterns de base de données éprouvés",
+          "Architecture cohérente et scalable",
         ],
       },
     },
     cta: {
-      title: "Prêt à commencer à publier ?",
-      subtitle: "Il est temps de se lancer.",
+      title: "Prêt à livrer plus vite ?",
+      subtitle: "Commencez à construire aujourd'hui.",
       button: "Commencer",
     },
     ctaCard: {
-      title: "Boostez votre productivité dès aujourd'hui",
-      description: "Créez un compte et commencez à publier.",
+      title: "Lancez votre SaaS aujourd'hui",
+      description: "Clonez le repo et commencez à construire en minutes.",
       primaryCta: "Commencer",
-      secondaryCta: "En savoir plus",
+      secondaryCta: "Voir la doc",
     },
     ctaImage: {
-      title: "Commencez à gagner beaucoup d'abonnés",
-      description: "En publiant chaque jour avec Threader !",
+      title: "Livrez votre produit plus vite",
+      description:
+        "Concentrez-vous sur vos fonctionnalités, pas le boilerplate.",
       cta: "Commencer",
     },
     faq: {
@@ -760,39 +765,39 @@ const fr: typeof en = {
       title: "Questions fréquentes",
       items: [
         {
-          question: "Qu'est-ce que Threader ?",
+          question: "Qu'est-ce que Light-TS ?",
           answer:
-            "Threader est une plateforme innovante qui vous aide à écrire, planifier et publier du contenu avec l'aide de l'IA, pour améliorer votre présence en ligne.",
+            "Light-TS est un boilerplate Next.js moderne qui inclut authentification, paiements, base de données et emails - tout ce qu'il faut pour lancer un SaaS rapidement.",
         },
         {
-          question: "Comment fonctionne la génération de contenu IA ?",
+          question: "Quelle stack technique utilise Light-TS ?",
           answer:
-            "Notre fonctionnalité IA crée du contenu unique et engageant pour vos Threads, rendant la création plus simple et plus rapide.",
+            "Next.js 16, TypeScript, TailwindCSS v4, Prisma ORM, Better Auth, Stripe, React Email et Resend.",
         },
         {
-          question: "Puis-je planifier mes threads à l'avance ?",
+          question: "Le code est-il prêt pour la production ?",
           answer:
-            "Oui, Threader vous permet de planifier vos threads à une date précise pour rester régulier sans publier chaque jour.",
+            "Oui, Light-TS suit les bonnes pratiques avec TypeScript en mode strict, gestion d'erreurs appropriée et patterns d'architecture scalables.",
         },
         {
-          question: "Qu'est-ce que le projet Now.TS ?",
+          question: "Puis-je l'utiliser pour des projets commerciaux ?",
           answer:
-            "Now.TS est un projet annoncé sur notre plateforme qui permet de créer des apps Next.js professionnelles en quelques jours.",
+            "Absolument ! Light-TS est conçu pour construire des applications SaaS commerciales.",
         },
         {
-          question: "Comment obtenir plus d'abonnés ?",
+          question: "Comment démarrer ?",
           answer:
-            "Concentrez-vous sur du contenu Next.js. Nos outils de recherche vous aident à comprendre les tendances et améliorer votre stratégie.",
+            "Clonez le repository, lancez pnpm setup pour configurer votre environnement, et vous êtes prêt à construire.",
         },
         {
-          question: "Quels sont les avantages de publier avec Threader ?",
+          question: "Quelle base de données supporte-t-il ?",
           answer:
-            "Threader vous permet de planifier vos posts, d'éviter la publication manuelle quotidienne, de suivre votre contenu et d'être régulier.",
+            "Light-TS utilise PostgreSQL avec Prisma ORM. NeonDB est recommandé pour les déploiements serverless.",
         },
         {
-          question: "Quels plans tarifaires propose Threader ?",
+          question: "L'authentification est-elle incluse ?",
           answer:
-            "Threader propose des plans Gratuit et Premium. Le plan Gratuit permet de planifier 1 post, tandis que Premium offre la planification illimitée, l'aperçu des posts et le repost automatique.",
+            "Oui, l'authentification multi-provider avec GitHub, Google, email/mot de passe et magic links est pré-configurée avec Better Auth.",
         },
       ],
     },
@@ -908,11 +913,11 @@ const fr: typeof en = {
   },
   email: {
     section: {
-      title: "Soyez informé du lancement",
+      title: "Restez informé",
       description:
-        "Soyez parmi les premiers à utiliser Threader. Accès anticipé, contenu exclusif et plus.",
-      submit: "Prévenez-moi",
-      success: "Merci d'avoir rejoint la liste d'attente",
+        "Recevez les dernières nouvelles sur les fonctionnalités, mises à jour et bonnes pratiques SaaS.",
+      submit: "S'abonner",
+      success: "Merci de votre inscription",
     },
     submit: "S'abonner",
     success: "Vous êtes inscrit à notre newsletter.",
@@ -1007,19 +1012,19 @@ const fr: typeof en = {
   about: {
     metaTitle: "À propos de {app}",
     metaDescription:
-      "Découvrez NOW.TS, notre mission pour aider les créateurs à collecter des témoignages puissants, et rencontrez le fondateur.",
+      "Découvrez Light-TS, le boilerplate Next.js moderne conçu pour aider les développeurs à livrer des produits SaaS plus rapidement.",
     hero: {
       kicker: "À propos",
-      title: "Bâtir la confiance grâce à des témoignages authentiques",
+      title: "Livrez plus vite avec une base solide",
       description:
-        "Une plateforme fiable, construite par un fondateur dédié à l'innovation continue, aux mises à jour régulières et à une communication transparente.",
+        "Un boilerplate de confiance, construit par des développeurs pour des développeurs, avec des mises à jour continues et un focus sur les bonnes pratiques modernes.",
     },
     commitment: {
       title: "Notre engagement envers vous",
       paragraphOne:
-        "NOW.TS est construit avec une vision long terme et un engagement fort envers nos utilisateurs. Choisir une plateforme, c'est nous confier votre réputation et vos relations clients.",
+        "Light-TS est construit avec une vision long terme et un engagement envers la communauté des développeurs. Choisir un boilerplate, c'est lui faire confiance comme fondation de votre produit.",
       paragraphTwo:
-        "C'est pourquoi nous garantissons des mises à jour régulières, des améliorations continues et une communication transparente sur chaque changement. Nous grandissons avec vous, sans vous laisser dans l'incertitude.",
+        "C'est pourquoi nous garantissons des mises à jour régulières, des améliorations continues et une documentation claire. Vous aurez toujours accès aux derniers patterns et bonnes pratiques.",
     },
     gallery: {
       altOne: "Créateur enregistrant un témoignage",
@@ -1056,10 +1061,10 @@ const fr: typeof en = {
   contact: {
     metaTitle: "Contact {app}",
     metaDescription:
-      "Contactez l'équipe NOW.TS. Nous sommes là pour répondre à vos questions sur les témoignages, la plateforme ou le support technique.",
+      "Contactez l'équipe Light-TS. Nous sommes là pour répondre à vos questions sur le boilerplate, les fonctionnalités ou le support technique.",
     title: "Contactez-nous",
     description:
-      "Des questions sur NOW.TS ? Besoin d'aide ou envie de partager un retour ? Nous sommes là pour vous aider et ravis d'échanger.",
+      "Des questions sur Light-TS ? Besoin d'aide pour la configuration ou envie de partager un retour ? Nous sommes là pour vous aider.",
     details: {
       location: "Localisation",
       email: "Email",

@@ -1,22 +1,22 @@
 export const SiteConfig = {
-  title: "NOW.TS",
-  description: "Collect and showcase powerful video and text testimonials",
-  prodUrl: "https://demo.nowts.app",
-  appId: "nowts",
-  domain: "demo.nowts.app",
+  title: "Light-TS",
+  description: "Modern Next.js boilerplate with auth, payments, and more",
+  prodUrl: "https://light-ts.vercel.app",
+  appId: "light-ts",
+  domain: "light-ts.vercel.app",
   appIcon: "/images/icon.png",
   company: {
-    name: "NOW.TS LLC",
-    address: "421 Rue de Paris, France", // Remove if not needed
+    name: "Light-TS",
+    address: "", // Add your company address
   },
   brand: {
-    primary: "#007291", // You can adjust this to your brand color
+    primary: "#6366f1", // Indigo - modern tech feel
   },
   team: {
-    image: "https://melvynx.com/images/me/twitter-en.jpg",
-    website: "https://melvynx.com",
-    twitter: "https://twitter.com/melvyn_me",
-    name: "Melvynx",
+    image: "https://github.com/YoannDrx.png",
+    website: "https://yoann-andrieux.fr",
+    twitter: "https://twitter.com/YoannDrx",
+    name: "Yoann Andrieux",
   },
   features: {
     /**
