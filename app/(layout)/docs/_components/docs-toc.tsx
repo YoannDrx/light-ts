@@ -69,9 +69,9 @@ export function DocsTableOfContents({
         {t("docs.onThisPage")}
       </h4>
       <nav className="flex flex-col gap-2">
-        {toc.map((item) => (
+        {toc.map((item, index) => (
           <a
-            key={item.url}
+            key={`${item.url}-${index}`}
             href={item.url}
             className={cn(
               "text-muted-foreground hover:text-foreground block text-sm no-underline transition-colors",

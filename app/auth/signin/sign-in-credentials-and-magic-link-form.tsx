@@ -18,6 +18,7 @@ import { getCallbackUrl } from "@/lib/auth/auth-utils";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -40,10 +41,15 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
       password: "",
     },
   });
+  const [mounted, setMounted] = useState(false);
   const [isUsingCredentials, setIsUsingCredentials] = useLocalStorage(
     "sign-in-with-credentials",
     true,
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const signInMutation = useMutation({
     mutationFn: async (values: LoginCredentialsFormType) => {
@@ -98,7 +104,7 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
           </FormItem>
         )}
       />
-      {isUsingCredentials ? (
+      {mounted && isUsingCredentials ? (
         <FormField
           control={form.control}
           name="password"
@@ -127,40 +133,42 @@ export const SignInCredentialsAndMagicLinkForm = (props: {
         type="submit"
         className="ring-offset-card w-full ring-offset-2"
       >
-        {isUsingCredentials
+        {!mounted || isUsingCredentials
           ? t("auth.signIn.submit")
           : t("auth.signIn.magicLinkSubmit")}
       </LoadingButton>
 
-      {isUsingCredentials ? (
-        <Typography variant="muted" className="text-xs">
-          {t("auth.signIn.magicLinkPrompt")}{" "}
-          <Typography
-            variant="link"
-            as="button"
-            type="button"
-            onClick={() => {
-              setIsUsingCredentials(false);
-            }}
-          >
-            {t("auth.signIn.magicLinkAction")}
+      {mounted ? (
+        isUsingCredentials ? (
+          <Typography variant="muted" className="text-xs">
+            {t("auth.signIn.magicLinkPrompt")}{" "}
+            <Typography
+              variant="link"
+              as="button"
+              type="button"
+              onClick={() => {
+                setIsUsingCredentials(false);
+              }}
+            >
+              {t("auth.signIn.magicLinkAction")}
+            </Typography>
           </Typography>
-        </Typography>
-      ) : (
-        <Typography variant="muted" className="text-xs">
-          {t("auth.signIn.passwordPrompt")}{" "}
-          <Typography
-            variant="link"
-            as="button"
-            type="button"
-            onClick={() => {
-              setIsUsingCredentials(true);
-            }}
-          >
-            {t("auth.signIn.passwordAction")}
+        ) : (
+          <Typography variant="muted" className="text-xs">
+            {t("auth.signIn.passwordPrompt")}{" "}
+            <Typography
+              variant="link"
+              as="button"
+              type="button"
+              onClick={() => {
+                setIsUsingCredentials(true);
+              }}
+            >
+              {t("auth.signIn.passwordAction")}
+            </Typography>
           </Typography>
-        </Typography>
-      )}
+        )
+      ) : null}
     </Form>
   );
 };
