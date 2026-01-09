@@ -108,8 +108,8 @@ jobs:
       - name: Generate Prisma client
         run: pnpm prisma generate
 
-      - name: Deploy database migrations
-        run: pnpm prisma migrate deploy
+      - name: Reset database (clean slate)
+        run: pnpm prisma migrate reset --force --skip-seed
 
       - name: Verify database schema
         run: pnpm prisma migrate status
