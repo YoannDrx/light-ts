@@ -10,7 +10,7 @@ import { ContactSupportDialog } from "@/features/contact/support/contact-support
 import { getI18n } from "@/i18n/server";
 import { getRequiredUser } from "@/lib/auth/auth-user";
 import { env } from "@/lib/env";
-import { resend } from "@/lib/mail/resend";
+import { getResend } from "@/lib/mail/resend";
 import { combineWithParentMetadata } from "@/lib/metadata";
 import { prisma } from "@/lib/prisma";
 import type { PageParams } from "@/types/next";
@@ -62,7 +62,7 @@ export default async function MailProfilePage() {
     );
   }
 
-  const { data: resendUser } = await resend.contacts.get({
+  const { data: resendUser } = await getResend().contacts.get({
     audienceId: env.RESEND_AUDIENCE_ID,
     id: userWithResendContactId.resendContactId,
   });
