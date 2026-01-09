@@ -1,9 +1,8 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getI18n } from "@/i18n/server";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { Crown, DollarSign, Users } from "lucide-react";
 import { cacheLife } from "next/dist/server/use-cache/cache-life";
 
@@ -28,7 +27,7 @@ async function calculateTotalMRR() {
         if (!sub.stripeSubscriptionId) return null;
 
         try {
-          const stripeSub = await stripe.subscriptions.retrieve(
+          const stripeSub = await getStripe().subscriptions.retrieve(
             sub.stripeSubscriptionId,
           );
           return stripeSub;

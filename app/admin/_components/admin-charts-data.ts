@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 export type MrrDataPoint = {
   date: string;
@@ -17,7 +17,7 @@ export async function getMrrHistory(): Promise<MrrDataPoint[]> {
   const sixMonthsAgo = new Date(now);
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-  const invoices = await stripe.invoices.list({
+  const invoices = await getStripe().invoices.list({
     created: {
       gte: Math.floor(sixMonthsAgo.getTime() / 1000),
     },

@@ -2,7 +2,7 @@ import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -25,7 +25,7 @@ export const POST = async (req: NextRequest) => {
 
   let event: Stripe.Event | null = null;
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       stripeSignature ?? "",
       env.STRIPE_WEBHOOK_SECRET ?? "",
@@ -98,7 +98,7 @@ const checkoutSessionCompleted = async (
 
   // Get the subscription from Stripe to get the price details
   const stripeSubscription =
-    await stripe.subscriptions.retrieve(subscriptionId);
+    await getStripe().subscriptions.retrieve(subscriptionId);
   const priceId = stripeSubscription.items.data[0]?.price.id;
 
   if (!priceId) {

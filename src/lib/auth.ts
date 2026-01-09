@@ -11,7 +11,7 @@ import { env } from "./env";
 import { logger } from "./logger";
 import { prisma } from "./prisma";
 import { getServerUrl } from "./server-url";
-import { stripe } from "./stripe";
+import { getStripe } from "./stripe";
 
 type SocialProvidersType = Parameters<typeof betterAuth>[0]["socialProviders"];
 
@@ -44,7 +44,7 @@ export const auth = betterAuth({
 
           // Create Stripe customer for the user
           try {
-            const stripeCustomer = await stripe.customers.create({
+            const stripeCustomer = await getStripe().customers.create({
               email: user.email,
               name: user.name,
               metadata: {
