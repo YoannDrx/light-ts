@@ -33,7 +33,10 @@ test.describe("account", () => {
     await expect(deleteButton).toBeEnabled();
     await deleteButton.click();
 
-    await expect(page.getByText("Your deletion has been asked.")).toBeVisible();
+    // i18n: toast message is "Deletion requested" or "Suppression demandée"
+    await expect(
+      page.getByText(/Deletion requested|Suppression demandée/i),
+    ).toBeVisible();
 
     const verification = await prisma.verification.findFirst({
       where: {

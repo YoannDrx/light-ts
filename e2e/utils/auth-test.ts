@@ -123,5 +123,6 @@ export async function signOutAccount(options: { page: Page }) {
   // Click the sign out button (supports both English "Sign out" and French "Se déconnecter")
   await page.getByRole("button", { name: /sign out|se déconnecter/i }).click();
 
-  await page.waitForURL(/\/auth\/signin/, { timeout: 10000 });
+  // After sign out, user is redirected to home page "/" (not /auth/signin)
+  await page.waitForURL("/", { timeout: 10000 });
 }

@@ -11,17 +11,24 @@ test.describe("admin", () => {
 
     await page.goto("/admin");
 
-    await expect(page.getByRole("link", { name: "Users" })).toBeVisible();
-
+    // i18n: "Users" (EN) / "Utilisateurs" (FR)
     await expect(
-      page.getByRole("link", { name: "Feedback" }).first(),
+      page.getByRole("link", { name: /Users|Utilisateurs/i }),
     ).toBeVisible();
 
-    await page.getByRole("link", { name: "Users" }).click();
+    // i18n: "Feedback" (EN) / "Retours" (FR)
+    await expect(
+      page.getByRole("link", { name: /Feedback|Retours/i }).first(),
+    ).toBeVisible();
+
+    await page.getByRole("link", { name: /Users|Utilisateurs/i }).click();
 
     await expect(page).toHaveURL("/admin/users");
 
-    await page.getByRole("link", { name: "Feedback" }).first().click();
+    await page
+      .getByRole("link", { name: /Feedback|Retours/i })
+      .first()
+      .click();
     await expect(page).toHaveURL("/admin/feedback");
   });
 });

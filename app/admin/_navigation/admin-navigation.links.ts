@@ -21,17 +21,12 @@ export const getAdminNavigation = (t: Translator): NavigationGroup[] => {
         {
           href: `${ADMIN_PATH}/users`,
           Icon: Users,
-          label: t("admin.users"),
+          label: t("admin.users.title"),
         },
         {
           href: `${ADMIN_PATH}/feedback`,
           Icon: MessageSquare,
-          label: t("admin.feedback"),
-        },
-        {
-          href: `${ADMIN_PATH}/feedback`,
-          Icon: MessageSquare,
-          label: t("admin.feedback"),
+          label: t("admin.feedback.title"),
         },
       ],
     },
