@@ -32,7 +32,7 @@ export async function AccountLayout({ children }: AccountLayoutProps) {
               await auth.api.signOut({
                 headers: await headers(),
               });
-              redirect("/auth/signin");
+              redirect("/");
             }}
           >
             {t("account.settings.signOut")}

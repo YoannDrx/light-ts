@@ -3,7 +3,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { LanguageToggle } from "@/features/i18n/language-toggle";
 import { Layout } from "@/features/page/layout";
 import type { PropsWithChildren } from "react";
 import { AccountSidebar } from "./account-sidebar";
@@ -16,9 +15,6 @@ export async function AccountNavigation({ children }: PropsWithChildren) {
         <header className="flex h-16 shrink-0 items-center gap-2">
           <Layout size="lg" className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
-            <div className="ml-auto">
-              <LanguageToggle />
-            </div>
           </Layout>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

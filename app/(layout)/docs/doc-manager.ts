@@ -1,5 +1,6 @@
 import { logger } from "@/lib/logger";
 import { defaultLocale, type Locale } from "@/i18n/config";
+import type { PageProps } from "@/types/next";
 import fm from "front-matter";
 import fs from "fs/promises";
 import path from "path";

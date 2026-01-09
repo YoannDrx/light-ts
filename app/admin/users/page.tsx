@@ -6,6 +6,7 @@ import {
 } from "@/features/page/layout";
 import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
+import type { PageProps } from "@/types/next";
 import { getUsersWithStats } from "./_actions/admin-users";
 import {
   createSearchParamsCache,

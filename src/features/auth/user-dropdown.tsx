@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSession } from "@/lib/auth-client";
 import {
+  Globe,
   LayoutDashboard,
   Monitor,
   Moon,
@@ -25,17 +26,26 @@ import {
   SunMoon,
 } from "lucide-react";
 
+import { localeCookieName, type Locale } from "@/i18n/config";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { useI18n } from "@/i18n/provider";
 import { UserDropdownLogout } from "./user-dropdown-logout";
 import { UserDropdownStopImpersonating } from "./user-dropdown-stop-impersonating";
 
+const setLocaleCookie = (locale: Locale) => {
+  const maxAge = 60 * 60 * 24 * 365;
+  document.cookie = `${localeCookieName}=${locale}; path=/; max-age=${maxAge}; samesite=lax`;
+  document.documentElement.lang = locale;
+};
+
 export const UserDropdown = ({ children }: PropsWithChildren) => {
   const session = useSession();
   const theme = useTheme();
-  const { t } = useI18n();
+  const router = useRouter();
+  const { locale, t } = useI18n();
 
   if (!session.data?.user) {
     return null;
@@ -98,6 +108,34 @@ export const UserDropdown = ({ children }: PropsWithChildren) => {
               <DropdownMenuItem onClick={() => theme.setTheme("system")}>
                 <Monitor className="mr-2 size-4" />
                 <span>{t("theme.system")}</span>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <Globe className="text-muted-foreground mr-4 size-4" />
+            <span>{t("language.title")}</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem
+                onClick={() => {
+                  setLocaleCookie("fr");
+                  router.refresh();
+                }}
+                disabled={locale === "fr"}
+              >
+                <span>{t("language.fr")}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setLocaleCookie("en");
+                  router.refresh();
+                }}
+                disabled={locale === "en"}
+              >
+                <span>{t("language.en")}</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>

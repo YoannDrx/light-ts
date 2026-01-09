@@ -3,7 +3,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { LanguageToggle } from "@/features/i18n/language-toggle";
 import { Layout } from "@/features/page/layout";
 import { getI18n } from "@/i18n/server";
 import type { PropsWithChildren } from "react";
@@ -23,12 +22,7 @@ export async function AdminNavigation({ children }: PropsWithChildren) {
               variant="outline"
               className="size-9 cursor-pointer"
             />
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">{t("admin.panel")}</span>
-            </div>
-            <div className="ml-auto">
-              <LanguageToggle />
-            </div>
+            <span className="font-semibold">{t("admin.panel")}</span>
           </Layout>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>

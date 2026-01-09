@@ -4,10 +4,11 @@ const en = {
     description: "Modern Next.js boilerplate with auth, payments, and more",
   },
   language: {
+    title: "Language",
     toggleLabel: "Toggle language",
     current: "Current language",
-    fr: "FR",
-    en: "EN",
+    fr: "Français",
+    en: "English",
   },
   nav: {
     docs: "Docs",

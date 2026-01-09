@@ -29,7 +29,7 @@ const LastUsedProvider = () => {
     if (searchParams.get("provider")) {
       setLastUsedProvider(searchParams.get("provider") as AuthProvider);
     }
-    router.push(searchParams.get("callbackUrl") ?? "/account");
+    router.push(searchParams.get("callbackUrl") ?? "/app");
   }, [router, searchParams, setLastUsedProvider]);
 
   return <div>{lastUsedProvider}</div>;

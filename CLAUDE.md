@@ -22,19 +22,35 @@ Guide pour Claude Code sur ce dépôt.
 
 **mgrep est ton outil principal pour explorer le codebase.** Il te donne la réponse en langage naturel + la source pertinente, tout servi.
 
+### Nom du store
+
+Le nom du store mgrep = **le nom du dossier du projet** (ex: si le projet est dans `/Users/dev/my-saas`, le store s'appelle `my-saas`).
+
+Pour obtenir le nom du store : `basename $(pwd)` ou regarde simplement le nom du dossier courant.
+
+### Lancer le watch (synchronisation)
+
+Avant d'utiliser mgrep, lance le watcher dans un terminal séparé :
+
+```bash
+pnpm mgrep
+```
+
+Le script détecte automatiquement le nom du dossier pour le store.
+
 ### Commande de base
 
 ```bash
-mgrep "ta question en langage naturel" --store "light-ts" -a -m <nombre>
+mgrep "ta question en langage naturel" --store "<nom-du-dossier>" -a -m <nombre>
 ```
 
 ### Paramètres essentiels
 
-| Paramètre              | Description                                   |
-| ---------------------- | --------------------------------------------- |
-| `--store "light-ts"`   | **Obligatoire** - le store indexé du projet   |
-| `-a`                   | Active la réponse en langage naturel          |
-| `-m <n>`               | Nombre de résultats du retrieval (minimum 10) |
+| Paramètre                 | Description                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `--store "<nom-dossier>"` | **Obligatoire** - le nom du dossier du projet         |
+| `-a`                      | Active la réponse en langage naturel                  |
+| `-m <n>`                  | Nombre de résultats du retrieval (minimum 10)         |
 
 ### Ajuster `-m` selon la complexité
 
@@ -49,10 +65,10 @@ mgrep "ta question en langage naturel" --store "light-ts" -a -m <nombre>
 Si la requête touche **plusieurs parties du codebase**, lance plusieurs mgrep en parallèle plutôt qu'une seule requête surchargée :
 
 ```bash
-# Exemple : comprendre le système d'auth complet
-mgrep "comment fonctionne l'authentification GitHub côté frontend" --store "light-ts" -a -m 20
-mgrep "comment le token est géré côté serveur" --store "light-ts" -a -m 20
-mgrep "comment les sessions sont gérées" --store "light-ts" -a -m 20
+# Exemple : comprendre le système d'auth complet (remplace <store> par le nom du dossier)
+mgrep "comment fonctionne l'authentification GitHub côté frontend" --store "<store>" -a -m 20
+mgrep "comment le token est géré côté serveur" --store "<store>" -a -m 20
+mgrep "comment les sessions sont gérées" --store "<store>" -a -m 20
 ```
 
 ### Règles
@@ -107,6 +123,7 @@ Quand tu lances un subagent Explore, copie-colle les instructions sur mgrep de c
 - `pnpm email` - Serveur de développement emails
 - `pnpm stripe-webhooks` - Écouter les webhooks Stripe
 - `pnpm knip` - Détection de code inutilisé
+- `pnpm mgrep` - Lancer le watcher mgrep (synchronisation du code)
 
 ---
 
@@ -117,18 +134,19 @@ Le projet utilise plusieurs CLIs pour automatiser le setup et le déploiement.
 ### Installation
 
 ```bash
-npm i -g @vercel/cli neonctl @upstash/cli stripe gh
+npm i -g @vercel/cli neonctl @upstash/cli stripe gh @mixedbread/mgrep
 ```
 
 ### Liste des CLIs
 
-| CLI | Package | Commande login | Usage |
-|-----|---------|----------------|-------|
-| `gh` | `gh` | `gh auth login` | GitHub |
-| `vercel` | `@vercel/cli` | `vercel login` | Déploiement |
-| `neon` | `neonctl` | `neon auth` | PostgreSQL (NeonDB) |
-| `upstash` | `@upstash/cli` | `upstash auth login` | Redis (Upstash) |
-| `stripe` | `stripe` | `stripe login` | Paiements (optionnel) |
+| CLI       | Package            | Commande login       | Usage                       |
+| --------- | ------------------ | -------------------- | --------------------------- |
+| `gh`      | `gh`               | `gh auth login`      | GitHub                      |
+| `vercel`  | `@vercel/cli`      | `vercel login`       | Déploiement                 |
+| `neon`    | `neonctl`          | `neon auth`          | PostgreSQL (NeonDB)         |
+| `upstash` | `@upstash/cli`     | `upstash auth login` | Redis (Upstash)             |
+| `stripe`  | `stripe`           | `stripe login`       | Paiements (optionnel)       |
+| `mgrep`   | `@mixedbread/mgrep`| `mgrep login`        | Recherche de code IA        |
 
 ---
 
@@ -343,15 +361,15 @@ npx bmad-method@alpha install
 
 ### Agents disponibles
 
-| Agent | Rôle |
-|-------|------|
-| `/analyst` | Analyse et recherche |
-| `/pm` | Product Management |
-| `/architect` | Architecture technique |
-| `/ux-designer` | Design UX/UI |
-| `/sm` | Scrum Master |
-| `/dev` | Développement |
-| `/tea` | Test Architect |
+| Agent          | Rôle                   |
+| -------------- | ---------------------- |
+| `/analyst`     | Analyse et recherche   |
+| `/pm`          | Product Management     |
+| `/architect`   | Architecture technique |
+| `/ux-designer` | Design UX/UI           |
+| `/sm`          | Scrum Master           |
+| `/dev`         | Développement          |
+| `/tea`         | Test Architect         |
 
 ### Structure
 

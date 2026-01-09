@@ -6,10 +6,11 @@ const fr: typeof en = {
     description: "Boilerplate Next.js moderne avec auth, paiements et plus",
   },
   language: {
+    title: "Langue",
     toggleLabel: "Changer de langue",
     current: "Langue actuelle",
-    fr: "FR",
-    en: "EN",
+    fr: "Français",
+    en: "English",
   },
   nav: {
     docs: "Docs",

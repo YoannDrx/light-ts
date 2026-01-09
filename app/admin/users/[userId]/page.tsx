@@ -12,6 +12,7 @@ import {
 import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
 import { prisma } from "@/lib/prisma";
+import type { PageProps } from "@/types/next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { UserDetailsCard } from "../../_components/user-details-card";

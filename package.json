@@ -12,6 +12,7 @@
     "format": "prettier --write .",
     "postinstall": "prisma generate",
     "knip": "knip-bun --config knip.json",
+    "mgrep": "tsx scripts/mgrep-watch.ts",
     "lint": "eslint . --fix",
     "start": "next start",
     "stripe-webhooks": "stripe listen --forward-to localhost:3000/api/webhooks/stripe",

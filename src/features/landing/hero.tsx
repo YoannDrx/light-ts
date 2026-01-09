@@ -33,7 +33,7 @@ export const Hero = async () => {
             </Typography>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
-                href="/signin"
+                href="/auth/signin"
                 className={buttonVariants({ size: "lg", variant: "default" })}
               >
                 {t("landing.hero.ctaPrimary")}
