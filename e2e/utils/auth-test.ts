@@ -27,16 +27,18 @@ export async function createTestAccount(options: {
   // Navigate to signup page
   await options.page.goto(`/auth/signup?callbackUrl=${options.callbackURL}`);
 
-  // Fill out the form
-  await options.page.getByLabel("Name").fill(userData.name);
-  await options.page.getByLabel("Email").fill(userData.email);
+  // Fill out the form (supports both English and French labels)
+  await options.page.getByLabel(/^Name$|^Nom$/i).fill(userData.name);
+  await options.page.getByLabel(/^Email$/i).fill(userData.email);
   await options.page.locator('input[name="password"]').fill(userData.password);
   await options.page
     .locator('input[name="verifyPassword"]')
     .fill(userData.password);
 
-  // Submit the form
-  await options.page.getByRole("button", { name: /sign up/i }).click();
+  // Submit the form (supports both English "Create account" and French "Créer un compte")
+  await options.page
+    .getByRole("button", { name: /create account|créer un compte/i })
+    .click();
 
   // Wait for navigation to complete - we should be redirected to the callback URL
   if (options.callbackURL) {
@@ -86,13 +88,13 @@ export async function signInAccount(options: {
     `/auth/signin${callbackURL ? `?callbackUrl=${callbackURL}` : ""}`,
   );
 
-  // Fill out the form
-  await page.getByLabel("Email").fill(userData.email);
+  // Fill out the form (supports both English and French labels)
+  await page.getByLabel(/^Email$/i).fill(userData.email);
   await page.locator('input[name="password"]').fill(userData.password);
 
-  // Submit the form
+  // Submit the form (supports both English "Sign in" and French "Se connecter")
   await page
-    .getByRole("button", { name: /sign in/i })
+    .getByRole("button", { name: /sign in|se connecter/i })
     .first()
     .click();
 
@@ -118,8 +120,8 @@ export async function signOutAccount(options: { page: Page }) {
   // Navigate to account page
   await page.goto(`/account`);
 
-  // Click the sign out button
-  await page.getByRole("button", { name: /sign out/i }).click();
+  // Click the sign out button (supports both English "Sign out" and French "Se déconnecter")
+  await page.getByRole("button", { name: /sign out|se déconnecter/i }).click();
 
   await page.waitForURL(/\/auth\/signin/, { timeout: 10000 });
 }
