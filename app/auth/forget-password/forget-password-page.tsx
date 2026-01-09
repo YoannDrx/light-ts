@@ -42,7 +42,7 @@ export function ForgetPasswordPage() {
   const forgetPasswordMutation = useMutation({
     mutationFn: async (values: { email: string }) => {
       return unwrapSafePromise(
-        authClient.forgetPassword({
+        authClient.requestPasswordReset({
           email: values.email,
           redirectTo: "/auth/reset-password",
         }),
