@@ -65,8 +65,14 @@ export async function createTestAccount(options: {
       where: { id: user.id },
       data: { role: "admin" },
     });
-    // await 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+    // Sign out and sign back in to refresh session with admin role
+    await signOutAccount({ page: options.page });
+    await signInAccount({
+      page: options.page,
+      userData: { email: userData.email, password: userData.password },
+      callbackURL: options.callbackURL,
+    });
   }
 
   return userData;
