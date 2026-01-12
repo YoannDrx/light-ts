@@ -69,9 +69,12 @@ export async function createTestAccount(options: {
     // Wait for the database update to be committed
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Sign out via the API endpoint to invalidate all sessions
-    await options.page.goto("/api/auth/sign-out");
-    await options.page.waitForLoadState("networkidle");
+    // Clear cookies and storage to completely reset the session
+    await options.page.context().clearCookies();
+    await options.page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
 
     // Sign back in with the admin role now in the database
     await signInAccount({
