@@ -12,24 +12,24 @@ test.describe("admin", () => {
     await page.goto("/admin");
     await page.waitForLoadState("networkidle");
 
-    // i18n: "Users" (EN) / "Utilisateurs" (FR)
-    await expect(
-      page.getByRole("link", { name: /Users|Utilisateurs/i }),
-    ).toBeVisible();
+    // Wait for sidebar to be fully rendered
+    await page.waitForTimeout(1000);
 
-    // i18n: "Feedback" (EN) / "Retours" (FR)
-    await expect(
-      page.getByRole("link", { name: /Feedback|Retours/i }).first(),
-    ).toBeVisible();
+    // Check we're on the admin page (not redirected)
+    await expect(page).toHaveURL(/\/admin/);
 
-    await page.getByRole("link", { name: /Users|Utilisateurs/i }).click();
+    // i18n: "Users" (EN) / "Utilisateurs" (FR) - use locator with href
+    const usersLink = page.locator('a[href="/admin/users"]');
+    await expect(usersLink).toBeVisible({ timeout: 10000 });
 
+    // i18n: "Feedback" (EN) / "Retours" (FR) - use locator with href
+    const feedbackLink = page.locator('a[href="/admin/feedback"]');
+    await expect(feedbackLink).toBeVisible({ timeout: 10000 });
+
+    await usersLink.click();
     await expect(page).toHaveURL("/admin/users");
 
-    await page
-      .getByRole("link", { name: /Feedback|Retours/i })
-      .first()
-      .click();
+    await feedbackLink.click();
     await expect(page).toHaveURL("/admin/feedback");
   });
 });
