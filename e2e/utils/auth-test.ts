@@ -65,23 +65,8 @@ export async function createTestAccount(options: {
       where: { id: user.id },
       data: { role: "admin" },
     });
-
     // Wait for the database update to be committed
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Clear cookies and storage to completely reset the session
-    await options.page.context().clearCookies();
-    await options.page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
-
-    // Sign back in with the admin role now in the database
-    await signInAccount({
-      page: options.page,
-      userData: { email: userData.email, password: userData.password },
-      callbackURL: options.callbackURL,
-    });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   return userData;
