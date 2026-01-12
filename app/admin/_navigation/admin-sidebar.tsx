@@ -72,21 +72,23 @@ export function AdminSidebar() {
 const ItemCollapsing = (
   props: PropsWithChildren<{ defaultOpenStartPath?: string }>,
 ) => {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const isOpen = props.defaultOpenStartPath
+  const shouldBeOpen = props.defaultOpenStartPath
     ? pathname.startsWith(props.defaultOpenStartPath)
     : true;
 
+  // Initialize open state with the computed value
+  const [open, setOpen] = useState(shouldBeOpen);
+
   useEffect(() => {
-    if (isOpen) {
-      setOpen(isOpen);
+    if (shouldBeOpen) {
+      setOpen(shouldBeOpen);
     }
-  }, [isOpen]);
+  }, [shouldBeOpen]);
+
   return (
     <Collapsible
-      defaultOpen={isOpen}
       onOpenChange={setOpen}
       open={open}
       className="group/collapsible"
