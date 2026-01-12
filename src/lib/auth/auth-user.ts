@@ -42,7 +42,7 @@ export const getRequiredAdmin = async () => {
     select: { role: true },
   });
 
-  if (!dbUser || dbUser.role !== "admin") {
+  if (dbUser?.role !== "admin") {
     unauthorized();
   }
 
