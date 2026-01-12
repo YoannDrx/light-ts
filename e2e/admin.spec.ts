@@ -9,7 +9,12 @@ test.describe("admin", () => {
       admin: true,
     });
 
+    // After role update in DB, we need to reload to refresh the session
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+
     await page.goto("/admin");
+    await page.waitForLoadState("networkidle");
 
     // i18n: "Users" (EN) / "Utilisateurs" (FR)
     await expect(

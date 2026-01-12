@@ -56,9 +56,15 @@ test.describe("account", () => {
     const confirmUrl = `${getServerUrl()}/auth/confirm-delete?token=${resetToken}&callbackUrl=/auth/goodbye`;
     await page.goto(confirmUrl);
 
-    await page.getByRole("button", { name: "Yes, Delete My Account" }).click();
+    // i18n: button text is "Delete account" (EN) / "Supprimer le compte" (FR)
+    await page
+      .getByRole("button", { name: /Delete account|Supprimer le compte/i })
+      .click();
     await page.waitForURL(/\/auth\/goodbye/, { timeout: 10000 });
-    await expect(page.getByText("Account Deleted").first()).toBeVisible();
+    // i18n: page title is "You're signed out" (EN) / "Vous êtes déconnecté" (FR)
+    await expect(
+      page.getByText(/You're signed out|Vous êtes déconnecté/i).first(),
+    ).toBeVisible();
 
     const user = await prisma.user.findUnique({
       where: {
