@@ -66,8 +66,8 @@ export async function createTestAccount(options: {
       data: { role: "admin" },
     });
 
-    // Sign out and sign back in to refresh session with admin role
-    await signOutAccount({ page: options.page });
+    // Clear all cookies to invalidate session, then sign back in with admin role
+    await options.page.context().clearCookies();
     await signInAccount({
       page: options.page,
       userData: { email: userData.email, password: userData.password },
@@ -93,6 +93,7 @@ export async function signInAccount(options: {
   await page.goto(
     `/auth/signin${callbackURL ? `?callbackUrl=${callbackURL}` : ""}`,
   );
+  await page.waitForLoadState("networkidle");
 
   // Fill out the form (supports both English and French labels)
   await page.getByLabel(/^Email$/i).fill(userData.email);
@@ -106,11 +107,8 @@ export async function signInAccount(options: {
 
   // Wait for navigation to complete if a callback URL is provided
   if (callbackURL) {
-    try {
-      await page.waitForURL(new RegExp(callbackURL), { timeout: 30000 });
-    } catch (error) {
-      logger.error("Error waiting for navigation to complete", error);
-    }
+    await page.waitForURL(new RegExp(callbackURL), { timeout: 30000 });
+    await page.waitForLoadState("networkidle");
   }
 
   return userData;
@@ -125,9 +123,14 @@ export async function signOutAccount(options: { page: Page }) {
 
   // Navigate to account page
   await page.goto(`/account`);
+  await page.waitForLoadState("networkidle");
 
   // Click the sign out button (supports both English "Sign out" and French "Se déconnecter")
-  await page.getByRole("button", { name: /sign out|se déconnecter/i }).click();
+  const signOutButton = page.getByRole("button", {
+    name: /sign out|se déconnecter/i,
+  });
+  await signOutButton.waitFor({ state: "visible", timeout: 10000 });
+  await signOutButton.click();
 
   // After sign out, user is redirected to home page "/" (not /auth/signin)
   await page.waitForURL("/", { timeout: 10000 });
