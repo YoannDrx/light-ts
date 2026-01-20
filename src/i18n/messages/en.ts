@@ -1,6 +1,6 @@
 const en = {
   meta: {
-    title: "Light-TS",
+    title: "LightTS",
     description: "Modern Next.js boilerplate with auth, payments, and more",
   },
   language: {
@@ -660,10 +660,10 @@ const en = {
       skeleton: {
         threadPrompt: "Create your first project",
         threadResponse:
-          "Your Light-TS project is ready! Start building your SaaS in minutes.",
+          "Your LightTS project is ready! Start building your SaaS in minutes.",
         schedulePending: "Setting up your environment...",
         scheduleSuccess: "Your development server is running on localhost:3000",
-        researchQuestion: "What stack does Light-TS use?",
+        researchQuestion: "What stack does LightTS use?",
         searching: "Loading...",
         researchAnswer:
           "Next.js 16, TypeScript, TailwindCSS, Prisma, Better Auth, and Stripe.",
@@ -722,7 +722,7 @@ const en = {
         ],
       },
       with: {
-        title: "Building with Light-TS",
+        title: "Building with LightTS",
         items: [
           "Auth ready in minutes",
           "Stripe pre-configured",
@@ -752,24 +752,24 @@ const en = {
       title: "Frequently Asked Questions",
       items: [
         {
-          question: "What is Light-TS?",
+          question: "What is LightTS?",
           answer:
-            "Light-TS is a modern Next.js boilerplate that includes authentication, payments, database, and email - everything you need to launch a SaaS quickly.",
+            "LightTS is a modern Next.js boilerplate that includes authentication, payments, database, and email - everything you need to launch a SaaS quickly.",
         },
         {
-          question: "What tech stack does Light-TS use?",
+          question: "What tech stack does LightTS use?",
           answer:
             "Next.js 16, TypeScript, TailwindCSS v4, Prisma ORM, Better Auth, Stripe, React Email, and Resend.",
         },
         {
           question: "Is the code production-ready?",
           answer:
-            "Yes, Light-TS follows best practices with TypeScript strict mode, proper error handling, and scalable architecture patterns.",
+            "Yes, LightTS follows best practices with TypeScript strict mode, proper error handling, and scalable architecture patterns.",
         },
         {
           question: "Can I use it for commercial projects?",
           answer:
-            "Absolutely! Light-TS is designed for building commercial SaaS applications.",
+            "Absolutely! LightTS is designed for building commercial SaaS applications.",
         },
         {
           question: "How do I get started?",
@@ -779,7 +779,7 @@ const en = {
         {
           question: "What database does it support?",
           answer:
-            "Light-TS uses PostgreSQL with Prisma ORM. NeonDB is recommended for serverless deployments.",
+            "LightTS uses PostgreSQL with Prisma ORM. NeonDB is recommended for serverless deployments.",
         },
         {
           question: "Is authentication included?",
@@ -998,7 +998,7 @@ const en = {
   about: {
     metaTitle: "About {app}",
     metaDescription:
-      "Learn about Light-TS, the modern Next.js boilerplate designed to help developers ship SaaS products faster.",
+      "Learn about LightTS, the modern Next.js boilerplate designed to help developers ship SaaS products faster.",
     hero: {
       kicker: "About us",
       title: "Ship faster with a proven foundation",
@@ -1008,7 +1008,7 @@ const en = {
     commitment: {
       title: "Our commitment to you",
       paragraphOne:
-        "Light-TS is built with a long-term vision and commitment to the developer community. We understand that choosing a boilerplate means trusting it as the foundation of your product.",
+        "LightTS is built with a long-term vision and commitment to the developer community. We understand that choosing a boilerplate means trusting it as the foundation of your product.",
       paragraphTwo:
         "That's why we guarantee regular updates, continuous improvements, and clear documentation. You'll always have access to the latest patterns and best practices. We're here to help you ship faster.",
     },
@@ -1047,10 +1047,10 @@ const en = {
   contact: {
     metaTitle: "Contact {app}",
     metaDescription:
-      "Get in touch with the Light-TS team. We're here to help with any questions about the boilerplate, features, or technical support.",
+      "Get in touch with the LightTS team. We're here to help with any questions about the boilerplate, features, or technical support.",
     title: "Get in touch",
     description:
-      "Have questions about Light-TS? Need help with setup or want to share feedback? We're here to help and always excited to hear from the community.",
+      "Have questions about LightTS? Need help with setup or want to share feedback? We're here to help and always excited to hear from the community.",
     details: {
       location: "Location",
       email: "Email",

@@ -4,9 +4,9 @@ Guide pour Claude Code sur ce dépôt.
 
 ---
 
-## À propos de light-ts
+## À propos de LightTS
 
-**light-ts** est un template boilerplate Next.js 15 pour démarrer rapidement de nouveaux projets avec une stack moderne et complète.
+**LightTS** est un template boilerplate Next.js 15 pour démarrer rapidement de nouveaux projets avec une stack moderne et complète.
 
 ### Fonctionnalités incluses
 
