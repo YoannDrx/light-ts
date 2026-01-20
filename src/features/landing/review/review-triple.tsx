@@ -6,7 +6,7 @@ type ReviewTripleProps = {
   /**
    * An array of reviews.
    */
-  reviews: [ReviewItemProps, ReviewItemProps, ReviewItemProps];
+  reviews: ReviewItemProps[];
 };
 
 export const ReviewTriple = (props: ReviewTripleProps) => {

@@ -1,10 +1,13 @@
 import { CircleSvg } from "@/components/svg/circle-svg";
 import { buttonVariants } from "@/components/ui/button";
+import { getI18n } from "@/i18n/server";
 import Image from "next/image";
 import Link from "next/link";
 import { Typography } from "../../components/nowts/typography";
 
-export const Hero = () => {
+export const Hero = async () => {
+  const { t } = await getI18n();
+
   return (
     <div className="relative isolate flex flex-col">
       <GridBackground />
@@ -16,9 +19,9 @@ export const Hero = () => {
               variant="h1"
               className="text-5xl font-semibold tracking-tight text-balance sm:text-7xl lg:text-7xl"
             >
-              Write the best content and Grow your{" "}
+              {t("landing.hero.titlePrefix")}{" "}
               <span className="relative inline-block">
-                <span>business</span>
+                <span>{t("landing.hero.titleHighlight")}</span>
                 <CircleSvg className="fill-primary absolute inset-0" />
               </span>
             </Typography>
@@ -26,26 +29,26 @@ export const Hero = () => {
               variant="large"
               className="text-muted-foreground mt-8 text-lg font-medium text-pretty sm:text-xl/8"
             >
-              Build for Thread, create, schedule and publish your content to
-              your account with AI.
+              {t("landing.hero.description")}
             </Typography>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
-                href="/signin"
+                href="/auth/signin"
                 className={buttonVariants({ size: "lg", variant: "default" })}
               >
-                Get started
+                {t("landing.hero.ctaPrimary")}
               </Link>
               <Link
                 href="#pricing"
                 className={buttonVariants({ size: "lg", variant: "link" })}
               >
-                Learn more <span aria-hidden="true">→</span>
+                {t("landing.hero.ctaSecondary")}{" "}
+                <span aria-hidden="true">→</span>
               </Link>
             </div>
           </div>
           <Image
-            alt="App screenshot"
+            alt={t("landing.hero.imageAlt")}
             src="/images/screenshot.png"
             width={1280}
             height={720}

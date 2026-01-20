@@ -1,8 +1,9 @@
 import { getPosts } from "@/features/posts/post-manager";
+import { defaultLocale } from "@/i18n/config";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getPosts();
+  const posts = await getPosts(undefined, defaultLocale);
   return [
     {
       url: "https://codeline.app",

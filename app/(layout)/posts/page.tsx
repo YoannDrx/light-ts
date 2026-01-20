@@ -9,32 +9,38 @@ import {
 } from "@/features/page/layout";
 import { PostCard } from "@/features/posts/post-card";
 import { getPosts, getPostsTags } from "@/features/posts/post-manager";
+import { getI18n } from "@/i18n/server";
 import { SiteConfig } from "@/site-config";
 import type { PageParams } from "@/types/next";
 import { FileQuestion } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: `${SiteConfig.title}'s Blog`,
-  description: SiteConfig.description,
-  keywords: ["posts"],
-  openGraph: {
-    title: `${SiteConfig.title}'s Blog`,
-    description: SiteConfig.description,
-    url: SiteConfig.prodUrl,
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("posts.metaTitle", { app: SiteConfig.title }),
+    description: t("posts.metaDescription"),
+    keywords: ["posts"],
+    openGraph: {
+      title: t("posts.metaTitle", { app: SiteConfig.title }),
+      description: t("posts.metaDescription"),
+      url: SiteConfig.prodUrl,
+      type: "website",
+    },
+  };
+}
 
 export default async function RoutePage(props: PageParams) {
-  const tags = await getPostsTags();
-  const posts = await getPosts();
+  const { t, locale } = await getI18n();
+  const tags = await getPostsTags(locale);
+  const posts = await getPosts(undefined, locale);
 
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>Blog</LayoutTitle>
+        <LayoutTitle>{t("posts.title")}</LayoutTitle>
       </LayoutHeader>
       <LayoutContent className="flex flex-wrap gap-2">
         {tags.map((tag) => (
@@ -53,9 +59,9 @@ export default async function RoutePage(props: PageParams) {
         <LayoutContent className="flex flex-col items-center justify-center">
           <div className="flex flex-col items-center rounded-lg border-2 border-dashed p-4 lg:gap-6 lg:p-8">
             <FileQuestion />
-            <Typography variant="h2">No posts found</Typography>
+            <Typography variant="h2">{t("posts.emptyTitle")}</Typography>
             <Link className={buttonVariants({ variant: "link" })} href="/posts">
-              View all posts
+              {t("posts.viewAll")}
             </Link>
           </div>
         </LayoutContent>

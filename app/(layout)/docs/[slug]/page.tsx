@@ -1,4 +1,3 @@
-"use cache";
 
 import { Typography } from "@/components/nowts/typography";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { defaultLocale } from "@/i18n/config";
+import { getI18n } from "@/i18n/server";
 import { DocsApiExamples } from "../_components/docs-api-examples";
 import { DocsCopyPage } from "../_components/docs-copy-page";
 import { DocsTableOfContents, type TocItem } from "../_components/docs-toc";
@@ -15,9 +16,9 @@ import type { DocParams } from "../doc-manager";
 import { getCurrentDoc, getDocs } from "../doc-manager";
 
 export async function generateMetadata(props: DocParams): Promise<Metadata> {
-  "use cache";
   const params = await props.params;
-  const doc = await getCurrentDoc(params.slug);
+  const { locale } = await getI18n();
+  const doc = await getCurrentDoc(params.slug, locale);
 
   if (!doc) {
     notFound();
@@ -31,7 +32,7 @@ export async function generateMetadata(props: DocParams): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const docs = await getDocs();
+  const docs = await getDocs(undefined, defaultLocale);
 
   return docs.map((doc) => ({
     slug: doc.slug,
@@ -62,16 +63,16 @@ function extractToc(content: string): TocItem[] {
 }
 
 export default async function page(props: DocParams) {
-  "use cache";
 
   const params = await props.params;
-  const doc = await getCurrentDoc(params.slug);
+  const { locale } = await getI18n();
+  const doc = await getCurrentDoc(params.slug, locale);
 
   if (!doc) {
     notFound();
   }
 
-  const docs = await getDocs();
+  const docs = await getDocs(undefined, locale);
   const sortedDocs = docs.sort((a, b) => {
     if (a.attributes.order !== undefined && b.attributes.order !== undefined) {
       return a.attributes.order - b.attributes.order;

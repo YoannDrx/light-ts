@@ -6,22 +6,24 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import Link from "next/link";
 
-export default function SuccessPaymentPage() {
+export default async function SuccessPaymentPage() {
+  const { t } = await getI18n();
+
   return (
     <>
       <Layout>
         <LayoutHeader>
-          <LayoutTitle>Thank You for Your Purchase!</LayoutTitle>
+          <LayoutTitle>{t("payment.success.title")}</LayoutTitle>
           <LayoutDescription>
-            Your payment was successful! You now have full access to all our
-            premium resources. If you have any questions, we're here to help.
+            {t("payment.success.description")}
           </LayoutDescription>
         </LayoutHeader>
         <LayoutContent>
           <Link href="/" className={buttonVariants({ size: "lg" })}>
-            Get Started
+            {t("payment.success.cta")}
           </Link>
         </LayoutContent>
       </Layout>

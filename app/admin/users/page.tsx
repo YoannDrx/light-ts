@@ -4,7 +4,9 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { getRequiredAdmin } from "@/lib/auth/auth-user";
+import type { PageProps } from "@/types/next";
 import { getUsersWithStats } from "./_actions/admin-users";
 import {
   createSearchParamsCache,
@@ -19,6 +21,7 @@ const searchParamsCache = createSearchParamsCache({
 });
 
 export default async function Page(props: PageProps<"/admin/users">) {
+  const { t } = await getI18n();
   await getRequiredAdmin();
 
   const { q, page } = await searchParamsCache.parse(props.searchParams);
@@ -33,7 +36,7 @@ export default async function Page(props: PageProps<"/admin/users">) {
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>User Management</LayoutTitle>
+        <LayoutTitle>{t("admin.users.title")}</LayoutTitle>
       </LayoutHeader>
 
       <LayoutContent>

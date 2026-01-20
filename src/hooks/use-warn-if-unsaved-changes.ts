@@ -2,7 +2,7 @@ import { useNextTopLoaderStore } from "@/features/page/next-top-loader";
 import { useEffect } from "react";
 
 // Comment : https://github.com/vercel/next.js/discussions/9662#discussioncomment-8819562
-export const useWarnIfUnsavedChanges = (unsaved: boolean, message?: string) => {
+export const useWarnIfUnsavedChanges = (unsaved: boolean, message: string) => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleAnchorClick = (e: any) => {
@@ -43,10 +43,7 @@ export const useWarnIfUnsavedChanges = (unsaved: boolean, message?: string) => {
     const beforeUnloadHandler = () => {
       useNextTopLoaderStore.getState().disable();
 
-      const yes = confirm(
-        message ??
-          "Changes you made has not been saved just yet. Do you wish to proceed anyway?",
-      );
+      const yes = confirm(message);
 
       if (!yes) return;
 

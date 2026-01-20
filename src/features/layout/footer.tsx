@@ -2,10 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Layout, LayoutContent } from "@/features/page/layout";
+import { useI18n } from "@/i18n/provider";
 import { SiteConfig } from "@/site-config";
 import Link from "next/link";
 
 export function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="bg-background border-t pb-8">
       <Layout className="my-14">
@@ -17,81 +20,81 @@ export function Footer() {
                   {SiteConfig.title}
                 </h3>
                 <p className="text-muted-foreground max-w-xs text-sm">
-                  {SiteConfig.description}
+                  {t("footer.description")}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-medium">Product</h4>
+                  <h4 className="font-medium">{t("footer.product")}</h4>
                   <nav className="flex flex-col gap-2">
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/posts">Blog</Link>
+                      <Link href="/posts">{t("footer.blog")}</Link>
                     </Button>
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/docs">Documentation</Link>
+                      <Link href="/docs">{t("footer.documentation")}</Link>
                     </Button>
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/orgs">Dashboard</Link>
+                      <Link href="/orgs">{t("footer.dashboard")}</Link>
                     </Button>
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/account">Account</Link>
+                      <Link href="/account">{t("footer.account")}</Link>
                     </Button>
                   </nav>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-medium">Company</h4>
+                  <h4 className="font-medium">{t("footer.company")}</h4>
                   <nav className="flex flex-col gap-2">
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/about">About</Link>
+                      <Link href="/about">{t("footer.about")}</Link>
                     </Button>
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/contact">Contact</Link>
+                      <Link href="/contact">{t("footer.contact")}</Link>
                     </Button>
                   </nav>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <h4 className="font-medium">Legal</h4>
+                  <h4 className="font-medium">{t("footer.legal")}</h4>
                   <nav className="flex flex-col gap-2">
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/legal/terms">Terms</Link>
+                      <Link href="/legal/terms">{t("footer.terms")}</Link>
                     </Button>
                     <Button
                       asChild
                       variant="link"
                       className="h-auto justify-start p-0"
                     >
-                      <Link href="/legal/privacy">Privacy</Link>
+                      <Link href="/legal/privacy">{t("footer.privacy")}</Link>
                     </Button>
                   </nav>
                 </div>
@@ -104,8 +107,10 @@ export function Footer() {
                   {SiteConfig.company.address}
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  © {new Date().getFullYear()} {SiteConfig.company.name}. All
-                  rights reserved.
+                  {t("footer.rights", {
+                    year: new Date().getFullYear(),
+                    company: SiteConfig.company.name,
+                  })}
                 </p>
               </div>
             </div>

@@ -5,16 +5,27 @@ import {
   LayoutTitle,
 } from "@/features/page/layout";
 import { Pricing } from "@/features/plans/pricing-section";
+import { getI18n } from "@/i18n/server";
 import { combineWithParentMetadata } from "@/lib/metadata";
 import { getUserActiveSubscription } from "@/lib/user/get-user-subscription";
+import type { PageParams } from "@/types/next";
+import type { ResolvingMetadata } from "next";
 import { UserBilling } from "./user-billing";
 
-export const generateMetadata = combineWithParentMetadata({
-  title: "Billing",
-  description: "Manage your organization billing.",
-});
+export const generateMetadata = async (
+  params: PageParams,
+  parent: ResolvingMetadata,
+) => {
+  const { t } = await getI18n();
+
+  return combineWithParentMetadata({
+    title: t("account.billing.metaTitle"),
+    description: t("account.billing.metaDescription"),
+  })(params, parent);
+};
 
 export default async function OrgBillingPage() {
+  const { t } = await getI18n();
   const subscription = await getUserActiveSubscription();
 
   if (!subscription) {
@@ -22,9 +33,9 @@ export default async function OrgBillingPage() {
       <>
         <Layout size="lg">
           <LayoutHeader>
-            <LayoutTitle>Free plan</LayoutTitle>
+            <LayoutTitle>{t("account.billing.freeTitle")}</LayoutTitle>
             <LayoutDescription>
-              Upgrade to premium to unlock all features.
+              {t("account.billing.freeDescription")}
             </LayoutDescription>
           </LayoutHeader>
         </Layout>

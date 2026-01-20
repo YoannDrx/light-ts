@@ -131,6 +131,113 @@ vi.mock("@/lib/organizations/get-org", () => ({
   getRequiredCurrentOrg: vi.fn(),
 }));
 
+// Mock i18n provider with actual translations
+vi.mock("@/i18n/provider", () => {
+  const mockMessages: Record<string, unknown> = {
+    auth: {
+      form: {
+        name: "Name",
+        email: "Email",
+        emailPlaceholder: "you@example.com",
+        password: "Password",
+      },
+      signIn: {
+        description: "Sign in to continue to your dashboard.",
+        emailPlaceholder: "you@example.com",
+        forgotPassword: "Forgot password?",
+        submit: "Sign in",
+        magicLinkSubmit: "Sign in with magic link",
+        magicLinkPrompt: "Prefer a magic link?",
+        magicLinkAction: "Login with magic link",
+        passwordPrompt: "Prefer a password?",
+        passwordAction: "Use password",
+        noAccount: "Don't have an account?",
+        signUp: "Sign up",
+        or: "or",
+        lastUsed: "Last used",
+        provider: "Continue with {provider}",
+      },
+      signUp: {
+        title: "Create your {app} account",
+        description: "Get started in minutes with a free account.",
+        namePlaceholder: "Your name",
+        emailPlaceholder: "you@example.com",
+        verifyPassword: "Verify password",
+        passwordMismatch: "Password does not match",
+        submit: "Sign up",
+        hasAccount: "Already have an account?",
+        signIn: "Sign in",
+      },
+      forgetPassword: {
+        title: "Forgot your password?",
+        description: "Enter your email to receive a reset link.",
+        submit: "Send reset link",
+      },
+      resetPassword: {
+        title: "Set a new password",
+        description: "Choose a strong password to secure your account.",
+        newPassword: "New password",
+        passwordPlaceholder: "At least 8 characters",
+        passwordMin: "Password must be at least 8 characters",
+        submit: "Update password",
+        success: "Password updated",
+      },
+      logout: "Log out",
+    },
+    actions: {
+      close: "Close",
+      toggleTheme: "Toggle theme",
+      cancel: "Cancel",
+      tryAgain: "Try again",
+      save: "Save",
+    },
+    common: {
+      error: "An error occurred",
+    },
+  };
+
+  // Helper function to get nested value from object by dot-notation key
+  const getNestedValue = (
+    obj: Record<string, unknown>,
+    path: string,
+  ): string => {
+    const keys = path.split(".");
+    let current: unknown = obj;
+    for (const key of keys) {
+      if (current && typeof current === "object" && key in current) {
+        current = (current as Record<string, unknown>)[key];
+      } else {
+        return path; // Return the key if not found
+      }
+    }
+    return typeof current === "string" ? current : path;
+  };
+
+  // Helper function to interpolate variables in translations
+  const interpolate = (
+    template: string,
+    vars?: Record<string, string | number>,
+  ): string => {
+    if (!vars) return template;
+    return template.replace(/\{(\w+)\}/g, (_, key: string) =>
+      key in vars ? String(vars[key]) : `{${key}}`,
+    );
+  };
+
+  return {
+    useI18n: () => ({
+      locale: "en",
+      messages: mockMessages,
+      t: (key: string, vars?: Record<string, string | number>) =>
+        interpolate(getNestedValue(mockMessages, key), vars),
+      tm: (key: string, vars?: Record<string, string | number>) =>
+        interpolate(getNestedValue(mockMessages, key), vars),
+    }),
+    I18nProvider: async ({ children }: { children: React.ReactNode }) =>
+      children,
+  };
+});
+
 // Define the type for our global helper
 
 declare global {

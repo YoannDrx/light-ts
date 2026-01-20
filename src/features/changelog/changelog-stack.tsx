@@ -2,6 +2,7 @@
 
 import { formatDate } from "@/lib/format/date";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/provider";
 import Image from "next/image";
 import Link from "next/link";
 import type { Changelog } from "./changelog-manager";
@@ -12,6 +13,7 @@ type ChangelogStackProps = {
 };
 
 export function ChangelogStack({ changelogs, className }: ChangelogStackProps) {
+  const { t, locale } = useI18n();
   const offset = 12;
   const scaleFactor = 0.05;
 
@@ -50,7 +52,7 @@ export function ChangelogStack({ changelogs, className }: ChangelogStackProps) {
               <div className="relative h-40 w-full">
                 <Image
                   src={attributes.image}
-                  alt={attributes.title ?? "Changelog"}
+                  alt={attributes.title ?? t("changelog.title")}
                   fill
                   className="object-cover"
                 />
@@ -58,10 +60,10 @@ export function ChangelogStack({ changelogs, className }: ChangelogStackProps) {
             )}
             <div className="flex flex-col gap-2 p-4">
               <p className="text-lg font-semibold">
-                {attributes.title ?? "New Update"}
+                {attributes.title ?? t("changelog.newUpdate")}
               </p>
               <p className="text-muted-foreground text-sm">
-                {formatDate(attributes.date)}
+                {formatDate(attributes.date, locale)}
               </p>
             </div>
           </Link>

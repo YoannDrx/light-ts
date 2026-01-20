@@ -13,7 +13,7 @@ export async function AccountNavigation({ children }: PropsWithChildren) {
       <AccountSidebar />
       <SidebarInset className="border-accent border">
         <header className="flex h-16 shrink-0 items-center gap-2">
-          <Layout size="lg">
+          <Layout size="lg" className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
           </Layout>
         </header>

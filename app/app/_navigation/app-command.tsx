@@ -13,15 +13,18 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/i18n/provider";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { APP_LINKS } from "./app-navigation.links";
+import { getAppNavigation } from "./app-navigation.links";
 
 export function AppCommand() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { t } = useI18n();
+  const links = getAppNavigation(t);
 
   const down = () => {
     setOpen((open) => !open);
@@ -35,7 +38,7 @@ export function AppCommand() {
         <Search className="text-muted-foreground absolute top-2.5 left-2.5 size-4" />
         <Input
           type="search"
-          placeholder="Search..."
+          placeholder={t("app.searchPlaceholder")}
           className="bg-background w-full appearance-none pl-8 shadow-none"
           onClick={() => {
             setOpen(true);
@@ -49,11 +52,16 @@ export function AppCommand() {
           <KeyboardShortcut eventKey="k">K</KeyboardShortcut>
         </div>
       </div>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+      <CommandDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={t("app.commandTitle")}
+        description={t("app.commandDescription")}
+      >
+        <CommandInput placeholder={t("app.commandPlaceholder")} />
         <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          {APP_LINKS.map((link, index) => (
+          <CommandEmpty>{t("app.commandEmpty")}</CommandEmpty>
+          {links.map((link, index) => (
             <CommandGroup heading={link.title} key={index}>
               {link.links.map((link) => (
                 <CommandItem

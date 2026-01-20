@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { dialogManager } from "@/features/dialog-manager/dialog-manager";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,6 +32,7 @@ type UserActionsProps = {
 export function UserActions({ user }: UserActionsProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { t } = useI18n();
 
   const impersonateMutation = useMutation({
     mutationFn: async (userId: string) => {
@@ -41,12 +43,12 @@ export function UserActions({ user }: UserActionsProps) {
       );
     },
     onSuccess: () => {
-      toast.success("Impersonation started");
+      toast.success(t("admin.users.impersonating"));
       void queryClient.invalidateQueries();
       window.location.href = "/orgs";
     },
     onError: (error: Error) => {
-      toast.error(`Failed to impersonate user: ${error.message}`);
+      toast.error(t("admin.users.impersonateFailed", { error: error.message }));
     },
   });
 
@@ -61,16 +63,16 @@ export function UserActions({ user }: UserActionsProps) {
       return unwrapSafePromise(
         authClient.admin.banUser({
           userId,
-          banReason: reason ?? "Banned by admin",
+          banReason: reason ?? t("admin.users.banReason"),
         }),
       );
     },
     onSuccess: () => {
-      toast.success("User banned successfully");
+      toast.success(t("admin.users.banned"));
       router.refresh();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to ban user: ${error.message}`);
+      toast.error(t("admin.users.banFailed", { error: error.message }));
     },
   });
 
@@ -83,11 +85,11 @@ export function UserActions({ user }: UserActionsProps) {
       );
     },
     onSuccess: () => {
-      toast.success("User unbanned successfully");
+      toast.success(t("admin.users.unbanned"));
       router.refresh();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to unban user: ${error.message}`);
+      toast.error(t("admin.users.unbanFailed", { error: error.message }));
     },
   });
 
@@ -107,11 +109,11 @@ export function UserActions({ user }: UserActionsProps) {
       );
     },
     onSuccess: () => {
-      toast.success("User role updated successfully");
+      toast.success(t("admin.users.roleUpdated"));
       router.refresh();
     },
     onError: (error: Error) => {
-      toast.error(`Failed to update user role: ${error.message}`);
+      toast.error(t("admin.users.roleUpdateFailed", { error: error.message }));
     },
   });
 
@@ -120,7 +122,7 @@ export function UserActions({ user }: UserActionsProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
           <MoreHorizontal className="mr-2 size-4" />
-          Actions
+          {t("admin.users.table.actions")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -130,7 +132,7 @@ export function UserActions({ user }: UserActionsProps) {
             disabled={impersonateMutation.isPending}
           >
             <Eye className="mr-2 size-4" />
-            Impersonate User
+            {t("admin.users.actions.impersonate")}
           </DropdownMenuItem>
         )}
 
@@ -145,7 +147,7 @@ export function UserActions({ user }: UserActionsProps) {
             disabled={setRoleMutation.isPending}
           >
             <Crown className="mr-2 size-4" />
-            Make Admin
+            {t("admin.users.actions.makeAdmin")}
           </DropdownMenuItem>
         )}
 
@@ -157,16 +159,18 @@ export function UserActions({ user }: UserActionsProps) {
             disabled={unbanUserMutation.isPending}
           >
             <UserCheck className="mr-2 size-4" />
-            Unban User
+            {t("admin.users.actions.unban")}
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem
             onClick={() => {
               dialogManager.confirm({
-                title: "Ban User",
-                description: `Are you sure you want to ban ${user.name || user.email}? They will no longer be able to access the platform.`,
+                title: t("admin.users.actions.ban"),
+                description: t("admin.users.banConfirm", {
+                  name: user.name || user.email,
+                }),
                 action: {
-                  label: "Ban User",
+                  label: t("admin.users.actions.ban"),
                   onClick: async () => {
                     await banUserMutation.mutateAsync({ userId: user.id });
                   },
@@ -177,7 +181,7 @@ export function UserActions({ user }: UserActionsProps) {
             className="text-destructive focus:text-destructive"
           >
             <Ban className="mr-2 size-4" />
-            Ban User
+            {t("admin.users.actions.ban")}
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

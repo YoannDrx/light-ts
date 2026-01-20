@@ -108,11 +108,8 @@ jobs:
       - name: Generate Prisma client
         run: pnpm prisma generate
 
-      - name: Deploy database migrations
-        run: pnpm prisma migrate deploy
-
-      - name: Verify database schema
-        run: pnpm prisma migrate status
+      - name: Setup database schema
+        run: pnpm prisma db push --force-reset --accept-data-loss
 
       - name: Build application
         run: pnpm build

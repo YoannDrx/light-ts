@@ -1,9 +1,12 @@
 import { Typography } from "@/components/nowts/typography";
 import { Card } from "@/components/ui/card";
+import { getI18n } from "@/i18n/server";
 import { SectionLayout } from "../landing/section-layout";
 import { EmailForm } from "./email-form";
 
-export const EmailFormSection = () => {
+export const EmailFormSection = async () => {
+  const { t } = await getI18n();
+
   return (
     <SectionLayout>
       <Card className="relative isolate overflow-hidden py-24 text-center shadow-2xl lg:rounded-3xl">
@@ -11,16 +14,15 @@ export const EmailFormSection = () => {
           as="h2"
           className="mx-auto max-w-3xl text-center text-4xl font-semibold tracking-tight text-white sm:text-5xl"
         >
-          Get notified when we're launching
+          {t("email.section.title")}
         </Typography>
         <Typography className="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">
-          Be the first to use Threader. Get early access, exclusive content and
-          more.
+          {t("email.section.description")}
         </Typography>
         <div className="mx-auto mt-10 w-full max-w-lg">
           <EmailForm
-            submitButtonLabel="Notify me"
-            successMessage="Thank you for joining the waiting list"
+            submitButtonLabel={t("email.section.submit")}
+            successMessage={t("email.section.success")}
           />
         </div>
         <svg

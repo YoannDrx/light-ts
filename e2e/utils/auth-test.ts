@@ -27,16 +27,18 @@ export async function createTestAccount(options: {
   // Navigate to signup page
   await options.page.goto(`/auth/signup?callbackUrl=${options.callbackURL}`);
 
-  // Fill out the form
-  await options.page.getByLabel("Name").fill(userData.name);
-  await options.page.getByLabel("Email").fill(userData.email);
+  // Fill out the form (supports both English and French labels)
+  await options.page.getByLabel(/^Name$|^Nom$/i).fill(userData.name);
+  await options.page.getByLabel(/^Email$/i).fill(userData.email);
   await options.page.locator('input[name="password"]').fill(userData.password);
   await options.page
     .locator('input[name="verifyPassword"]')
     .fill(userData.password);
 
-  // Submit the form
-  await options.page.getByRole("button", { name: /sign up/i }).click();
+  // Submit the form (supports both English "Create account" and French "Créer un compte")
+  await options.page
+    .getByRole("button", { name: /create account|créer un compte/i })
+    .click();
 
   // Wait for navigation to complete - we should be redirected to the callback URL
   if (options.callbackURL) {
@@ -63,8 +65,8 @@ export async function createTestAccount(options: {
       where: { id: user.id },
       data: { role: "admin" },
     });
-    // await 5 seconds
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    // Wait for the database update to be committed
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   return userData;
@@ -85,24 +87,22 @@ export async function signInAccount(options: {
   await page.goto(
     `/auth/signin${callbackURL ? `?callbackUrl=${callbackURL}` : ""}`,
   );
+  await page.waitForLoadState("networkidle");
 
-  // Fill out the form
-  await page.getByLabel("Email").fill(userData.email);
+  // Fill out the form (supports both English and French labels)
+  await page.getByLabel(/^Email$/i).fill(userData.email);
   await page.locator('input[name="password"]').fill(userData.password);
 
-  // Submit the form
+  // Submit the form (supports both English "Sign in" and French "Se connecter")
   await page
-    .getByRole("button", { name: /sign in/i })
+    .getByRole("button", { name: /sign in|se connecter/i })
     .first()
     .click();
 
   // Wait for navigation to complete if a callback URL is provided
   if (callbackURL) {
-    try {
-      await page.waitForURL(new RegExp(callbackURL), { timeout: 30000 });
-    } catch (error) {
-      logger.error("Error waiting for navigation to complete", error);
-    }
+    await page.waitForURL(new RegExp(callbackURL), { timeout: 30000 });
+    await page.waitForLoadState("networkidle");
   }
 
   return userData;
@@ -117,9 +117,15 @@ export async function signOutAccount(options: { page: Page }) {
 
   // Navigate to account page
   await page.goto(`/account`);
+  await page.waitForLoadState("networkidle");
 
-  // Click the sign out button
-  await page.getByRole("button", { name: /sign out/i }).click();
+  // Click the sign out button (supports both English "Sign out" and French "Se déconnecter")
+  const signOutButton = page.getByRole("button", {
+    name: /sign out|se déconnecter/i,
+  });
+  await signOutButton.waitFor({ state: "visible", timeout: 10000 });
+  await signOutButton.click();
 
-  await page.waitForURL(/\/auth\/signin/, { timeout: 10000 });
+  // After sign out, user is redirected to home page "/" (not /auth/signin)
+  await page.waitForURL("/", { timeout: 10000 });
 }

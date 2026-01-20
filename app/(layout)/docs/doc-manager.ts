@@ -1,10 +1,36 @@
 import { logger } from "@/lib/logger";
+import { defaultLocale, type Locale } from "@/i18n/config";
+import type { PageProps } from "@/types/next";
 import fm from "front-matter";
 import fs from "fs/promises";
 import path from "path";
 import { z } from "zod";
 
 const docsDirectory = path.join(process.cwd(), "content/docs");
+
+const resolveDocsDirectory = async (locale: Locale) => {
+  const localizedDirectory = path.join(docsDirectory, locale);
+  try {
+    await fs.access(localizedDirectory);
+    return localizedDirectory;
+  } catch {
+    return path.join(docsDirectory, defaultLocale);
+  }
+};
+
+const readDocFile = async (locale: Locale, slug: string) => {
+  const localizedPath = path.join(docsDirectory, locale, `${slug}.mdx`);
+  try {
+    return await fs.readFile(localizedPath, "utf8");
+  } catch (error) {
+    if (locale === defaultLocale) {
+      throw error;
+    }
+  }
+
+  const fallbackPath = path.join(docsDirectory, defaultLocale, `${slug}.mdx`);
+  return fs.readFile(fallbackPath, "utf8");
+};
 
 const AttributeSchema = z.object({
   title: z.string(),
@@ -30,15 +56,16 @@ export type DocType = {
 
 export type DocParams = PageProps<"/docs/[slug]">;
 
-export async function getDocs(tags?: string[]) {
+export async function getDocs(tags?: string[], locale: Locale = defaultLocale) {
   try {
-    const fileNames = await fs.readdir(docsDirectory);
+    const directory = await resolveDocsDirectory(locale);
+    const fileNames = await fs.readdir(directory);
     const docs: DocType[] = [];
 
     for await (const fileName of fileNames) {
       if (!fileName.endsWith(".mdx")) continue;
 
-      const fullPath = path.join(docsDirectory, fileName);
+      const fullPath = path.join(directory, fileName);
       const fileContents = await fs.readFile(fullPath, "utf8");
 
       const matter = fm(fileContents);
@@ -70,10 +97,12 @@ export async function getDocs(tags?: string[]) {
   }
 }
 
-export async function getCurrentDoc(slug: string): Promise<DocType | null> {
+export async function getCurrentDoc(
+  slug: string,
+  locale: Locale = defaultLocale,
+): Promise<DocType | null> {
   try {
-    const filePath = path.join(docsDirectory, `${slug}.mdx`);
-    const fileContents = await fs.readFile(filePath, "utf8");
+    const fileContents = await readDocFile(locale, slug);
 
     const matter = fm(fileContents);
     const result = AttributeSchema.safeParse(matter.attributes);

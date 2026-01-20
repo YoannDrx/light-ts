@@ -2,6 +2,7 @@
 
 import { Loader } from "@/components/nowts/loader";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { LogOut } from "lucide-react";
@@ -9,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 export const UserDropdownStopImpersonating = () => {
   const router = useRouter();
+  const { t } = useI18n();
 
   const stopImpersonating = useMutation({
     mutationFn: async () => {
@@ -32,7 +34,7 @@ export const UserDropdownStopImpersonating = () => {
       ) : (
         <LogOut className="mr-2 size-4" />
       )}
-      Stop Impersonating
+      {t("admin.users.stopImpersonating")}
     </DropdownMenuItem>
   );
 };

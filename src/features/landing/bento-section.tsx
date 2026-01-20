@@ -4,6 +4,7 @@ import { BentoGrid, BentoGridItem } from "@/components/nowts/bentoo";
 import { Loader } from "@/components/nowts/loader";
 import { Typography } from "@/components/nowts/typography";
 import { Alert, AlertTitle } from "@/components/ui/alert";
+import { useI18n } from "@/i18n/provider";
 import { cn } from "@/lib/utils";
 import {
   BarChart3,
@@ -18,6 +19,65 @@ import { motion } from "motion/react";
 import { SectionLayout } from "./section-layout";
 
 export function BentoGridSection() {
+  const { t } = useI18n();
+  const items = [
+    {
+      title: t("landing.bento.items.ai.title"),
+      description: (
+        <span className="text-sm">
+          {t("landing.bento.items.ai.description")}
+        </span>
+      ),
+      header: <Skeleton1 />,
+      className: "md:col-span-1",
+      icon: <Sparkles size={20} />,
+    },
+    {
+      title: t("landing.bento.items.schedule.title"),
+      description: (
+        <span className="text-sm">
+          {t("landing.bento.items.schedule.description")}
+        </span>
+      ),
+      header: <Skeleton2 />,
+      className: "md:col-span-1",
+      icon: <Calendar size={20} />,
+    },
+    {
+      title: t("landing.bento.items.calendar.title"),
+      description: (
+        <span className="text-sm">
+          {t("landing.bento.items.calendar.description")}
+        </span>
+      ),
+      header: <Skeleton3 />,
+      className: "md:col-span-1",
+      icon: <CalendarCheck size={20} />,
+    },
+    {
+      title: t("landing.bento.items.analytics.title"),
+      description: (
+        <span className="text-sm">
+          {t("landing.bento.items.analytics.description")}
+        </span>
+      ),
+      header: <Skeleton4 />,
+      className: "md:col-span-2",
+      icon: <BarChart3 size={20} />,
+    },
+    {
+      title: t("landing.bento.items.research.title"),
+      description: (
+        <span className="text-sm">
+          {t("landing.bento.items.research.description")}
+        </span>
+      ),
+      header: <Skeleton5 />,
+      className: "md:col-span-1",
+      icon: <X className="size-4 text-neutral-500" />,
+    },
+  ];
+
   return (
     <SectionLayout>
       <BentoGrid className="mx-auto max-w-4xl md:auto-rows-[20rem]">
@@ -37,6 +97,7 @@ export function BentoGridSection() {
 }
 
 const Skeleton1 = () => {
+  const { t } = useI18n();
   const variants: Variants = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
@@ -50,13 +111,13 @@ const Skeleton1 = () => {
     >
       <motion.div className="border-border bg-background flex flex-row items-start gap-2 rounded-2xl border p-3">
         <img
-          alt="avatar"
+          alt={t("landing.bento.avatarAlt")}
           src="https://melvynx.com/_next/image?url=%2Fimages%2Fmy-face.png&w=828&q=75"
           className="size-6 shrink-0 rounded-full"
         />
         <div>
           <p className="text-xs text-neutral-500">
-            Create a Thread to announce Now.ts
+            {t("landing.bento.skeleton.threadPrompt")}
           </p>
         </div>
       </motion.div>
@@ -65,8 +126,7 @@ const Skeleton1 = () => {
         className="border-border bg-background flex flex-row items-start justify-end gap-2 rounded-2xl border p-3"
       >
         <p className="text-xs text-neutral-500">
-          Today I announced my new project, Now.TS, the perfect way to create
-          professional Next.js application in days.
+          {t("landing.bento.skeleton.threadResponse")}
         </p>
         <div className="size-6 shrink-0 rounded-full bg-gradient-to-r from-pink-500 to-violet-500" />
       </motion.div>
@@ -75,6 +135,7 @@ const Skeleton1 = () => {
 };
 
 const Skeleton2 = () => {
+  const { t } = useI18n();
   const variants: Variants = {
     initial: { opacity: 0, y: -10 },
     animate: { opacity: 1, y: 0 },
@@ -88,13 +149,13 @@ const Skeleton2 = () => {
       <motion.div>
         <Alert variant="default" className="">
           <Loader size={20} />
-          <AlertTitle>Schedule your threads...</AlertTitle>
+          <AlertTitle>{t("landing.bento.skeleton.schedulePending")}</AlertTitle>
         </Alert>
       </motion.div>
       <motion.div variants={variants}>
         <Alert variant="success" className="">
           <CheckCircle size={20} />
-          <AlertTitle>Your threads are now scheduled for 7:00 AM</AlertTitle>
+          <AlertTitle>{t("landing.bento.skeleton.scheduleSuccess")}</AlertTitle>
         </Alert>
       </motion.div>
     </motion.div>
@@ -131,6 +192,7 @@ const Skeleton3 = () => {
   );
 };
 const Skeleton4 = () => {
+  const { t } = useI18n();
   const first = {
     initial: {
       x: 20,
@@ -162,15 +224,23 @@ const Skeleton4 = () => {
         variants={first}
         className="border-border bg-background flex h-full w-1/3 flex-col items-center justify-center rounded-2xl border p-4"
       >
-        <Typography variant="large">+123 followers</Typography>
-        <Typography variant={"muted"}>In the last 30 days</Typography>
+        <Typography variant="large">
+          {t("landing.bento.stats.followers", { count: "123" })}
+        </Typography>
+        <Typography variant={"muted"}>
+          {t("landing.bento.stats.last30Days")}
+        </Typography>
         <Typography variant={"muted"} className="text-green-500">
           +12%
         </Typography>
       </motion.div>
       <motion.div className="border-border bg-background flex h-full w-1/3 flex-col items-center justify-center rounded-2xl border p-4">
-        <Typography variant="large">+1.4 M Views</Typography>
-        <Typography variant={"muted"}>In the last 30 days</Typography>
+        <Typography variant="large">
+          {t("landing.bento.stats.views", { count: "1.4 M" })}
+        </Typography>
+        <Typography variant={"muted"}>
+          {t("landing.bento.stats.last30Days")}
+        </Typography>
         <Typography variant={"muted"} className="text-green-500">
           +21%
         </Typography>
@@ -179,9 +249,15 @@ const Skeleton4 = () => {
         variants={second}
         className="border-border bg-background flex h-full w-1/3 flex-col items-center justify-center rounded-2xl border p-4"
       >
-        <Typography variant="large">1244 likes</Typography>
-        <Typography variant="large">766 replis</Typography>
-        <Typography variant={"muted"}>In the last 30 days</Typography>
+        <Typography variant="large">
+          {t("landing.bento.stats.likes", { count: "1244" })}
+        </Typography>
+        <Typography variant="large">
+          {t("landing.bento.stats.replies", { count: "766" })}
+        </Typography>
+        <Typography variant={"muted"}>
+          {t("landing.bento.stats.last30Days")}
+        </Typography>
         <Typography variant={"muted"} className="text-green-500">
           +12%
         </Typography>
@@ -191,6 +267,7 @@ const Skeleton4 = () => {
 };
 
 const Skeleton5 = () => {
+  const { t } = useI18n();
   const variants = {
     initial: {
       x: 0,
@@ -228,13 +305,13 @@ const Skeleton5 = () => {
       >
         <img
           src="https://melvynx.com/_next/image?url=%2Fimages%2Fmy-face.png&w=828&q=75"
-          alt="avatar"
+          alt={t("landing.bento.avatarAlt")}
           height="100"
           width="100"
           className="size-10 rounded-full"
         />
         <p className="text-xs text-neutral-500">
-          What I need to do to get more followers ?
+          {t("landing.bento.skeleton.researchQuestion")}
         </p>
       </motion.div>
       <motion.div
@@ -242,7 +319,9 @@ const Skeleton5 = () => {
         className="border-border bg-background flex flex-row items-start justify-end gap-2 rounded-2xl border p-3"
       >
         <div>
-          <p className="text-xs text-neutral-500">Searching...</p>
+          <p className="text-xs text-neutral-500">
+            {t("landing.bento.skeleton.searching")}
+          </p>
           <motion.p
             className="text-xs text-neutral-500"
             variants={{
@@ -254,8 +333,7 @@ const Skeleton5 = () => {
               },
             }}
           >
-            Based on the Threads activity of the past 30 days, you should focus
-            creating content on Next.js
+            {t("landing.bento.skeleton.researchAnswer")}
           </motion.p>
         </div>
         <div className="size-6 shrink-0 rounded-full bg-gradient-to-r from-pink-500 to-violet-500" />
@@ -263,62 +341,3 @@ const Skeleton5 = () => {
     </motion.div>
   );
 };
-
-const items = [
-  {
-    title: "AI Content Generation",
-    description: (
-      <span className="text-sm">
-        Experience the power of AI in generating unique content.
-      </span>
-    ),
-    header: <Skeleton1 />,
-    className: "md:col-span-1",
-    icon: <Sparkles size={20} />,
-  },
-  {
-    title: "Schedule with ease",
-    description: (
-      <span className="text-sm">
-        We help you schedule your threads with ease.
-      </span>
-    ),
-    header: <Skeleton2 />,
-    className: "md:col-span-1",
-    icon: <Calendar size={20} />,
-  },
-  {
-    title: "Calendar View",
-    description: (
-      <span className="text-sm">
-        See what you have planned for the day with our calendar view.
-      </span>
-    ),
-    header: <Skeleton3 />,
-    className: "md:col-span-1",
-    icon: <CalendarCheck size={20} />,
-  },
-  {
-    title: "Threads Analysis",
-    description: (
-      <span className="text-sm">
-        Understand your threads with our powerful analytics.
-      </span>
-    ),
-    header: <Skeleton4 />,
-    className: "md:col-span-2",
-    icon: <BarChart3 size={20} />,
-  },
-
-  {
-    title: "See what works",
-    description: (
-      <span className="text-sm">
-        Understand the hype and trends with our powerful research tools.
-      </span>
-    ),
-    header: <Skeleton5 />,
-    className: "md:col-span-1",
-    icon: <X className="size-4 text-neutral-500" />,
-  },
-];

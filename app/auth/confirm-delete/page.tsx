@@ -1,13 +1,17 @@
 import { SiteConfig } from "@/site-config";
 import type { PageParams } from "@/types/next";
 import type { Metadata } from "next";
+import { getI18n } from "@/i18n/server";
 import { ConfirmDeletePage } from "./confirm-delete-page";
 
-export const metadata: Metadata = {
-  title: `Confirm Account Deletion | ${SiteConfig.title}`,
-  description:
-    "Confirm that you want to permanently delete your account and all associated data.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("auth.confirmDelete.metaTitle", { app: SiteConfig.title }),
+    description: t("auth.confirmDelete.metaDescription"),
+  };
+}
 
 export default async function ConfirmDelete(props: PageParams) {
   const searchParams = await props.searchParams;

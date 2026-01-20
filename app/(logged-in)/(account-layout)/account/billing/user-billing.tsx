@@ -13,12 +13,14 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { useI18n } from "@/i18n/provider";
 import { resolveActionResult } from "@/lib/actions/actions-utils";
 import { LIMITS_CONFIG, getPlanLimits } from "@/lib/auth/stripe/auth-plans";
 import type { UserActiveSubscription } from "@/lib/user/get-user-subscription";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { differenceInDays, format } from "date-fns";
+import { enUS, fr } from "date-fns/locale";
 import {
   AlertCircle,
   ArrowUpCircle,
@@ -34,6 +36,8 @@ import { openStripePortalAction } from "./billing.action";
 export function UserBilling(props: { subscription: UserActiveSubscription }) {
   const subscription = props.subscription;
   const router = useRouter();
+  const { locale, t } = useI18n();
+  const dateLocale = locale === "fr" ? fr : enUS;
 
   // Get plan limits and fake current usage
   const planLimits = getPlanLimits(subscription.plan);
@@ -48,7 +52,7 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
       const stripeCustomerId = subscription.stripeCustomerId;
 
       if (!stripeCustomerId) {
-        throw new Error("No stripe customer id found");
+        throw new Error(t("account.billing.noStripeCustomer"));
       }
 
       const stripeBilling = await resolveActionResult(openStripePortalAction());
@@ -79,7 +83,7 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>Billing</LayoutTitle>
+        <LayoutTitle>{t("account.billing.title")}</LayoutTitle>
       </LayoutHeader>
       <LayoutActions>
         <LoadingButton
@@ -89,7 +93,7 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
           loading={manageSubscriptionMutation.isPending}
         >
           <ArrowUpCircle className="mr-2 size-4" />
-          Manage Subscription
+          {t("account.billing.manage")}
         </LoadingButton>
 
         {subscription.status === "trialing" ? (
@@ -102,14 +106,14 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
                 onClick={() => router.push(`/account/billing/cancel`)}
               >
                 <XCircle className="mr-2 size-4" />
-                Cancel Subscription
+                {t("account.billing.cancel")}
               </Button>
             )}
           </>
         ) : (
           <Button className="w-full sm:w-auto">
             <CreditCard className="mr-2 size-4" />
-            Reactivate Subscription
+            {t("account.billing.reactivate")}
           </Button>
         )}
       </LayoutActions>
@@ -118,14 +122,16 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
         <Card>
           <CardHeader className="flex flex-row items-center gap-4 space-y-0">
             <StatusIcon className={cn("size-5", statusConfig.textColor)} />
-            <CardTitle>{statusConfig.description}</CardTitle>
+            <CardTitle>{t(statusConfig.descriptionKey)}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             {subscription.status === "trialing" && (
               <div className="mt-1 space-y-1">
                 <div className="flex items-center justify-between text-sm">
                   <Typography>
-                    Trial period: {daysRemaining} days remaining
+                    {t("account.billing.trialRemaining", {
+                      days: daysRemaining,
+                    })}
                   </Typography>
                 </div>
                 <Progress value={trialProgress} className="h-2" />
@@ -133,10 +139,11 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
             )}
             {subscription.cancelAtPeriodEnd && (
               <Typography variant="muted">
-                Your subscription will end on{" "}
+                {t("account.billing.endsOn")}{" "}
                 {format(
                   new Date(subscription.periodEnd ?? new Date()),
                   "MMMM d, yyyy",
+                  { locale: dateLocale },
                 )}
               </Typography>
             )}
@@ -145,30 +152,38 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Subscription Details</CardTitle>
+            <CardTitle>{t("account.billing.detailsTitle")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between">
-              <Typography variant="muted">Plan:</Typography>
+              <Typography variant="muted">
+                {t("account.billing.plan")}
+              </Typography>
               <Typography className="capitalize">
-                {subscription.plan}
+                {t(`plans.names.${subscription.plan}`)}
               </Typography>
             </div>
             <div className="flex justify-between">
-              <Typography variant="muted">Start date:</Typography>
+              <Typography variant="muted">
+                {t("account.billing.startDate")}
+              </Typography>
               <Typography>
                 {format(
                   new Date(subscription.periodStart ?? new Date()),
                   "MMMM d, yyyy",
+                  { locale: dateLocale },
                 )}
               </Typography>
             </div>
             <div className="flex justify-between">
-              <Typography variant="muted">Renew at:</Typography>
+              <Typography variant="muted">
+                {t("account.billing.renewAt")}
+              </Typography>
               <Typography>
                 {format(
                   new Date(subscription.periodEnd ?? new Date()),
                   "MMMM d, yyyy",
+                  { locale: dateLocale },
                 )}
               </Typography>
             </div>
@@ -179,7 +194,7 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Plan Limits</CardTitle>
+            <CardTitle>{t("account.billing.limitsTitle")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             {Object.entries(planLimits).map(([key, total]) => {
@@ -196,16 +211,17 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
                     <div className="flex items-center gap-2">
                       <Icon className="text-primary size-4" />
                       <Typography variant="muted" className="text-sm">
-                        {limitConfig.getLabel(total)}
+                        {t(`plans.limits.${key}.label`, { value: total })}
                       </Typography>
                     </div>
                     <Typography variant="muted" className="text-xs">
-                      {used.toLocaleString()} / {total.toLocaleString()}
+                      {used.toLocaleString(locale)} /{" "}
+                      {total.toLocaleString(locale)}
                     </Typography>
                   </div>
                   <Progress value={percentage} className="h-1" />
                   <Typography variant="muted" className="text-xs">
-                    {limitConfig.description}
+                    {t(`plans.limits.${key}.description`)}
                   </Typography>
                 </div>
               );
@@ -220,43 +236,43 @@ export function UserBilling(props: { subscription: UserActiveSubscription }) {
 // Status configuration with colors and descriptions
 const STATUS_CONFIG = {
   trialing: {
-    label: "Trial",
-    description: "Your free trial is active",
+    labelKey: "account.billing.status.trialing",
+    descriptionKey: "account.billing.status.trialingDescription",
     color: "bg-blue-500",
     textColor: "text-blue-500",
     icon: Clock,
   },
   active: {
-    label: "Active",
-    description: "Your subscription is active",
+    labelKey: "account.billing.status.active",
+    descriptionKey: "account.billing.status.activeDescription",
     color: "bg-green-500",
     textColor: "text-green-500",
     icon: CheckCircle2,
   },
   canceled: {
-    label: "Canceled",
-    description: "Your subscription has been canceled",
+    labelKey: "account.billing.status.canceled",
+    descriptionKey: "account.billing.status.canceledDescription",
     color: "bg-orange-500",
     textColor: "text-orange-500",
     icon: XCircle,
   },
   past_due: {
-    label: "Past Due",
-    description: "Your payment is past due",
+    labelKey: "account.billing.status.pastDue",
+    descriptionKey: "account.billing.status.pastDueDescription",
     color: "bg-red-500",
     textColor: "text-red-500",
     icon: AlertCircle,
   },
   unpaid: {
-    label: "Unpaid",
-    description: "Your subscription is unpaid",
+    labelKey: "account.billing.status.unpaid",
+    descriptionKey: "account.billing.status.unpaidDescription",
     color: "bg-red-500",
     textColor: "text-red-500",
     icon: AlertCircle,
   },
   incomplete: {
-    label: "Incomplete",
-    description: "Your subscription setup is incomplete",
+    labelKey: "account.billing.status.incomplete",
+    descriptionKey: "account.billing.status.incompleteDescription",
     color: "bg-yellow-500",
     textColor: "text-yellow-500",
     icon: AlertCircle,

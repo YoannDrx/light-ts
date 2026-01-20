@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -27,22 +28,20 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const ChangePasswordFormSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters"),
-    revokeOtherSessions: z.boolean().default(true),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
 export function ChangePasswordForm() {
   const router = useRouter();
+  const { t } = useI18n();
+  const ChangePasswordFormSchema = z
+    .object({
+      currentPassword: z.string().min(1, t("account.password.currentRequired")),
+      newPassword: z.string().min(8, t("account.password.minLength")),
+      confirmPassword: z.string().min(8, t("account.password.minLength")),
+      revokeOtherSessions: z.boolean().default(true),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("account.password.mismatch"),
+      path: ["confirmPassword"],
+    });
 
   const form = useZodForm({
     schema: ChangePasswordFormSchema,
@@ -68,7 +67,7 @@ export function ChangePasswordForm() {
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("Password changed successfully");
+      toast.success(t("account.password.success"));
       router.push("/account");
     },
   });
@@ -80,10 +79,8 @@ export function ChangePasswordForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Change Password</CardTitle>
-        <CardDescription>
-          Update your password to keep your account secure.
-        </CardDescription>
+        <CardTitle>{t("account.password.title")}</CardTitle>
+        <CardDescription>{t("account.password.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form form={form} onSubmit={onSubmit} className="space-y-4">
@@ -92,7 +89,7 @@ export function ChangePasswordForm() {
             name="currentPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Current Password</FormLabel>
+                <FormLabel>{t("account.password.currentLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -105,7 +102,7 @@ export function ChangePasswordForm() {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel>{t("account.password.newLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -118,7 +115,7 @@ export function ChangePasswordForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Confirm New Password</FormLabel>
+                <FormLabel>{t("account.password.confirmLabel")}</FormLabel>
                 <FormControl>
                   <Input type="password" {...field} />
                 </FormControl>
@@ -132,10 +129,9 @@ export function ChangePasswordForm() {
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                 <div className="space-y-0.5">
-                  <FormLabel>Sign out from other devices</FormLabel>
+                  <FormLabel>{t("account.password.revokeLabel")}</FormLabel>
                   <FormDescription>
-                    This will sign you out from all other devices where you're
-                    currently logged in
+                    {t("account.password.revokeDescription")}
                   </FormDescription>
                 </div>
                 <FormControl>
@@ -152,7 +148,7 @@ export function ChangePasswordForm() {
             type="submit"
             className="w-full"
           >
-            Change Password
+            {t("account.password.submit")}
           </LoadingButton>
         </Form>
       </CardContent>

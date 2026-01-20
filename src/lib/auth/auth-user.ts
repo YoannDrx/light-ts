@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { unauthorized } from "next/navigation";
 import { auth } from "../auth";
+import { prisma } from "../prisma";
 
 export const getSession = async () => {
   const session = await auth.api.getSession({
@@ -34,9 +35,16 @@ export const getRequiredUser = async () => {
 export const getRequiredAdmin = async () => {
   const user = await getRequiredUser();
 
-  if (user.role !== "admin") {
+  // Fetch fresh role from DB to handle cases where role was updated
+  // after the session was created (e.g., in E2E tests)
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id },
+    select: { role: true },
+  });
+
+  if (dbUser?.role !== "admin") {
     unauthorized();
   }
 
-  return user;
+  return { ...user, role: dbUser.role };
 };

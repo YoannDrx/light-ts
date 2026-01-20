@@ -6,18 +6,24 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { getI18n } from "@/i18n/server";
 import { SiteConfig } from "@/site-config";
 import { CheckCircle } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: `Account Deleted | ${SiteConfig.title}`,
-  description:
-    "Your account has been successfully deleted. Thank you for using our service.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
 
-export default function GoodbyePage() {
+  return {
+    title: t("auth.goodbye.metaTitle", { app: SiteConfig.title }),
+    description: t("auth.goodbye.metaDescription"),
+  };
+}
+
+export default async function GoodbyePage() {
+  const { t } = await getI18n();
+
   return (
     <Card className="mx-auto w-full max-w-md lg:max-w-lg lg:p-6">
       <CardHeader>
@@ -28,24 +34,24 @@ export default function GoodbyePage() {
             </AvatarFallback>
           </Avatar>
         </div>
-        <CardHeader className="text-center">Account Deleted</CardHeader>
+        <CardHeader className="text-center">
+          {t("auth.goodbye.title")}
+        </CardHeader>
 
         <CardDescription className="text-center">
-          Your account has been successfully deleted. We're sorry to see you go.
+          {t("auth.goodbye.description")}
         </CardDescription>
       </CardHeader>
       <CardFooter className="border-t pt-6">
         <div className="w-full space-y-4 text-center">
           <p className="text-muted-foreground text-sm">
-            Your account and all associated data have been permanently removed
-            from our system.
+            {t("auth.goodbye.detailOne")}
           </p>
           <p className="text-muted-foreground text-sm">
-            If you change your mind, you're welcome to create a new account
-            anytime.
+            {t("auth.goodbye.detailTwo")}
           </p>
           <Button asChild className="w-full">
-            <Link href="/auth/signup">Create New Account</Link>
+            <Link href="/auth/signup">{t("auth.goodbye.cta")}</Link>
           </Button>
         </div>
       </CardFooter>

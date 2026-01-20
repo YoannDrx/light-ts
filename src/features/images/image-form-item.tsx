@@ -1,4 +1,7 @@
+"use client";
+
 import { Loader } from "@/components/nowts/loader";
+import { useI18n } from "@/i18n/provider";
 import { isActionSuccessful } from "@/lib/actions/actions-utils";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -55,6 +58,7 @@ const Overlay = (props: PropsWithChildren<{ isLoading?: boolean }>) => {
 };
 
 const UseImageUpload = ({ onChange }: { onChange: (url: string) => void }) => {
+  const { t } = useI18n();
   const uploadImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
@@ -63,7 +67,7 @@ const UseImageUpload = ({ onChange }: { onChange: (url: string) => void }) => {
       const result = await uploadImageAction({ formData });
 
       if (!isActionSuccessful(result)) {
-        toast.error(result.serverError ?? "Something went wrong");
+        toast.error(result.serverError ?? t("images.errors.uploadFailed"));
         return;
       }
 
@@ -77,15 +81,15 @@ const UseImageUpload = ({ onChange }: { onChange: (url: string) => void }) => {
     const validFiles = ["image/png", "image/jpeg", "image/jpg"];
 
     if (!validFiles.includes(file.type)) {
-      toast.error("Invalid file type", {
-        description: "Only png, jpg, jpeg are allowed",
+      toast.error(t("images.errors.invalidType"), {
+        description: t("images.errors.invalidTypeDescription"),
       });
       return;
     }
 
     if (file.size > 1024 * 1024) {
-      toast.error("File too large (max 1mb)", {
-        description: "https://tinypng.com/ to compress the image",
+      toast.error(t("images.errors.fileTooLarge"), {
+        description: t("images.errors.fileTooLargeDescription"),
       });
       return;
     }

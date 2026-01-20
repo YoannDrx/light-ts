@@ -1,5 +1,6 @@
 import { Typography } from "@/components/nowts/typography";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/i18n/provider";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +34,8 @@ export function ChangelogTimeline({
   changelogs,
   className,
 }: ChangelogTimelineProps) {
+  const { t, locale } = useI18n();
+
   return (
     <div className={cn("relative", className)}>
       <div className="bg-border absolute top-0 bottom-0 left-[9px] w-px md:left-[11px]" />
@@ -81,7 +84,7 @@ export function ChangelogTimeline({
                     variant="muted"
                     className="text-xs tracking-wider uppercase"
                   >
-                    {date.toLocaleDateString("en-US", {
+                    {date.toLocaleDateString(locale, {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
@@ -89,7 +92,7 @@ export function ChangelogTimeline({
                   </Typography>
                   {isFirst && (
                     <Badge variant="default" className="text-xs">
-                      Latest
+                      {t("changelog.latest")}
                     </Badge>
                   )}
                 </div>
@@ -99,7 +102,7 @@ export function ChangelogTimeline({
                     <div className="relative size-16 shrink-0 overflow-hidden rounded-lg md:size-20">
                       <Image
                         src={attributes.image}
-                        alt={attributes.title ?? "Changelog"}
+                        alt={attributes.title ?? t("changelog.title")}
                         fill
                         className="object-cover"
                       />
@@ -111,7 +114,7 @@ export function ChangelogTimeline({
                         variant="h3"
                         className="group-hover:text-primary text-base transition-colors md:text-lg"
                       >
-                        {attributes.title ?? "New Update"}
+                        {attributes.title ?? t("changelog.newUpdate")}
                       </Typography>
                       {attributes.version && (
                         <Badge variant="outline" className="text-xs">

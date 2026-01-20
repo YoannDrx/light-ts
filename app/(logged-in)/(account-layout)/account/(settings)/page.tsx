@@ -1,11 +1,15 @@
 import { getRequiredUser } from "@/lib/auth/auth-user";
 import { combineWithParentMetadata } from "@/lib/metadata";
+import { getI18n } from "@/i18n/server";
 import { AccountLayout } from "../account-layout";
 import { EditProfileCardForm } from "./edit-profile-form";
 
-export const generateMetadata = combineWithParentMetadata({
-  title: "Settings",
-  description: "Update your profile.",
+export const generateMetadata = combineWithParentMetadata(async () => {
+  const { t } = await getI18n();
+  return {
+    title: t("account.profile.editTitle"),
+    description: t("account.profile.editDescription"),
+  };
 });
 
 export default async function EditProfilePage() {

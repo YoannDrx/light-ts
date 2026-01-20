@@ -17,15 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "January", 2023: 186, 2024: 80 },
-  { month: "February", 2023: 305, 2024: 200 },
-  { month: "March", 2023: 237, 2024: 120 },
-  { month: "April", 2023: 73, 2024: 190 },
-  { month: "May", 2023: 209, 2024: 130 },
-  { month: "June", 2023: 214, 2024: 140 },
-];
+import { useI18n } from "@/i18n/provider";
 
 const chartConfig = {
   2023: {
@@ -39,13 +31,21 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function SubscribersChart() {
+  const { t } = useI18n();
+  const chartData = [
+    { month: t("months.january"), 2023: 186, 2024: 80 },
+    { month: t("months.february"), 2023: 305, 2024: 200 },
+    { month: t("months.march"), 2023: 237, 2024: 120 },
+    { month: t("months.april"), 2023: 73, 2024: 190 },
+    { month: t("months.may"), 2023: 209, 2024: 130 },
+    { month: t("months.june"), 2023: 214, 2024: 140 },
+  ];
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>New users</CardTitle>
-        <CardDescription>
-          Showing new users for the last 6 months compared to the previous year
-        </CardDescription>
+        <CardTitle>{t("app.subscribers.title")}</CardTitle>
+        <CardDescription>{t("app.subscribers.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer className="h-64 w-full" config={chartConfig}>
@@ -115,10 +115,11 @@ export function SubscribersChart() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 leading-none font-medium">
-              Trending up by 5.2% this month <TrendingUp className="size-4" />
+              {t("app.subscribers.trending", { value: "5.2%" })}{" "}
+              <TrendingUp className="size-4" />
             </div>
             <div className="text-muted-foreground flex items-center gap-2 leading-none">
-              January - June 2024
+              {t("app.subscribers.range", { year: "2024" })}
             </div>
           </div>
         </div>

@@ -3,34 +3,32 @@ import { Home, MessageSquare, Users } from "lucide-react";
 
 const ADMIN_PATH = `/admin`;
 
-const ADMIN_LINKS: NavigationGroup[] = [
-  {
-    title: "Admin",
-    links: [
-      {
-        href: ADMIN_PATH,
-        Icon: Home,
-        label: "Dashboard",
-      },
-      {
-        href: `${ADMIN_PATH}/users`,
-        Icon: Users,
-        label: "Users",
-      },
-      {
-        href: `${ADMIN_PATH}/feedback`,
-        Icon: MessageSquare,
-        label: "Feedback",
-      },
-      {
-        href: `${ADMIN_PATH}/feedback`,
-        Icon: MessageSquare,
-        label: "Feedback",
-      },
-    ],
-  },
-] satisfies NavigationGroup[];
+type Translator = (
+  key: string,
+  values?: Record<string, string | number>,
+) => string;
 
-export const getAdminNavigation = (): NavigationGroup[] => {
-  return ADMIN_LINKS;
+export const getAdminNavigation = (t: Translator): NavigationGroup[] => {
+  return [
+    {
+      title: t("admin.nav.section"),
+      links: [
+        {
+          href: ADMIN_PATH,
+          Icon: Home,
+          label: t("nav.dashboard"),
+        },
+        {
+          href: `${ADMIN_PATH}/users`,
+          Icon: Users,
+          label: t("admin.users.title"),
+        },
+        {
+          href: `${ADMIN_PATH}/feedback`,
+          Icon: MessageSquare,
+          label: t("admin.feedback.title"),
+        },
+      ],
+    },
+  ];
 };

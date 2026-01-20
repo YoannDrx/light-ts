@@ -6,6 +6,7 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -16,10 +17,12 @@ type AccountLayoutProps = {
 };
 
 export async function AccountLayout({ children }: AccountLayoutProps) {
+  const { t } = await getI18n();
+
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>Settings</LayoutTitle>
+        <LayoutTitle>{t("account.settings.title")}</LayoutTitle>
       </LayoutHeader>
       <LayoutActions>
         <form>
@@ -29,10 +32,10 @@ export async function AccountLayout({ children }: AccountLayoutProps) {
               await auth.api.signOut({
                 headers: await headers(),
               });
-              redirect("/auth/signin");
+              redirect("/");
             }}
           >
-            Sign out
+            {t("account.settings.signOut")}
           </SubmitButton>
         </form>
       </LayoutActions>

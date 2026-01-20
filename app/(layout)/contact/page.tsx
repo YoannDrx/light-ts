@@ -6,27 +6,32 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { contactSupportAction } from "@/features/contact/support/contact-support.action";
 import { ContactSupportSchema } from "@/features/contact/support/contact-support.schema";
+import { getI18n } from "@/i18n/server";
 import { env } from "@/lib/env";
 import { serverToast } from "@/lib/server-toast";
 import { SiteConfig } from "@/site-config";
 import { Building2, Mail, MessageSquare } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: `Contact ${SiteConfig.title}`,
-  description:
-    "Get in touch with the NOW.TS team. We're here to help with any questions about testimonial collection, platform features, or technical support.",
-  keywords: ["contact", "support", "help", "testimonials", "questions"],
-  openGraph: {
-    title: `Contact ${SiteConfig.title}`,
-    description:
-      "Get in touch with the NOW.TS team. We're here to help with any questions about testimonial collection, platform features, or technical support.",
-    url: `${SiteConfig.prodUrl}/contact`,
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
 
-export default function ContactPage() {
+  return {
+    title: t("contact.metaTitle", { app: SiteConfig.title }),
+    description: t("contact.metaDescription"),
+    keywords: ["contact", "support", "help", "testimonials", "questions"],
+    openGraph: {
+      title: t("contact.metaTitle", { app: SiteConfig.title }),
+      description: t("contact.metaDescription"),
+      url: `${SiteConfig.prodUrl}/contact`,
+      type: "website",
+    },
+  };
+}
+
+export default async function ContactPage() {
+  const { t } = await getI18n();
+
   return (
     <div className="bg-background relative isolate min-h-screen">
       <GridBackground
@@ -40,20 +45,20 @@ export default function ContactPage() {
               variant="h1"
               className="text-foreground text-4xl font-semibold tracking-tight text-pretty sm:text-5xl"
             >
-              Get in touch
+              {t("contact.title")}
             </Typography>
             <Typography
               variant="p"
               className="text-muted-foreground mt-6 text-lg/8"
             >
-              Have questions about NOW.TS? Need help with testimonial collection
-              or want to share feedback? I'm here to help and always excited to
-              hear from our community.
+              {t("contact.description")}
             </Typography>
             <dl className="text-muted-foreground mt-10 flex flex-col gap-4 text-base/7">
               <div className="flex gap-x-4">
                 <dt className="flex-none">
-                  <span className="sr-only">Location</span>
+                  <span className="sr-only">
+                    {t("contact.details.location")}
+                  </span>
                   <Building2
                     aria-hidden="true"
                     className="text-muted-foreground h-6 w-6"
@@ -63,7 +68,7 @@ export default function ContactPage() {
               </div>
               <div className="flex gap-x-4">
                 <dt className="flex-none">
-                  <span className="sr-only">Email</span>
+                  <span className="sr-only">{t("contact.details.email")}</span>
                   <Mail
                     aria-hidden="true"
                     className="text-muted-foreground h-6 w-6"
@@ -80,16 +85,18 @@ export default function ContactPage() {
               </div>
               <div className="flex gap-x-4">
                 <dt className="flex-none">
-                  <span className="sr-only">Response time</span>
+                  <span className="sr-only">
+                    {t("contact.details.responseTime")}
+                  </span>
                   <MessageSquare
                     aria-hidden="true"
                     className="text-muted-foreground h-6 w-6"
                   />
                 </dt>
                 <dd>
-                  Usually respond within 24 hours
+                  {t("contact.details.responseLineOne")}
                   <br />
-                  Monday - Friday, 9 AM - 6 PM ICT
+                  {t("contact.details.responseLineTwo")}
                 </dd>
               </div>
             </dl>
@@ -98,6 +105,7 @@ export default function ContactPage() {
         <form
           action={async (formData) => {
             "use server";
+            const { t } = await getI18n();
 
             const firstname = formData.get("first-name");
             const lastname = formData.get("last-name");
@@ -114,13 +122,13 @@ export default function ContactPage() {
             });
 
             if (!result.success) {
-              await serverToast("Invalid input", "error");
+              await serverToast(t("contact.form.invalid"), "error");
               return;
             }
 
             await contactSupportAction(result.data);
 
-            await serverToast("Your message has been sent", "success");
+            await serverToast(t("contact.form.success"), "success");
           }}
           className="flex w-full items-center justify-start px-6 pt-24 pb-24 sm:pt-32 lg:px-12 lg:pt-24"
         >
@@ -131,7 +139,7 @@ export default function ContactPage() {
                   htmlFor="first-name"
                   className="text-foreground block text-sm font-semibold"
                 >
-                  First name
+                  {t("contact.form.firstName")}
                 </Label>
                 <div className="mt-2.5">
                   <Input
@@ -148,7 +156,7 @@ export default function ContactPage() {
                   htmlFor="last-name"
                   className="text-foreground block text-sm font-semibold"
                 >
-                  Last name
+                  {t("contact.form.lastName")}
                 </Label>
                 <div className="mt-2.5">
                   <Input
@@ -165,7 +173,7 @@ export default function ContactPage() {
                   htmlFor="email"
                   className="text-foreground block text-sm font-semibold"
                 >
-                  Email
+                  {t("contact.form.email")}
                 </Label>
                 <div className="mt-2.5">
                   <Input
@@ -182,7 +190,7 @@ export default function ContactPage() {
                   htmlFor="subject"
                   className="text-foreground block text-sm font-semibold"
                 >
-                  Subject
+                  {t("contact.form.subject")}
                 </Label>
                 <div className="mt-2.5">
                   <Input
@@ -198,7 +206,7 @@ export default function ContactPage() {
                   htmlFor="message"
                   className="text-foreground block text-sm font-semibold"
                 >
-                  Message
+                  {t("contact.form.message")}
                 </Label>
                 <div className="mt-2.5">
                   <Textarea
@@ -216,7 +224,7 @@ export default function ContactPage() {
                 type="submit"
                 className="rounded-md px-3.5 py-2.5 text-center text-sm font-semibold"
               >
-                Send message
+                {t("contact.form.submit")}
               </Button>
             </div>
           </div>

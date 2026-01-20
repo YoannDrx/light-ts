@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient, useSession } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -25,16 +26,17 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const ChangeEmailFormSchema = z.object({
-  newEmail: z.string().email("Please enter a valid email address"),
-});
-
 export function ChangeEmailForm() {
   const router = useRouter();
   const session = useSession();
+  const { t } = useI18n();
+
+  const changeEmailFormSchema = z.object({
+    newEmail: z.string().email(t("account.email.invalid")),
+  });
 
   const form = useZodForm({
-    schema: ChangeEmailFormSchema,
+    schema: changeEmailFormSchema,
     defaultValues: {
       newEmail: session.data?.user.email,
     },
@@ -52,22 +54,21 @@ export function ChangeEmailForm() {
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("Verification email sent. Please check your inbox.");
+      toast.success(t("account.email.verifySent"));
       router.push("/account");
     },
   });
 
-  function onSubmit(values: z.infer<typeof ChangeEmailFormSchema>) {
+  function onSubmit(values: z.infer<typeof changeEmailFormSchema>) {
     changeEmailMutation.mutate(values);
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Change Email</CardTitle>
+        <CardTitle>{t("account.email.changeTitle")}</CardTitle>
         <CardDescription>
-          Enter your new email address. We'll send a verification link to
-          confirm the change.
+          {t("account.email.changeDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -77,11 +78,11 @@ export function ChangeEmailForm() {
             name="newEmail"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Email</FormLabel>
+                <FormLabel>{t("account.email.newLabel")}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="new-email@example.com"
+                    placeholder={t("account.email.newPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -94,7 +95,7 @@ export function ChangeEmailForm() {
             type="submit"
             className="w-full"
           >
-            Change Email
+            {t("account.email.changeSubmit")}
           </LoadingButton>
         </Form>
       </CardContent>

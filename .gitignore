@@ -44,3 +44,6 @@ src/generated
 .playwright-mcp
 
 .conductor
+
+# BMAD outputs (generated artifacts)
+_bmad-output/

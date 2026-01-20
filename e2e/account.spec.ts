@@ -19,19 +19,24 @@ test.describe("account", () => {
     await page.waitForURL(/\/account\/danger/, { timeout: 10000 });
     await page.getByRole("button", { name: "Delete" }).click();
 
+    // Wait for the confirm dialog to appear (i18n: "Confirm deletion")
     const deleteDialog = page.getByRole("alertdialog", {
-      name: "Delete your account ?",
+      name: /Confirm deletion|Confirmer la suppression/i,
     });
     await expect(deleteDialog).toBeVisible();
 
     const confirmInput = deleteDialog.getByRole("textbox");
-    await confirmInput.fill("Delete");
+    // i18n: confirmation text is "Delete account" or "Supprimer le compte"
+    await confirmInput.fill("Delete account");
 
     const deleteButton = deleteDialog.getByRole("button", { name: /delete/i });
     await expect(deleteButton).toBeEnabled();
     await deleteButton.click();
 
-    await expect(page.getByText("Your deletion has been asked.")).toBeVisible();
+    // i18n: toast message is "Deletion requested" or "Suppression demandée"
+    await expect(
+      page.getByText(/Deletion requested|Suppression demandée/i),
+    ).toBeVisible();
 
     const verification = await prisma.verification.findFirst({
       where: {
@@ -51,9 +56,15 @@ test.describe("account", () => {
     const confirmUrl = `${getServerUrl()}/auth/confirm-delete?token=${resetToken}&callbackUrl=/auth/goodbye`;
     await page.goto(confirmUrl);
 
-    await page.getByRole("button", { name: "Yes, Delete My Account" }).click();
+    // i18n: button text is "Delete account" (EN) / "Supprimer le compte" (FR)
+    await page
+      .getByRole("button", { name: /Delete account|Supprimer le compte/i })
+      .click();
     await page.waitForURL(/\/auth\/goodbye/, { timeout: 10000 });
-    await expect(page.getByText("Account Deleted").first()).toBeVisible();
+    // i18n: page title is "You're signed out" (EN) / "Vous êtes déconnecté" (FR)
+    await expect(
+      page.getByText(/You're signed out|Vous êtes déconnecté/i).first(),
+    ).toBeVisible();
 
     const user = await prisma.user.findUnique({
       where: {
@@ -94,9 +105,15 @@ test.describe("account", () => {
     await page.locator('input[name="currentPassword"]').fill(userData.password);
     await page.locator('input[name="newPassword"]').fill(newPassword);
     await page.locator('input[name="confirmPassword"]').fill(newPassword);
-    await page.getByRole("button", { name: /Change Password/i }).click();
+    // i18n: button text is "Update password" or "Mettre à jour le mot de passe"
+    await page
+      .getByRole("button", { name: /Update password|Mettre à jour/i })
+      .click();
 
-    await expect(page.getByText("Password changed successfully")).toBeVisible();
+    // i18n: success message is "Password updated" or "Mot de passe mis à jour"
+    await expect(
+      page.getByText(/Password updated|Mot de passe mis à jour/i),
+    ).toBeVisible();
 
     await signOutAccount({ page });
 

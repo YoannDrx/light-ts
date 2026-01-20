@@ -4,7 +4,7 @@ import { authAction } from "@/lib/actions/safe-actions";
 import { ActionError } from "@/lib/errors/action-error";
 import { prisma } from "@/lib/prisma";
 import { getServerUrl } from "@/lib/server-url";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { z } from "zod";
 
 const getStripeCustomerId = async (userId: string) => {
@@ -28,7 +28,7 @@ export const openStripePortalAction = authAction.action(
       throw new ActionError("No stripe customer id found");
     }
 
-    const stripeBilling = await stripe.billingPortal.sessions.create({
+    const stripeBilling = await getStripe().billingPortal.sessions.create({
       customer: stripeCustomerId,
       return_url: `${getServerUrl()}/account/billing`,
     });
@@ -66,7 +66,7 @@ export const cancelSubscriptionAction = authAction
     }
 
     // Create billing portal session which allows the user to cancel
-    const stripeBilling = await stripe.billingPortal.sessions.create({
+    const stripeBilling = await getStripe().billingPortal.sessions.create({
       customer: stripeCustomerId,
       return_url: `${getServerUrl()}${returnUrl}`,
     });

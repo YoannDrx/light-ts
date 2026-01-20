@@ -5,7 +5,7 @@ import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { ActionError } from "@/lib/errors/action-error";
 import { prisma } from "@/lib/prisma";
 import { getServerUrl } from "@/lib/server-url";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { z } from "zod";
 
 export const upgradeUserAction = authAction
@@ -49,7 +49,7 @@ export const upgradeUserAction = authAction
       const customerId = dbUser.stripeCustomerId;
 
       // Create checkout session
-      const session = await stripe.checkout.sessions.create({
+      const session = await getStripe().checkout.sessions.create({
         customer: customerId,
         payment_method_types: ["card"],
         line_items: [

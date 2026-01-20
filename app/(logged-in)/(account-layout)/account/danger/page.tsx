@@ -1,13 +1,17 @@
 import { combineWithParentMetadata } from "@/lib/metadata";
+import { getI18n } from "@/i18n/server";
 import { AccountLayout } from "../account-layout";
 import { DeleteAccountForm } from "./delete-account-form";
 
-export const generateMetadata = combineWithParentMetadata({
-  title: "Delete Account",
-  description: "Permanently delete your account and all associated data.",
+export const generateMetadata = combineWithParentMetadata(async () => {
+  const { t } = await getI18n();
+  return {
+    title: t("account.danger.title"),
+    description: t("account.danger.description"),
+  };
 });
 
-export default function DeleteProfilePage() {
+export default async function DeleteProfilePage() {
   return (
     <AccountLayout>
       <div className="flex flex-col gap-4 lg:gap-8">

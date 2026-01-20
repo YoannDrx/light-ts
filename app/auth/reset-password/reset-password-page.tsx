@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { unwrapSafePromise } from "@/lib/promises";
 import { useMutation } from "@tanstack/react-query";
@@ -26,15 +27,16 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const PasswordFormSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
-
 export function ResetPasswordPage({ token }: { token: string }) {
   const router = useRouter();
+  const { t } = useI18n();
+
+  const passwordFormSchema = z.object({
+    password: z.string().min(8, t("auth.resetPassword.passwordMin")),
+  });
 
   const passwordForm = useZodForm({
-    schema: PasswordFormSchema,
+    schema: passwordFormSchema,
   });
 
   const resetPasswordMutation = useMutation({
@@ -50,13 +52,13 @@ export function ResetPasswordPage({ token }: { token: string }) {
       toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("Password reset successfully");
+      toast.success(t("auth.resetPassword.success"));
       const newUrl = `${window.location.origin}/auth/signin`;
       window.location.href = newUrl;
     },
   });
 
-  function onSubmitPassword(values: z.infer<typeof PasswordFormSchema>) {
+  function onSubmitPassword(values: z.infer<typeof passwordFormSchema>) {
     resetPasswordMutation.mutate(values);
   }
 
@@ -75,10 +77,12 @@ export function ResetPasswordPage({ token }: { token: string }) {
             </AvatarFallback>
           </Avatar>
         </div>
-        <CardHeader className="text-center">Reset Password</CardHeader>
+        <CardHeader className="text-center">
+          {t("auth.resetPassword.title")}
+        </CardHeader>
 
         <CardDescription className="text-center">
-          Enter your new password below
+          {t("auth.resetPassword.description")}
         </CardDescription>
       </CardHeader>
       <CardFooter className="border-t pt-6">
@@ -92,9 +96,13 @@ export function ResetPasswordPage({ token }: { token: string }) {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel>{t("auth.resetPassword.newPassword")}</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="••••••••" {...field} />
+                  <Input
+                    type="password"
+                    placeholder={t("auth.resetPassword.passwordPlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -105,7 +113,7 @@ export function ResetPasswordPage({ token }: { token: string }) {
             type="submit"
             className="w-full"
           >
-            Reset Password
+            {t("auth.resetPassword.submit")}
           </LoadingButton>
         </Form>
       </CardFooter>

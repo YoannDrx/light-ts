@@ -7,7 +7,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { AuthButtonClient } from "../auth/auth-button-client";
+import { LanguageToggle } from "../i18n/language-toggle";
 import { ThemeToggle } from "../theme/theme-toggle";
+import { useI18n } from "@/i18n/provider";
 
 function useBoundedScroll(threshold: number) {
   const { scrollY } = useScroll();
@@ -46,6 +48,7 @@ function useBoundedScroll(threshold: number) {
 }
 
 export function LandingHeader() {
+  const { t } = useI18n();
   const { scrollYBoundedProgress } = useBoundedScroll(400);
   const router = useRouter();
   const scrollYBoundedProgressDelayed = useTransform(
@@ -92,10 +95,11 @@ export function LandingHeader() {
           }}
           className="text-muted-foreground flex items-center gap-4 text-sm font-medium"
         >
-          <Link href="#features">Features</Link>
-          <Link href="#pricing">Pricing</Link>
-          <Link href="/posts">Blog</Link>
+          <Link href="#features">{t("nav.features")}</Link>
+          <Link href="#pricing">{t("nav.pricing")}</Link>
+          <Link href="/posts">{t("nav.blog")}</Link>
           <AuthButtonClient />
+          <LanguageToggle />
           <ThemeToggle />
         </motion.nav>
       </div>

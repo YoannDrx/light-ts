@@ -8,27 +8,28 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 import Link from "next/link";
 
-export default function CancelPaymentPage() {
+export default async function CancelPaymentPage() {
+  const { t } = await getI18n();
+
   return (
     <Layout>
       <LayoutHeader>
-        <Badge variant="outline">Payment failed</Badge>
-        <LayoutTitle>
-          We're sorry, but we couldn't process your payment
-        </LayoutTitle>
+        <Badge variant="outline">{t("payment.cancel.badge")}</Badge>
+        <LayoutTitle>{t("payment.cancel.title")}</LayoutTitle>
         <LayoutDescription>
-          We encountered an issue processing your payment.
-          <br /> Please check your payment details and try again. <br />
-          If the problem persists, don't hesitate to contact us for assistance.
+          {t("payment.cancel.lineOne")}
+          <br /> {t("payment.cancel.lineTwo")} <br />
+          {t("payment.cancel.lineThree")}
           <br />
-          We're here to help you resolve this smoothly.
+          {t("payment.cancel.lineFour")}
         </LayoutDescription>
       </LayoutHeader>
       <LayoutContent className="flex items-center gap-2">
         <Link href="/" className={buttonVariants({ variant: "invert" })}>
-          Home
+          {t("nav.home")}
         </Link>
         <ContactSupportDialog />
       </LayoutContent>

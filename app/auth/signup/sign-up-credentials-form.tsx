@@ -11,6 +11,7 @@ import {
   useZodForm,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { getCallbackUrl } from "@/lib/auth/auth-utils";
 import { unwrapSafePromise } from "@/lib/promises";
@@ -20,6 +21,7 @@ import type { LoginCredentialsFormType } from "./signup.schema";
 import { LoginCredentialsFormScheme } from "./signup.schema";
 
 export const SignUpCredentialsForm = () => {
+  const { t } = useI18n();
   const form = useZodForm({
     schema: LoginCredentialsFormScheme,
     defaultValues: {
@@ -55,7 +57,7 @@ export const SignUpCredentialsForm = () => {
   async function onSubmit(values: LoginCredentialsFormType) {
     if (values.password !== values.verifyPassword) {
       form.setError("verifyPassword", {
-        message: "Password does not match",
+        message: t("auth.signUp.passwordMismatch"),
       });
       return;
     }
@@ -76,9 +78,12 @@ export const SignUpCredentialsForm = () => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>{t("auth.form.name")}</FormLabel>
             <FormControl>
-              <Input placeholder="John Doe" {...field} />
+              <Input
+                placeholder={t("auth.signUp.namePlaceholder")}
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -89,9 +94,12 @@ export const SignUpCredentialsForm = () => {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>{t("auth.form.email")}</FormLabel>
             <FormControl>
-              <Input placeholder="john@doe.com" {...field} />
+              <Input
+                placeholder={t("auth.signUp.emailPlaceholder")}
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -102,7 +110,7 @@ export const SignUpCredentialsForm = () => {
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>{t("auth.form.password")}</FormLabel>
             <FormControl>
               <Input type="password" {...field} />
             </FormControl>
@@ -115,7 +123,7 @@ export const SignUpCredentialsForm = () => {
         name="verifyPassword"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Verify Password</FormLabel>
+            <FormLabel>{t("auth.signUp.verifyPassword")}</FormLabel>
             <FormControl>
               <Input type="password" {...field} />
             </FormControl>
@@ -125,7 +133,7 @@ export const SignUpCredentialsForm = () => {
       />
 
       <Button type="submit" className="w-full">
-        Sign up
+        {t("auth.signUp.submit")}
       </Button>
     </Form>
   );

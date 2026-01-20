@@ -16,17 +16,21 @@ test("password reset flow", async ({ page }) => {
 
   await page.waitForURL(/\/account/, { timeout: 10000 });
 
-  // 2. Sign out
+  // 2. Sign out (redirects to "/" after signout, not "/auth/signin")
 
-  await page.getByRole("button", { name: /sign out/i }).click();
-  await page.waitForURL(/\/auth\/signin/, { timeout: 10000 });
+  await page.getByRole("button", { name: /sign out|déconnexion/i }).click();
+  // After sign out, user is redirected to home page "/"
+  await page.waitForURL("/", { timeout: 10000 });
 
   // 3. Go to forget password page
   await page.goto(`${getServerUrl()}/auth/forget-password`);
 
   // 4. Submit the email for password reset
   await page.getByLabel("Email").fill(userData.email);
-  await page.getByRole("button", { name: /send reset link/i }).click();
+  // i18n: button text is "Send reset link" or "Envoyer le lien"
+  await page
+    .getByRole("button", { name: /send reset link|Envoyer le lien/i })
+    .click();
 
   // 5. Should be redirected to verify page
   await page.waitForURL(/\/auth\/verify/, { timeout: 10000 });
@@ -53,7 +57,10 @@ test("password reset flow", async ({ page }) => {
   // 8. Set a new password
   const newPassword = faker.internet.password({ length: 12, memorable: true });
   await page.locator('input[name="password"]').fill(newPassword);
-  await page.getByRole("button", { name: /reset password/i }).click();
+  // i18n: button text is "Update password" or "Mettre à jour"
+  await page
+    .getByRole("button", { name: /Update password|Mettre à jour/i })
+    .click();
 
   // 9. Should be redirected to sign in page
   await page.waitForURL(/\/auth\/signin/, { timeout: 30000 });
@@ -61,8 +68,9 @@ test("password reset flow", async ({ page }) => {
   // 10. Try to sign in with the new password
   await page.getByLabel("Email").fill(userData.email);
   await page.locator('input[name="password"]').fill(newPassword);
+  // i18n: button text is "Sign in" or "Se connecter"
   await page
-    .getByRole("button", { name: /sign in/i })
+    .getByRole("button", { name: /sign in|Se connecter/i })
     .first()
     .click();
 

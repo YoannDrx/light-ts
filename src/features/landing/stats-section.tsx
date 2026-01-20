@@ -2,6 +2,7 @@
 
 import { animate } from "motion/react";
 import { useEffect, useRef } from "react";
+import { useI18n } from "@/i18n/provider";
 import { SectionLayout } from "./section-layout";
 
 type StatProps = {
@@ -10,30 +11,31 @@ type StatProps = {
   text: string;
 };
 
-const stats: StatProps[] = [
-  {
-    number: 476,
-    suffix: "K",
-    text: "Threads scheduled every month.",
-  },
-  {
-    number: 1.44,
-    suffix: "K",
-    text: "Users that use our platform.",
-  },
-  {
-    number: 1.5,
-    suffix: "M+",
-    text: "Interactions with posts created by our users.",
-  },
-  {
-    number: 192,
-    suffix: "K",
-    text: "Users impacted by our published posts.",
-  },
-];
-
 export function StatsSection() {
+  const { t } = useI18n();
+  const stats: StatProps[] = [
+    {
+      number: 476,
+      suffix: "K",
+      text: t("landing.stats.one"),
+    },
+    {
+      number: 1.44,
+      suffix: "K",
+      text: t("landing.stats.two"),
+    },
+    {
+      number: 1.5,
+      suffix: "M+",
+      text: t("landing.stats.three"),
+    },
+    {
+      number: 192,
+      suffix: "K",
+      text: t("landing.stats.four"),
+    },
+  ];
+
   return (
     <SectionLayout size="sm">
       <div className="grid w-full items-center gap-12 sm:grid-cols-2 md:-mx-5 md:max-w-none md:grid-cols-4 md:gap-0">

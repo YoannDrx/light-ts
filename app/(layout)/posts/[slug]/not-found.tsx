@@ -5,17 +5,20 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 
-export default function NotFoundPage() {
+export default async function NotFoundPage() {
+  const { t } = await getI18n();
+
   return (
     <Layout>
       <LayoutHeader>
-        <LayoutTitle>404 - Not Found</LayoutTitle>
+        <LayoutTitle>{t("posts.notFound.title")}</LayoutTitle>
       </LayoutHeader>
       <LayoutContent>
         <Card>
           <CardHeader>
-            <CardTitle>The post you are looking for doesn't exist.</CardTitle>
+            <CardTitle>{t("posts.notFound.description")}</CardTitle>
           </CardHeader>
         </Card>
       </LayoutContent>

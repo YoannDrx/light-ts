@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getI18n } from "@/i18n/server";
 import { Star } from "lucide-react";
 import type { PropsWithChildren } from "react";
 
@@ -13,7 +14,9 @@ type ReviewSmallProps = PropsWithChildren<{
   stars: number;
 }>;
 
-export const ReviewSmall = (props: ReviewSmallProps) => {
+export const ReviewSmall = async (props: ReviewSmallProps) => {
+  const { t } = await getI18n();
+
   return (
     <div className="flex items-center gap-3">
       <div className="flex items-center">
@@ -23,7 +26,10 @@ export const ReviewSmall = (props: ReviewSmallProps) => {
             className="border-background -mr-4 size-12 border-4 last:mr-0"
           >
             <AvatarFallback>A</AvatarFallback>
-            <AvatarImage src={avatar} alt="avatar" />
+            <AvatarImage
+              src={avatar}
+              alt={t("landing.reviews.avatarAltGeneric")}
+            />
           </Avatar>
         ))}
       </div>

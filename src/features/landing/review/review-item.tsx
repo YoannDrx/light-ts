@@ -2,6 +2,7 @@ import { Typography } from "@/components/nowts/typography";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ClientMarkdown } from "@/features/markdown/client-markdown";
+import { getI18n } from "@/i18n/server";
 import { cn } from "@/lib/utils";
 import type { ComponentPropsWithoutRef } from "react";
 
@@ -24,7 +25,9 @@ export type ReviewItemProps = {
   image: string;
 } & ComponentPropsWithoutRef<"div">;
 
-export const ReviewItem = ({ className, ...props }: ReviewItemProps) => {
+export const ReviewItem = async ({ className, ...props }: ReviewItemProps) => {
+  const { t } = await getI18n();
+
   return (
     <Card className={cn("h-fit overflow-hidden pb-0", className)} {...props}>
       <CardHeader>
@@ -34,7 +37,10 @@ export const ReviewItem = ({ className, ...props }: ReviewItemProps) => {
         <div>
           <Avatar>
             <AvatarFallback>{props.name[0]}</AvatarFallback>
-            <AvatarImage src={props.image} alt="user image" />
+            <AvatarImage
+              src={props.image}
+              alt={t("landing.reviews.avatarAlt", { name: props.name })}
+            />
           </Avatar>
         </div>
         <div>

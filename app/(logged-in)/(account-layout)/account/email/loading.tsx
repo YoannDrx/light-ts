@@ -6,15 +6,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getI18n } from "@/i18n/server";
 
-export default function PageLoading() {
+export default async function PageLoading() {
+  const { t } = await getI18n();
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Mail settings</CardTitle>
-        <CardDescription>
-          Update your email notifications settings to match your preferences.
-        </CardDescription>
+        <CardTitle>{t("account.email.title")}</CardTitle>
+        <CardDescription>{t("account.email.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <Skeleton className="h-12 w-full" />

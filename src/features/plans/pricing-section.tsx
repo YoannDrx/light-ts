@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { useI18n } from "@/i18n/provider";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import { PricingCard } from "./pricing-card";
 
 export function Pricing() {
   const [isYearly, setIsYearly] = useState(false);
+  const { t } = useI18n();
 
   return (
     <section className="from-background to-muted/20 w-full bg-gradient-to-b py-12 md:py-24 lg:py-32">
@@ -17,11 +19,10 @@ export function Pricing() {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Choose Your Plan
+              {t("pricing.title")}
             </h2>
             <p className="text-muted-foreground max-w-[700px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Select the perfect plan for your needs. Upgrade or downgrade at
-              any time.
+              {t("pricing.description")}
             </p>
           </div>
 
@@ -34,7 +35,7 @@ export function Pricing() {
                   : "text-muted-foreground",
               )}
             >
-              Monthly
+              {t("pricing.monthly")}
             </span>
             <Switch
               checked={isYearly}
@@ -49,12 +50,12 @@ export function Pricing() {
                   : "text-muted-foreground",
               )}
             >
-              <span className="text-sm font-medium">Yearly</span>
+              <span className="text-sm font-medium">{t("pricing.yearly")}</span>
               <Badge
                 variant="outline"
                 className="border-primary/20 bg-primary/10 text-primary ml-2"
               >
-                Save 20%
+                {t("pricing.save", { percent: "20%" })}
               </Badge>
             </div>
           </div>
@@ -72,17 +73,14 @@ export function Pricing() {
         </div>
 
         <div className="mt-16 text-center">
-          <p className="text-muted-foreground">
-            All plans include basic features like unlimited access and community
-            support.
-          </p>
+          <p className="text-muted-foreground">{t("pricing.footer")}</p>
           <p className="text-muted-foreground mt-2">
-            Need a custom plan?{" "}
+            {t("pricing.customPlan")}{" "}
             <Link
               href="/contact"
               className="text-primary font-medium hover:underline"
             >
-              Contact us
+              {t("pricing.contact")}
             </Link>
           </p>
         </div>

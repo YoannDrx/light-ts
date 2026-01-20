@@ -1,5 +1,8 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { useI18n } from "@/i18n/provider";
 import { getInitials } from "@/lib/utils/initials";
 import Link from "next/link";
 
@@ -27,8 +30,9 @@ export const UserTableCell = ({
   size = "md",
   showBadges = true,
 }: UserTableCellProps) => {
-  const displayName = user?.name ?? "Anonymous";
-  const displayEmail = user?.email ?? fallbackEmail ?? "No email";
+  const { t } = useI18n();
+  const displayName = user?.name ?? t("admin.users.anonymous");
+  const displayEmail = user?.email ?? fallbackEmail ?? t("admin.users.noEmail");
   const avatarSize = size === "sm" ? "size-8" : "size-10";
 
   const content = (
@@ -39,12 +43,12 @@ export const UserTableCell = ({
         <div className="mt-1 flex items-center gap-1">
           {!user.emailVerified && (
             <Badge variant="outline" className="text-xs">
-              Unverified
+              {t("admin.users.unverified")}
             </Badge>
           )}
           {user.banned && (
             <Badge variant="destructive" className="text-xs">
-              Banned
+              {t("admin.users.status.banned")}
             </Badge>
           )}
         </div>

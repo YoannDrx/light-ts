@@ -1,9 +1,8 @@
-"use cache";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getI18n } from "@/i18n/server";
 import { AUTH_PLANS } from "@/lib/auth/stripe/auth-plans";
 import { prisma } from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { Crown, DollarSign, Users } from "lucide-react";
 import { cacheLife } from "next/dist/server/use-cache/cache-life";
 
@@ -28,7 +27,7 @@ async function calculateTotalMRR() {
         if (!sub.stripeSubscriptionId) return null;
 
         try {
-          const stripeSub = await stripe.subscriptions.retrieve(
+          const stripeSub = await getStripe().subscriptions.retrieve(
             sub.stripeSubscriptionId,
           );
           return stripeSub;
@@ -74,6 +73,7 @@ async function calculateTotalMRR() {
 
 export async function AdminStatsSection() {
   cacheLife("hours");
+  const { locale, t } = await getI18n();
 
   const premiumPlanNames = AUTH_PLANS.filter((p) => p.price > 0).map(
     (p) => p.name,
@@ -90,28 +90,28 @@ export async function AdminStatsSection() {
     calculateTotalMRR(),
   ]);
 
-  const mrrFormatted = new Intl.NumberFormat("en-US", {
+  const mrrFormatted = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "USD",
   }).format(mrrInCents / 100);
 
   const stats = [
     {
-      title: "Total Users",
-      value: totalUsers.toLocaleString(),
-      description: "Registered users",
+      title: t("admin.stats.totalUsers"),
+      value: totalUsers.toLocaleString(locale),
+      description: t("admin.stats.totalUsersDescription"),
       icon: Users,
     },
     {
-      title: "Premium Users",
-      value: premiumUsers.toLocaleString(),
-      description: "Paid plan subscriptions",
+      title: t("admin.stats.premiumUsers"),
+      value: premiumUsers.toLocaleString(locale),
+      description: t("admin.stats.premiumUsersDescription"),
       icon: Crown,
     },
     {
-      title: "Monthly Recurring Revenue",
+      title: t("admin.stats.mrr"),
       value: mrrFormatted,
-      description: "Active subscriptions",
+      description: t("admin.stats.mrrDescription"),
       icon: DollarSign,
     },
   ];

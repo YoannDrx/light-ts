@@ -1,205 +1,377 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guide pour Claude Code sur ce dépôt.
 
-## About the project <NAME>
+---
 
-If you read this, ask question about the project to fill this part. You need to describe what is the purpose of the project, main feature and goals.
+## À propos de light-ts
 
-## Development Commands
+**light-ts** est un template boilerplate Next.js 15 pour démarrer rapidement de nouveaux projets avec une stack moderne et complète.
 
-### Core Commands
+### Fonctionnalités incluses
 
-- `pnpm dev` - Start development server with Turbopack
-- `pnpm build` - Build the application
-- `pnpm start` - Start production server
-- `pnpm ts` - Run TypeScript type checking
-- `pnpm lint` - Run ESLint with auto-fix
-- `pnpm lint:ci` - Run ESLint without auto-fix for CI
-- `pnpm clean` - Run lint, type check, and format code
-- `pnpm format` - Format code with Prettier
+- Authentification multi-providers (GitHub, Google, Email)
+- Organisations multi-tenants avec rôles
+- Paiements Stripe (abonnements)
+- Emails transactionnels (Resend)
+- Base de données PostgreSQL (NeonDB + Prisma)
 
-### Testing Commands
+---
 
-- `pnpm test:ci` - Run unit tests in CI mode
-- `pnpm test:e2e:ci` - Run e2e tests in CI mode (headless)
+## mgrep - Assistant de recherche de code
 
-### Database Commands
+**mgrep est ton outil principal pour explorer le codebase.** Il te donne la réponse en langage naturel + la source pertinente, tout servi.
 
-- `pnpm prisma:seed` - Seed the database
-- `pnpm better-auth:migrate` - Generate better-auth Prisma schema
+### Nom du store
 
-### Development Tools
+Le nom du store mgrep = **le nom du dossier du projet** (ex: si le projet est dans `/Users/dev/my-saas`, le store s'appelle `my-saas`).
 
-- `pnpm email` - Email development server
-- `pnpm stripe-webhooks` - Listen for Stripe webhooks
-- `pnpm knip` - Run knip for unused code detection
+Pour obtenir le nom du store : `basename $(pwd)` ou regarde simplement le nom du dossier courant.
 
-## Architecture Overview
+### Lancer le watch (synchronisation)
 
-### Technology Stack
+Avant d'utiliser mgrep, lance le watcher dans un terminal séparé :
 
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript (strict mode)
-- **Styling**: TailwindCSS v4 with Shadcn/UI components
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Better Auth with organization support
-- **Email**: React Email with Resend
-- **Payments**: Stripe integration
-- **Testing**: Vitest for unit tests, Playwright for e2e
-- **Package Manager**: pnpm
+```bash
+pnpm mgrep
+```
 
-### Project Structure
+Le script détecte automatiquement le nom du dossier pour le store.
 
-- `app/` - Next.js App Router pages and layouts
-- `src/components/` - UI components (Shadcn/UI in `ui/`, custom in `nowts/`)
-- `src/features/` - Feature-specific components and logic
-- `src/lib/` - Utilities, configurations, and services
-- `src/hooks/` - Custom React hooks
-- `emails/` - Email templates using React Email
-- `prisma/` - Database schema and migrations
-- `e2e/` - End-to-end tests
-- `__tests__/` - Unit tests
+### Commande de base
 
-### Key Features
+```bash
+mgrep "ta question en langage naturel" --store "<nom-du-dossier>" -a -m <nombre>
+```
 
-- **Multi-tenant Organizations**: Full organization management with roles and permissions
-- **Authentication**: Email/password, magic links, OAuth (GitHub, Google)
-- **Billing**: Stripe subscriptions with plan management
-- **Dialog System**: Global dialog manager for modals and confirmations
-- **Forms**: React Hook Form with Zod validation and server actions
-- **Email System**: Transactional emails with React Email
+### Paramètres essentiels
 
-## Code Conventions
+| Paramètre                 | Description                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `--store "<nom-dossier>"` | **Obligatoire** - le nom du dossier du projet         |
+| `-a`                      | Active la réponse en langage naturel                  |
+| `-m <n>`                  | Nombre de résultats du retrieval (minimum 10)         |
+
+### Ajuster `-m` selon la complexité
+
+| Type de requête                         | `-m` recommandé |
+| --------------------------------------- | --------------- |
+| Question simple (1-2 fichiers)          | 10              |
+| Question moyenne (flow, feature)        | 20-30           |
+| Question complexe (debug, architecture) | 30-50           |
+
+### Stratégie pour requêtes complexes
+
+Si la requête touche **plusieurs parties du codebase**, lance plusieurs mgrep en parallèle plutôt qu'une seule requête surchargée :
+
+```bash
+# Exemple : comprendre le système d'auth complet (remplace <store> par le nom du dossier)
+mgrep "comment fonctionne l'authentification GitHub côté frontend" --store "<store>" -a -m 20
+mgrep "comment le token est géré côté serveur" --store "<store>" -a -m 20
+mgrep "comment les sessions sont gérées" --store "<store>" -a -m 20
+```
+
+### Règles
+
+- **OBLIGATOIRE** : Utilise mgrep pour TOUTE recherche de code. N'utilise JAMAIS grep, Grep tool, ou Glob pour chercher du code.
+- **Langage naturel** : mgrep est un agent IA comme toi. Parle-lui comme à un collègue, pas comme à un moteur de recherche.
+  - ❌ `"architecture block icon color complete status"` (mots-clés robotiques)
+  - ✅ `"Quelle est la couleur de l'icône des blocs d'architecture quand ils sont complétés ?"` (question naturelle)
+
+---
+
+## Subagents (Task tool)
+
+**Les subagents n'héritent PAS des instructions de ce fichier.**
+
+Quand tu lances un subagent Explore, copie-colle les instructions sur mgrep de ce CLAUDE.md dans le prompt du subagent.
+
+---
+
+## Commandes de développement
+
+### Commandes principales
+
+- `pnpm dev` - Serveur de développement (Turbopack)
+- `pnpm build` - Compilation production
+- `pnpm start` - Serveur production
+- `pnpm ts` - Vérification TypeScript
+- `pnpm lint` - ESLint avec auto-fix
+- `pnpm clean` - Lint + TypeCheck + Format
+- `pnpm format` - Formatage Prettier
+
+### Setup et diagnostic
+
+- `pnpm setup` - Configuration interactive du projet
+- `pnpm doctor` - Diagnostic de santé du projet
+
+### Base de données
+
+- `pnpm prisma:migrate` - Créer une migration
+- `pnpm prisma:seed` - Seeder la base
+- `pnpm prisma:generate` - Regénérer le client Prisma
+- `pnpm better-auth:migrate` - Générer le schema Better Auth
+
+### Tests
+
+- `pnpm test:ci` - Tests unitaires (Vitest)
+- `pnpm test:e2e:ci` - Tests E2E headless (Playwright)
+- `pnpm test:e2e` - Tests E2E avec UI
+
+### Outils de dev
+
+- `pnpm email` - Serveur de développement emails
+- `pnpm stripe-webhooks` - Écouter les webhooks Stripe
+- `pnpm knip` - Détection de code inutilisé
+- `pnpm mgrep` - Lancer le watcher mgrep (synchronisation du code)
+
+---
+
+## CLIs requis
+
+Le projet utilise plusieurs CLIs pour automatiser le setup et le déploiement.
+
+### Installation
+
+```bash
+npm i -g @vercel/cli neonctl @upstash/cli stripe gh @mixedbread/mgrep
+```
+
+### Liste des CLIs
+
+| CLI       | Package            | Commande login       | Usage                       |
+| --------- | ------------------ | -------------------- | --------------------------- |
+| `gh`      | `gh`               | `gh auth login`      | GitHub                      |
+| `vercel`  | `@vercel/cli`      | `vercel login`       | Déploiement                 |
+| `neon`    | `neonctl`          | `neon auth`          | PostgreSQL (NeonDB)         |
+| `upstash` | `@upstash/cli`     | `upstash auth login` | Redis (Upstash)             |
+| `stripe`  | `stripe`           | `stripe login`       | Paiements (optionnel)       |
+| `mgrep`   | `@mixedbread/mgrep`| `mgrep login`        | Recherche de code IA        |
+
+---
+
+## Architecture
+
+### Stack technique
+
+- **Framework** : Next.js 16 avec App Router
+- **Langage** : TypeScript (mode strict)
+- **Styling** : TailwindCSS v4 avec Shadcn/UI
+- **Base de données** : PostgreSQL avec Prisma ORM
+- **Authentification** : Better Auth avec support organisations
+- **Emails** : React Email avec Resend
+- **Paiements** : Stripe
+- **Tests** : Vitest (unitaires), Playwright (E2E)
+- **Package Manager** : pnpm
+
+### Structure du projet
+
+- `app/` - Pages et layouts Next.js App Router
+- `src/components/` - Composants UI (Shadcn/UI dans `ui/`, custom dans `nowts/`)
+- `src/features/` - Composants et logique par feature
+- `src/lib/` - Utilitaires, configurations et services
+- `src/hooks/` - Hooks React personnalisés
+- `emails/` - Templates emails (React Email)
+- `prisma/` - Schema et migrations
+- `scripts/` - Scripts de setup et diagnostic
+- `e2e/` - Tests end-to-end
+- `__tests__/` - Tests unitaires
+
+---
+
+## Conventions de code
 
 ### TypeScript
 
-- Use `type` over `interface` (enforced by ESLint)
-- Prefer functional components with TypeScript types
-- No enums - use maps instead
-- Strict TypeScript configuration
+- Utiliser `type` plutôt que `interface` (enforced par ESLint)
+- Composants fonctionnels avec types TypeScript
+- Pas d'enums - utiliser des maps
+- Configuration TypeScript stricte
+- Préférer `??` à `||`
 
 ### React/Next.js
 
-- Prefer React Server Components over client components
-- Use `"use client"` only for Web API access in small components
-- Wrap client components in `Suspense` with fallback
-- Use dynamic loading for non-critical components
+- Préférer les React Server Components aux client components
+- Utiliser `"use client"` uniquement pour l'accès aux Web APIs dans de petits composants
+- Wrapper les client components dans `Suspense` avec fallback
+- Utiliser le chargement dynamique pour les composants non critiques
 
 ### Styling
 
-- Mobile-first approach with TailwindCSS
-- Use Shadcn/UI components from `src/components/ui/`
-- Custom components in `src/components/nowts/`
+- Approche mobile-first avec TailwindCSS
+- Utiliser les composants Shadcn/UI de `src/components/ui/`
+- Composants custom dans `src/components/nowts/`
+- Utiliser les composants de typographie de `@/components/ui/typography.tsx`
+- Préférer `flex flex-col gap-4` pour l'espacement vertical (pas `space-y-4`)
+- Préférer le composant Card pour les wrappers stylisés
 
-### Styling preferences
+---
 
-- Use the shared typography components in `@src/components/ui/typography.tsx` for paragraphs and headings (instead of creating custom `p`, `h1`, `h2`, etc.).
-- For spacing, prefer utility layouts like `flex flex-col gap-4` for vertical spacing and `flex gap-4` for horizontal spacing (instead of `space-y-4`).
-- Prefer the card container `@src/components/ui/card.tsx` for styled wrappers rather than adding custom styles directly to `<div>` elements.
+## Gestion d'état
 
-### State Management
+- `nuqs` pour l'état des paramètres URL
+- `Zustand` pour l'état global (voir dialog-store.ts)
+- `TanStack Query` pour l'état serveur
 
-- Use `nuqs` for URL search parameter state
-- Zustand for global state (see dialog-store.ts)
-- TanStack Query for server state
+---
 
-### Forms and Server Actions
+## Formulaires et Server Actions
 
-- Use React Hook Form with Zod validation
-- Server actions in `.action.ts` files
-- Use `resolveActionResult` helper for mutations
-- Follow form creation pattern in `/src/features/form/`
+- Utiliser React Hook Form avec validation Zod
+- Server actions dans les fichiers `.action.ts`
+- Utiliser le helper `resolveActionResult` pour les mutations
+- Suivre le pattern de création de formulaires dans `/src/features/form/`
+- Toutes les Server Actions DOIVENT utiliser `@/lib/actions/safe-actions.ts`
 
-### Authentication
+---
 
-- Use `getUser()` for optional user (server-side)
-- Use `getRequiredUser()` for required user (server-side)
-- Use `useSession()` from auth-client.ts (client-side)
-- Use `getCurrentOrgCache()` to get the current org
+## Authentification
 
-### Database
+- Utiliser `getUser()` pour un utilisateur optionnel (côté serveur)
+- Utiliser `getRequiredUser()` pour un utilisateur requis (côté serveur)
+- Utiliser `useSession()` depuis auth-client.ts (côté client)
+- Utiliser `getCurrentOrgCache()` pour obtenir l'org courante
 
-- Prisma ORM with PostgreSQL
-- Database hooks for user creation setup
-- Organization-based data access patterns
+---
 
-### Dialog System
+## Base de données
 
-- Use `dialogManager` for global modals
-- Types: confirm, input, custom dialogs
-- Automatic loading states and error handling
+- Prisma ORM avec PostgreSQL
+- Hooks de base de données pour la configuration à la création d'utilisateur
+- Patterns d'accès aux données basés sur l'organisation
 
-## Testing
+---
 
-### Unit Tests
+## Système de Dialog
 
-- Located in `__tests__/` directory
-- Use Vitest with React Testing Library
-- Mock extended with `vitest-mock-extended`
+- Utiliser `dialogManager` pour les modals globales
+- Types : confirm, input, custom dialogs
+- États de chargement et gestion d'erreurs automatiques
 
-### E2E Tests
+---
 
-- Located in `e2e/` directory
-- Use Playwright with custom test utilities
-- Helper functions in `e2e/utils/`
+## API Routes
 
-## Important Files
+- Toutes les routes API DOIVENT utiliser `@/lib/zod-route.ts`
+- Toujours lire `zod-route.ts` avant de créer des routes
+- Toutes les requêtes API DOIVENT utiliser `@/lib/up-fetch.ts` (jamais `fetch` directement)
 
-- `src/lib/auth.ts` - Authentication configuration
-- `src/features/dialog-manager/` - Global dialog system
-- `src/lib/actions/actions-utils.ts` - Server action utilities
-- `src/components/ui/form.tsx` - Form components
-- `prisma/schema.prisma` - Database schema
-- `src/site-config.ts` - Site configuration
-- `src/lib/actions/safe-actions.ts` - All Server Action SHOULD use this logic
-- `src/lib/zod-route.ts` - All Next.js route (inside the folder `/app/api` and name `route.ts`) SHOULD use this logic
+---
 
-## Development Notes
+## Tests
 
-- Always use `pnpm` for package management
-- Use TypeScript strict mode - no `any` types
-- Prefer server components and avoid unnecessary client-side state
-- Prefer using `??` than `||`
-- All API Route SHOULD use @src/lib/zod-route.ts, each file name `route.ts` should use Zod Route. ALWAYS READ zod-route.ts before creating any routes.
-- All API Request SHOULD use @src/lib/up-fetch.ts and NEVER use `fetch`
+### Tests unitaires
 
-## Files naming
+- Situés dans `__tests__/`
+- Utiliser Vitest avec React Testing Library
+- Mock extended avec `vitest-mock-extended`
 
-- All server actions should be suffix by `.action.ts` eg. `user.action.ts`, `dashboard.action.ts`
+### Tests E2E
 
-## Debugging and complexe tasks
+- Situés dans `e2e/`
+- Utiliser Playwright avec les utilitaires de test custom
+- Fonctions helper dans `e2e/utils/`
 
-- For complexe logic and debugging, use logs. Add a lot of logs at each steps and ASK ME TO SEND YOU the logs so you can debugs easily.
+---
 
-## TypeScript imports
+## Fichiers importants
 
-Important, when you import thing try to always use TypeScript paths :
+- `src/lib/auth.ts` - Configuration authentification
+- `src/features/dialog-manager/` - Système de dialog global
+- `src/lib/actions/actions-utils.ts` - Utilitaires server actions
+- `src/lib/actions/safe-actions.ts` - Logique safe actions
+- `src/lib/zod-route.ts` - Logique routes API
+- `src/lib/up-fetch.ts` - Client fetch amélioré
+- `src/components/ui/form.tsx` - Composants formulaires
+- `prisma/schema.prisma` - Schema base de données
+- `src/site-config.ts` - Configuration du site
 
-- `@/*` is link to @src
-- `@email/*` is link to @emails
-- `@app/*` is link to @app
+---
 
-## Workflow modification
+## Nommage des fichiers
 
-🚨 **CRITICAL RULE - ALWAYS FOLLOW THIS** 🚨
+- Server actions : suffixe `.action.ts` (ex: `user.action.ts`, `dashboard.action.ts`)
 
-**BEFORE editing any files, you MUST Read at least 3 files** that will help you to understand how to make a coherent and consistency.
+---
 
-This is **NON-NEGOTIABLE**. Do not skip this step under any circumstances. Reading existing files ensures:
+## Imports TypeScript
 
-- Code consistency with project patterns
-- Proper understanding of conventions
-- Following established architecture
-- Avoiding breaking changes
+Toujours utiliser les paths TypeScript :
 
-**Types of files you MUST read:**
+- `@/*` → `src/`
+- `@email/*` → `emails/`
+- `@app/*` → `app/`
 
-1. **Similar files**: Read files that do similar functionality to understand patterns and conventions
-2. **Imported dependencies**: Read the definition/implementation of any imports you're not 100% sure how to use correctly - understand their API, types, and usage patterns
+---
 
-**Steps to follow:**
+## Debugging et tâches complexes
 
-1. Read at least 3 relevant existing files (similar functionality + imported dependencies)
-2. Understand the patterns, conventions, and API usage
-3. Only then proceed with creating/editing files
+Pour les logiques complexes et le debugging, utilise des logs. Ajoute beaucoup de logs à chaque étape et DEMANDE-MOI DE T'ENVOYER les logs pour debugger facilement.
+
+---
+
+## Workflow de modification
+
+🚨 **RÈGLE CRITIQUE - TOUJOURS SUIVRE** 🚨
+
+**AVANT de modifier des fichiers, tu DOIS lire au moins 3 fichiers** qui t'aideront à comprendre comment rendre le code cohérent et consistant.
+
+C'est **NON-NÉGOCIABLE**. Ne saute jamais cette étape. Lire les fichiers existants assure :
+
+- Cohérence du code avec les patterns du projet
+- Bonne compréhension des conventions
+- Respect de l'architecture établie
+- Évitement des breaking changes
+
+**Types de fichiers à lire :**
+
+1. **Fichiers similaires** : Lis des fichiers avec des fonctionnalités similaires pour comprendre les patterns
+2. **Dépendances importées** : Lis les définitions/implémentations des imports dont tu n'es pas 100% sûr de l'utilisation
+
+**Étapes à suivre :**
+
+1. Lire au moins 3 fichiers pertinents (fonctionnalités similaires + dépendances)
+2. Comprendre les patterns, conventions et utilisation des APIs
+3. Ensuite seulement procéder à la création/modification des fichiers
+
+---
+
+## BMAD-METHOD (optionnel)
+
+BMAD (Breakthrough Method for Agile AI Driven Development) est un framework d'agents IA spécialisés pour le développement agile. Il peut être installé via `pnpm setup`.
+
+### Commande rapide
+
+- `/bmad` - Guide d'utilisation complet
+
+### Installation manuelle
+
+```bash
+npx bmad-method@alpha install
+# Sélectionner "Claude Code" comme IDE
+```
+
+### Workflow recommandé
+
+1. `*workflow-init` - Initialiser un nouveau projet
+2. `*prd` - Créer le Product Requirements Document
+3. `*create-architecture` - Designer l'architecture
+4. `*create-epics-and-stories` - Générer les stories
+5. `*dev-story` - Implémenter
+
+### Agents disponibles
+
+| Agent          | Rôle                   |
+| -------------- | ---------------------- |
+| `/analyst`     | Analyse et recherche   |
+| `/pm`          | Product Management     |
+| `/architect`   | Architecture technique |
+| `/ux-designer` | Design UX/UI           |
+| `/sm`          | Scrum Master           |
+| `/dev`         | Développement          |
+| `/tea`         | Test Architect         |
+
+### Structure
+
+- `_bmad/` - Configuration et agents (à committer)
+- `_bmad-output/` - Artifacts générés (gitignored)

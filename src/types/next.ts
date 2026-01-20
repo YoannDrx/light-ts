@@ -49,3 +49,16 @@ export type ErrorParams = {
   error: Error & { digest?: string };
   reset: () => void;
 };
+
+/**
+ * @name PageProps
+ * @deprecated Use PageParams instead. This is an alias for backward compatibility.
+ *
+ * Generic type for page props in Next.js App Router.
+ * The path parameter is ignored but kept for compatibility with existing code.
+ */
+ 
+export type PageProps<_Path extends string = string> = {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};

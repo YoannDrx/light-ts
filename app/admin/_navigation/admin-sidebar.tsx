@@ -18,6 +18,7 @@ import {
 import { SidebarNavigationMenu } from "@/components/ui/sidebar-utils";
 import type { NavigationGroup } from "@/features/navigation/navigation.type";
 import { SidebarUserButton } from "@/features/sidebar/sidebar-user-button";
+import { useI18n } from "@/i18n/provider";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
@@ -25,7 +26,8 @@ import { useEffect, useState } from "react";
 import { getAdminNavigation } from "./admin-navigation.links";
 
 export function AdminSidebar() {
-  const links: NavigationGroup[] = getAdminNavigation();
+  const { t } = useI18n();
+  const links: NavigationGroup[] = getAdminNavigation(t);
 
   return (
     <Sidebar variant="inset">
@@ -34,7 +36,7 @@ export function AdminSidebar() {
           <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
             <span className="text-sm font-semibold">A</span>
           </div>
-          <span className="font-semibold">Admin Panel</span>
+          <span className="font-semibold">{t("admin.panel")}</span>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -70,21 +72,23 @@ export function AdminSidebar() {
 const ItemCollapsing = (
   props: PropsWithChildren<{ defaultOpenStartPath?: string }>,
 ) => {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const isOpen = props.defaultOpenStartPath
+  const shouldBeOpen = props.defaultOpenStartPath
     ? pathname.startsWith(props.defaultOpenStartPath)
     : true;
 
+  // Initialize open state with the computed value
+  const [open, setOpen] = useState(shouldBeOpen);
+
   useEffect(() => {
-    if (isOpen) {
-      setOpen(isOpen);
+    if (shouldBeOpen) {
+      setOpen(shouldBeOpen);
     }
-  }, [isOpen]);
+  }, [shouldBeOpen]);
+
   return (
     <Collapsible
-      defaultOpen={isOpen}
       onOpenChange={setOpen}
       open={open}
       className="group/collapsible"

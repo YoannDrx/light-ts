@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useI18n } from "@/i18n/provider";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { useMemo } from "react";
 import { Area, AreaChart, XAxis } from "recharts";
@@ -16,26 +17,27 @@ type UserGrowthChartProps = {
   data: UserGrowthDataPoint[];
 };
 
-const chartConfig = {
-  total: {
-    label: "Total Users",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig;
-
 export function UserGrowthChart({ data }: UserGrowthChartProps) {
+  const { locale, t } = useI18n();
+  const chartConfig = {
+    total: {
+      label: t("admin.stats.totalUsers"),
+      color: "var(--chart-2)",
+    },
+  } satisfies ChartConfig;
+
   const chartData = useMemo(() => {
     return data.map((item) => {
       const [year, month] = item.date.split("-");
       const date = new Date(Number(year), Number(month) - 1);
       return {
         ...item,
-        formattedDate: date.toLocaleDateString("en-US", {
+        formattedDate: date.toLocaleDateString(locale, {
           month: "short",
         }),
       };
     });
-  }, [data]);
+  }, [data, locale]);
 
   const totalUsers =
     chartData.length > 0 ? chartData[chartData.length - 1].total : 0;
@@ -55,14 +57,16 @@ export function UserGrowthChart({ data }: UserGrowthChartProps) {
         <div className="flex items-start justify-between">
           <div>
             <p className="text-muted-foreground text-sm font-medium">
-              Total Users
+              {t("admin.stats.totalUsers")}
             </p>
             <div className="mt-1 flex items-baseline gap-2">
               <p className="text-3xl font-semibold tracking-tight">
-                {totalUsers.toLocaleString()}
+                {totalUsers.toLocaleString(locale)}
               </p>
               <span className="text-muted-foreground text-sm">
-                +{newUsersThisMonth} this month
+                {t("admin.stats.newUsersThisMonth", {
+                  count: newUsersThisMonth.toLocaleString(locale),
+                })}
               </span>
             </div>
           </div>

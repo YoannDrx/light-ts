@@ -11,14 +11,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { resolveActionResult } from "@/lib/actions/actions-utils";
 import { useMutation } from "@tanstack/react-query";
 import { AlertCircle, CheckCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { toast } from "sonner";
+import { useMemo } from "react";
 import { addEmailAction } from "./email.action";
 import type { EmailActionSchemaType } from "./email.schema";
-import { EmailActionSchema } from "./email.schema";
+import { z } from "zod";
 
 type EmailFormProps = {
   submitButtonLabel?: string;
@@ -26,11 +28,20 @@ type EmailFormProps = {
 };
 
 export const EmailForm = ({
-  submitButtonLabel = "Subscribe",
-  successMessage = "You have subscribed to our newsletter.",
+  submitButtonLabel,
+  successMessage,
 }: EmailFormProps) => {
+  const { t } = useI18n();
+  const schema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(t("email.invalid")).toLowerCase(),
+      }),
+    [t],
+  );
+
   const form = useZodForm({
-    schema: EmailActionSchema,
+    schema,
   });
 
   const submit = useMutation({
@@ -38,12 +49,15 @@ export const EmailForm = ({
       return resolveActionResult(addEmailAction({ email }));
     },
     onSuccess: () => {
-      toast.success(successMessage);
+      toast.success(successMessage ?? t("email.success"));
     },
     onError: () => {
-      toast.error("An error occurred");
+      toast.error(t("common.error"));
     },
   });
+
+  const submitLabel = submitButtonLabel ?? t("email.submit");
+  const successLabel = successMessage ?? t("email.success");
 
   return (
     <AnimatePresence mode="wait">
@@ -61,7 +75,7 @@ export const EmailForm = ({
         >
           <Alert variant="success">
             <CheckCircle size={20} />
-            <AlertTitle>{successMessage}</AlertTitle>
+            <AlertTitle>{successLabel}</AlertTitle>
           </Alert>
         </motion.div>
       ) : (
@@ -91,7 +105,7 @@ export const EmailForm = ({
                     <FormControl>
                       <Input
                         className="border-accent-foreground/20 bg-accent focus-visible:ring-foreground py-5 text-lg"
-                        placeholder="Ton email"
+                        placeholder={t("email.placeholder")}
                         {...field}
                       />
                     </FormControl>
@@ -104,7 +118,7 @@ export const EmailForm = ({
                 variant="invert"
                 loading={submit.isPending}
               >
-                {submitButtonLabel}
+                {submitLabel}
               </LoadingButton>
             </div>
             {submit.isError && (
@@ -112,7 +126,7 @@ export const EmailForm = ({
                 <AlertCircle size={20} />
                 <AlertTitle>{submit.error.message}</AlertTitle>
                 <AlertDescription>
-                  Try another email address or contact us.
+                  {t("email.errorDescription")}
                 </AlertDescription>
               </Alert>
             )}

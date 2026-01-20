@@ -13,20 +13,12 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cancelSubscriptionAction } from "../billing.action";
-
-const CANCEL_REASONS = {
-  too_expensive: "Too expensive",
-  not_using: "Not using the product enough",
-  missing_features: "Missing features",
-  bugs: "Too many bugs/issues",
-  competitor: "Switching to a competitor",
-  other: "Other",
-} as const;
 
 const CancelSchema = z.object({
   reasonType: z.enum([
@@ -37,15 +29,26 @@ const CancelSchema = z.object({
     "competitor",
     "other",
   ] as const),
-  details: z
-    .string()
-    .min(10, "Please provide more details (minimum 10 characters)"),
+  details: z.string(),
 });
 
 export function CancelSubscriptionForm() {
   const router = useRouter();
+  const { t } = useI18n();
+  const cancelReasons = {
+    too_expensive: t("account.billing.cancelReasons.tooExpensive"),
+    not_using: t("account.billing.cancelReasons.notUsing"),
+    missing_features: t("account.billing.cancelReasons.missingFeatures"),
+    bugs: t("account.billing.cancelReasons.bugs"),
+    competitor: t("account.billing.cancelReasons.competitor"),
+    other: t("account.billing.cancelReasons.other"),
+  } as const;
+
   const form = useZodForm({
-    schema: CancelSchema,
+    schema: CancelSchema.refine((data) => data.details.trim().length >= 10, {
+      message: t("account.billing.cancelDetailsMin"),
+      path: ["details"],
+    }),
     defaultValues: {
       details: "",
     },
@@ -56,14 +59,14 @@ export function CancelSubscriptionForm() {
     {
       onSuccess: (result) => {
         if (result.data.url) {
-          toast.success(
-            "Redirecting to billing portal where you can cancel your subscription.",
-          );
+          toast.success(t("account.billing.cancelRedirect"));
           window.location.href = result.data.url;
         }
       },
       onError: (error) => {
-        toast.error(error.error.serverError ?? "Failed to open billing portal");
+        toast.error(
+          error.error.serverError ?? t("account.billing.cancelError"),
+        );
       },
     },
   );
@@ -71,7 +74,7 @@ export function CancelSubscriptionForm() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Cancel Subscription</CardTitle>
+        <CardTitle>{t("account.billing.cancelTitle")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form
@@ -88,14 +91,16 @@ export function CancelSubscriptionForm() {
               name="reasonType"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>What's your main reason for cancelling?</FormLabel>
+                  <FormLabel>
+                    {t("account.billing.cancelReasonLabel")}
+                  </FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       className="space-y-2"
                     >
-                      {Object.entries(CANCEL_REASONS).map(([value, label]) => (
+                      {Object.entries(cancelReasons).map(([value, label]) => (
                         <FormItem
                           key={value}
                           className="flex items-center space-y-0 space-x-3"
@@ -120,10 +125,14 @@ export function CancelSubscriptionForm() {
               name="details"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Additional details</FormLabel>
+                  <FormLabel>
+                    {t("account.billing.cancelDetailsLabel")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Please provide more details to help us improve..."
+                      placeholder={t(
+                        "account.billing.cancelDetailsPlaceholder",
+                      )}
                       className="min-h-[100px]"
                       {...field}
                     />
@@ -139,14 +148,14 @@ export function CancelSubscriptionForm() {
                 variant="destructive"
                 loading={isPending}
               >
-                Confirm Cancellation
+                {t("account.billing.cancelConfirm")}
               </LoadingButton>
               <LoadingButton
                 type="button"
                 variant="outline"
                 onClick={() => router.push(`/account/billing`)}
               >
-                Go Back
+                {t("account.billing.cancelBack")}
               </LoadingButton>
             </div>
           </div>

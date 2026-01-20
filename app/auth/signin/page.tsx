@@ -6,6 +6,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
+import { getI18n } from "@/i18n/server";
 import { SocialProviders } from "@/lib/auth";
 import { getUser } from "@/lib/auth/auth-user";
 import { SiteConfig } from "@/site-config";
@@ -13,13 +14,17 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { SignInProviders } from "./sign-in-providers";
 
-export const metadata: Metadata = {
-  title: `Sign In | ${SiteConfig.title}`,
-  description:
-    "Sign in to your account to access testimonials and manage your projects.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getI18n();
+
+  return {
+    title: t("auth.signIn.metaTitle", { app: SiteConfig.title }),
+    description: t("auth.signIn.metaDescription"),
+  };
+}
 
 export default async function AuthSignInPage() {
+  const { t } = await getI18n();
   const user = await getUser();
 
   if (user) {
@@ -33,7 +38,7 @@ export default async function AuthSignInPage() {
       <CardHeader className="flex flex-col items-center justify-center gap-2">
         <div className="mx-auto mt-4 flex flex-row items-center gap-2">
           <Avatar className="size-8 rounded-md">
-            <AvatarImage src={SiteConfig.appIcon} alt="app logo" />
+            <AvatarImage src={SiteConfig.appIcon} alt={t("nav.logoAlt")} />
             <AvatarFallback>
               {SiteConfig.title.substring(0, 1).toUpperCase()}
             </AvatarFallback>
@@ -42,7 +47,7 @@ export default async function AuthSignInPage() {
         </div>
 
         <CardDescription className="text-center">
-          Please sign in to your account to continue.
+          {t("auth.signIn.description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-4">

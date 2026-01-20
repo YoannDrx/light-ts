@@ -5,12 +5,15 @@ import {
   LayoutHeader,
   LayoutTitle,
 } from "@/features/page/layout";
+import { getI18n } from "@/i18n/server";
 
-export default function RouteLoading() {
+export default async function RouteLoading() {
+  const { t } = await getI18n();
+
   return (
     <Layout size="lg">
       <LayoutHeader>
-        <LayoutTitle>User Management</LayoutTitle>
+        <LayoutTitle>{t("admin.users.title")}</LayoutTitle>
       </LayoutHeader>
       <LayoutContent>
         <div className="flex flex-col gap-4">

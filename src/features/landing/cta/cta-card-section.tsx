@@ -3,10 +3,13 @@
 import { Typography } from "@/components/nowts/typography";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useI18n } from "@/i18n/provider";
 import Link from "next/link";
 import { SectionLayout } from "../section-layout";
 
 export function CTASectionCard() {
+  const { t } = useI18n();
+
   return (
     <SectionLayout>
       <Card className="relative isolate overflow-hidden py-24 text-center shadow-2xl lg:rounded-3xl">
@@ -14,21 +17,21 @@ export function CTASectionCard() {
           as="h2"
           className="text-4xl font-semibold tracking-tight text-balance text-white sm:text-5xl"
         >
-          Boost your productivity today
+          {t("landing.ctaCard.title")}
         </Typography>
         <Typography className="mx-auto mt-6 max-w-xl text-lg/8 text-pretty text-gray-300">
-          Create an account and start posting today.
+          {t("landing.ctaCard.description")}
         </Typography>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link href="#pricing" className={buttonVariants({ size: "lg" })}>
-            Get started
+            {t("landing.ctaCard.primaryCta")}
           </Link>
 
           <Link
             href="#"
             className={buttonVariants({ size: "lg", variant: "outline" })}
           >
-            Learn more
+            {t("landing.ctaCard.secondaryCta")}
             <span aria-hidden="true">→</span>
           </Link>
         </div>

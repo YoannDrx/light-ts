@@ -19,10 +19,12 @@ export const handleRootRedirect = (request: NextRequest) => {
 };
 
 export const isAppRoute = (pathname: string) => {
-  return pathname.startsWith("/app/app");
+  return pathname.startsWith("/app");
 };
 
 export const isAdminRoute = (pathname: string) => {
+  // TODO: This should be "/admin" but the session role update mechanism
+  // needs to be fixed first (Better Auth caches user data in session)
   return pathname.startsWith("/app/admin");
 };
 

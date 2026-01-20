@@ -1,6 +1,7 @@
 import { Logo } from "@/components/nowts/logo";
 import { Badge } from "@/components/ui/badge";
 import { LoadingButton } from "@/features/form/submit-button";
+import { useI18n } from "@/i18n/provider";
 import { authClient } from "@/lib/auth-client";
 import { getCallbackUrl } from "@/lib/auth/auth-utils";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ type ProviderButtonProps = {
 };
 
 export const ProviderButton = (props: ProviderButtonProps) => {
+  const { t } = useI18n();
   const { lastUsedProvider } = useLastUsedProviderStore();
 
   const githubSignInMutation = useMutation({
@@ -32,7 +34,7 @@ export const ProviderButton = (props: ProviderButtonProps) => {
       await authClient.signIn.social({
         provider: props.providerId,
         callbackURL: getCallbackUrl(
-          `/auth/last-used-provider?provider=${props.providerId}&callbackUrl=${props.callbackUrl ?? "/account"}`,
+          `/auth/last-used-provider?provider=${props.providerId}&callbackUrl=${props.callbackUrl ?? "/app"}`,
         ),
       });
     },
@@ -48,7 +50,7 @@ export const ProviderButton = (props: ProviderButtonProps) => {
           variant="secondary"
           className="absolute -top-2.5 -right-2.5 z-10"
         >
-          Last used
+          {t("auth.signIn.lastUsed")}
         </Badge>
       )}
       <LoadingButton
@@ -65,7 +67,9 @@ export const ProviderButton = (props: ProviderButtonProps) => {
         }}
       >
         {data.icon}
-        <span className="ml-2">Sign in with {data.name}</span>
+        <span className="ml-2">
+          {t("auth.signIn.provider", { provider: data.name })}
+        </span>
       </LoadingButton>
     </div>
   );

@@ -7,20 +7,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ContactSupportDialog } from "@/features/contact/support/contact-support-dialog";
+import { getI18n } from "@/i18n/server";
 import { getRequiredUser } from "@/lib/auth/auth-user";
 import { env } from "@/lib/env";
-import { resend } from "@/lib/mail/resend";
+import { getResend } from "@/lib/mail/resend";
 import { combineWithParentMetadata } from "@/lib/metadata";
 import { prisma } from "@/lib/prisma";
+import type { PageParams } from "@/types/next";
+import type { ResolvingMetadata } from "next";
 import { AccountLayout } from "../account-layout";
 import { ToggleEmailCheckbox } from "./toggle-email-checkbox";
 
-export const generateMetadata = combineWithParentMetadata({
-  title: "Email",
-  description: "Update your email notifications settings.",
-});
+export const generateMetadata = async (
+  params: PageParams,
+  parent: ResolvingMetadata,
+) => {
+  const { t } = await getI18n();
+
+  return combineWithParentMetadata({
+    title: t("account.email.metaTitle"),
+    description: t("account.email.metaDescription"),
+  })(params, parent);
+};
 
 export default async function MailProfilePage() {
+  const { t } = await getI18n();
   const user = await getRequiredUser();
   const userWithResendContactId = await prisma.user.findUnique({
     where: {
@@ -51,7 +62,7 @@ export default async function MailProfilePage() {
     );
   }
 
-  const { data: resendUser } = await resend.contacts.get({
+  const { data: resendUser } = await getResend().contacts.get({
     audienceId: env.RESEND_AUDIENCE_ID,
     id: userWithResendContactId.resendContactId,
   });
@@ -71,11 +82,8 @@ export default async function MailProfilePage() {
       <div className="flex flex-col gap-4 lg:gap-8">
         <Card>
           <CardHeader>
-            <CardTitle>Mail settings</CardTitle>
-            <CardDescription>
-              Update your email notifications settings to match your
-              preferences.
-            </CardDescription>
+            <CardTitle>{t("account.email.title")}</CardTitle>
+            <CardDescription>{t("account.email.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <ToggleEmailCheckbox unsubscribed={resendUser.unsubscribed} />
@@ -86,14 +94,14 @@ export default async function MailProfilePage() {
   );
 }
 
-const ErrorComponent = () => {
+const ErrorComponent = async () => {
+  const { t } = await getI18n();
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Resend not found</CardTitle>
-        <CardDescription>
-          We couldn't find your Resend contact. Please contact support.
-        </CardDescription>
+        <CardTitle>{t("account.email.errorTitle")}</CardTitle>
+        <CardDescription>{t("account.email.errorDescription")}</CardDescription>
       </CardHeader>
       <CardFooter>
         <ContactSupportDialog />
