@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /* eslint-disable no-console */
 /**
- * Diagnostic de santé pour LightTS
+ * Diagnostic de santé pour LightS
  * Usage: pnpm doctor
  *
  * Vérifie:
@@ -270,7 +270,7 @@ function main(): void {
     "╔══════════════════════════════════════════════════════════════╗",
   );
   console.log(
-    "║                    LightTS Doctor                            ║",
+    "║                     LightS Doctor                            ║",
   );
   console.log(
     "║                  Diagnostic du projet                        ║",

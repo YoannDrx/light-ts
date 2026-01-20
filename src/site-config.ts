@@ -1,12 +1,12 @@
 export const SiteConfig = {
-  title: "Light-TS",
+  title: "LightS",
   description: "Modern Next.js boilerplate with auth, payments, and more",
-  prodUrl: "https://light-ts.vercel.app",
-  appId: "light-ts",
-  domain: "light-ts.vercel.app",
+  prodUrl: "https://lights.vercel.app",
+  appId: "lights",
+  domain: "lights.vercel.app",
   appIcon: "/images/icon.png",
   company: {
-    name: "Light-TS",
+    name: "LightS",
     address: "", // Add your company address
   },
   brand: {
@@ -27,7 +27,7 @@ export const SiteConfig = {
      */
     enableImageUpload: false as boolean,
     /**
-     * If enable, the user will be redirected to `/orgs` when he visits the landing page at `/`
+     * If enable, the user will be redirected to `/app` when he visits the landing page at `/`
      * The logic is located in middleware.ts
      */
     enableLandingRedirection: true as boolean,

@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 /* eslint-disable no-console */
 /**
- * Setup interactif pour light-ts
+ * Setup interactif pour LightS
  * Usage: pnpm setup
  *
  * Guide l'utilisateur pour configurer:
@@ -440,7 +440,7 @@ async function main(): Promise<void> {
     "╔══════════════════════════════════════════════════════════════╗",
   );
   console.log(
-    "║                     light-ts Setup                           ║",
+    "║                       LightS Setup                           ║",
   );
   console.log(
     "║              Configuration interactive du projet             ║",

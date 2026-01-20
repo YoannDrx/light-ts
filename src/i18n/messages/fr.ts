@@ -2,7 +2,7 @@ import type en from "./en";
 
 const fr: typeof en = {
   meta: {
-    title: "LightTS",
+    title: "LightS",
     description: "Boilerplate Next.js moderne avec auth, paiements et plus",
   },
   language: {
@@ -673,11 +673,11 @@ const fr: typeof en = {
       skeleton: {
         threadPrompt: "Créer votre premier projet",
         threadResponse:
-          "Votre projet LightTS est prêt ! Commencez à construire votre SaaS en minutes.",
+          "Votre projet LightS est prêt ! Commencez à construire votre SaaS en minutes.",
         schedulePending: "Configuration de votre environnement...",
         scheduleSuccess:
           "Votre serveur de développement tourne sur localhost:3000",
-        researchQuestion: "Quelle stack utilise LightTS ?",
+        researchQuestion: "Quelle stack utilise LightS ?",
         searching: "Chargement...",
         researchAnswer:
           "Next.js 16, TypeScript, TailwindCSS, Prisma, Better Auth et Stripe.",
@@ -735,7 +735,7 @@ const fr: typeof en = {
         ],
       },
       with: {
-        title: "Construire avec LightTS",
+        title: "Construire avec LightS",
         items: [
           "Auth prête en minutes",
           "Stripe pré-configuré",
@@ -766,24 +766,24 @@ const fr: typeof en = {
       title: "Questions fréquentes",
       items: [
         {
-          question: "Qu'est-ce que LightTS ?",
+          question: "Qu'est-ce que LightS ?",
           answer:
-            "LightTS est un boilerplate Next.js moderne qui inclut authentification, paiements, base de données et emails - tout ce qu'il faut pour lancer un SaaS rapidement.",
+            "LightS est un boilerplate Next.js moderne qui inclut authentification, paiements, base de données et emails - tout ce qu'il faut pour lancer un SaaS rapidement.",
         },
         {
-          question: "Quelle stack technique utilise LightTS ?",
+          question: "Quelle stack technique utilise LightS ?",
           answer:
             "Next.js 16, TypeScript, TailwindCSS v4, Prisma ORM, Better Auth, Stripe, React Email et Resend.",
         },
         {
           question: "Le code est-il prêt pour la production ?",
           answer:
-            "Oui, LightTS suit les bonnes pratiques avec TypeScript en mode strict, gestion d'erreurs appropriée et patterns d'architecture scalables.",
+            "Oui, LightS suit les bonnes pratiques avec TypeScript en mode strict, gestion d'erreurs appropriée et patterns d'architecture scalables.",
         },
         {
           question: "Puis-je l'utiliser pour des projets commerciaux ?",
           answer:
-            "Absolument ! LightTS est conçu pour construire des applications SaaS commerciales.",
+            "Absolument ! LightS est conçu pour construire des applications SaaS commerciales.",
         },
         {
           question: "Comment démarrer ?",
@@ -793,7 +793,7 @@ const fr: typeof en = {
         {
           question: "Quelle base de données supporte-t-il ?",
           answer:
-            "LightTS utilise PostgreSQL avec Prisma ORM. NeonDB est recommandé pour les déploiements serverless.",
+            "LightS utilise PostgreSQL avec Prisma ORM. NeonDB est recommandé pour les déploiements serverless.",
         },
         {
           question: "L'authentification est-elle incluse ?",
@@ -1013,7 +1013,7 @@ const fr: typeof en = {
   about: {
     metaTitle: "À propos de {app}",
     metaDescription:
-      "Découvrez LightTS, le boilerplate Next.js moderne conçu pour aider les développeurs à livrer des produits SaaS plus rapidement.",
+      "Découvrez LightS, le boilerplate Next.js moderne conçu pour aider les développeurs à livrer des produits SaaS plus rapidement.",
     hero: {
       kicker: "À propos",
       title: "Livrez plus vite avec une base solide",
@@ -1023,7 +1023,7 @@ const fr: typeof en = {
     commitment: {
       title: "Notre engagement envers vous",
       paragraphOne:
-        "LightTS est construit avec une vision long terme et un engagement envers la communauté des développeurs. Choisir un boilerplate, c'est lui faire confiance comme fondation de votre produit.",
+        "LightS est construit avec une vision long terme et un engagement envers la communauté des développeurs. Choisir un boilerplate, c'est lui faire confiance comme fondation de votre produit.",
       paragraphTwo:
         "C'est pourquoi nous garantissons des mises à jour régulières, des améliorations continues et une documentation claire. Vous aurez toujours accès aux derniers patterns et bonnes pratiques.",
     },
@@ -1062,10 +1062,10 @@ const fr: typeof en = {
   contact: {
     metaTitle: "Contact {app}",
     metaDescription:
-      "Contactez l'équipe LightTS. Nous sommes là pour répondre à vos questions sur le boilerplate, les fonctionnalités ou le support technique.",
+      "Contactez l'équipe LightS. Nous sommes là pour répondre à vos questions sur le boilerplate, les fonctionnalités ou le support technique.",
     title: "Contactez-nous",
     description:
-      "Des questions sur LightTS ? Besoin d'aide pour la configuration ou envie de partager un retour ? Nous sommes là pour vous aider.",
+      "Des questions sur LightS ? Besoin d'aide pour la configuration ou envie de partager un retour ? Nous sommes là pour vous aider.",
     details: {
       location: "Localisation",
       email: "Email",

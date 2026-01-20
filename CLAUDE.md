@@ -4,14 +4,13 @@ Guide pour Claude Code sur ce dépôt.
 
 ---
 
-## À propos de LightTS
+## À propos de LightS
 
-**LightTS** est un template boilerplate Next.js 15 pour démarrer rapidement de nouveaux projets avec une stack moderne et complète.
+**LightS** est un template boilerplate Next.js 15 pour démarrer rapidement de nouveaux projets avec une stack moderne et complète.
 
 ### Fonctionnalités incluses
 
 - Authentification multi-providers (GitHub, Google, Email)
-- Organisations multi-tenants avec rôles
 - Paiements Stripe (abonnements)
 - Emails transactionnels (Resend)
 - Base de données PostgreSQL (NeonDB + Prisma)
@@ -102,7 +101,8 @@ Quand tu lances un subagent Explore, copie-colle les instructions sur mgrep de c
 
 ### Setup et diagnostic
 
-- `pnpm setup` - Configuration interactive du projet
+- `pnpm init-project` - Initialiser un nouveau projet (première fois)
+- `pnpm setup` - Configuration interactive des services cloud
 - `pnpm doctor` - Diagnostic de santé du projet
 
 ### Base de données
@@ -158,7 +158,7 @@ npm i -g @vercel/cli neonctl @upstash/cli stripe gh @mixedbread/mgrep
 - **Langage** : TypeScript (mode strict)
 - **Styling** : TailwindCSS v4 avec Shadcn/UI
 - **Base de données** : PostgreSQL avec Prisma ORM
-- **Authentification** : Better Auth avec support organisations
+- **Authentification** : Better Auth
 - **Emails** : React Email avec Resend
 - **Paiements** : Stripe
 - **Tests** : Vitest (unitaires), Playwright (E2E)
@@ -230,7 +230,6 @@ npm i -g @vercel/cli neonctl @upstash/cli stripe gh @mixedbread/mgrep
 - Utiliser `getUser()` pour un utilisateur optionnel (côté serveur)
 - Utiliser `getRequiredUser()` pour un utilisateur requis (côté serveur)
 - Utiliser `useSession()` depuis auth-client.ts (côté client)
-- Utiliser `getCurrentOrgCache()` pour obtenir l'org courante
 
 ---
 
@@ -238,7 +237,6 @@ npm i -g @vercel/cli neonctl @upstash/cli stripe gh @mixedbread/mgrep
 
 - Prisma ORM avec PostgreSQL
 - Hooks de base de données pour la configuration à la création d'utilisateur
-- Patterns d'accès aux données basés sur l'organisation
 
 ---
 

@@ -1,8 +1,9 @@
 {
-  "name": "light-ts",
+  "name": "lights",
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "init-project": "tsx scripts/init.ts",
     "setup": "tsx scripts/setup.ts",
     "doctor": "tsx scripts/doctor.ts",
     "build": "next build",
